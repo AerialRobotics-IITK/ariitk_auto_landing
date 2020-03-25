@@ -3,45 +3,89 @@
 namespace ariitk::auto_landing{
 
 ExampleTrajectoryGeneration::ExampleTrajectoryGeneration()
-    : dimension_(3), derivative_to_optimize_(mav_trajectory_generation::derivative_order::SNAP), start_(dimension_), middle_one_(dimension_), middle_two_(dimension_), end_(dimension_) {
-        start_.makeStartOrEnd(Eigen::Vector3d(0,0,1), derivative_to_optimize_);
-        middle_one_.addConstraint(mav_trajectory_generation::derivative_order::POSITION, Eigen::Vector3d(1,0,1));
-        middle_two_.addConstraint(mav_trajectory_generation::derivative_order::POSITION, Eigen::Vector3d(2,0,1));
-        end_.makeStartOrEnd(Eigen::Vector3d(3,0,1), derivative_to_optimize_);
+    : dimension_(3), nh_(), nh_private_("~") {
+        // int number_of_points = 5;
 
+        mav_trajectory_generation::Vertex start_(dimension_), end_(dimension_);
+        mav_trajectory_generation::Vertex::Vector vertices_;
+        
+        nh_.getParam("v_max", v_max_);
+        nh_.getParam("a_max", a_max_);
+        nh_.getParam("distance", distance_);
+        nh_.getParam("points", points_);
+
+        int number_of_points = points_.size();
+        if (number_of_points < 2) {
+            ROS_ERROR ("The number of points given in the trajectory is less than 2. Please specify atleast 2 points.");
+            return;
+        }
+        derivative_to_optimize_ = int(points_[0]["derivative_order"]);
+        
+        // points_[0]["x"];
+        // double((points_[0])["x"]);
+        // std::cout << int(points_[number_of_points-1]["derivative_order"]);
+        
+        // XmlRpc::XmlRpcValue k = points_[0]["x"];
+        // double(k);
+        // double k = points_[0]["x"];
+        // Eigen::Vector3d(double(points_[0]["x"]), double(points_[0]["y"]), double(points_[0]["z"]));
+        start_.makeStartOrEnd(Eigen::Vector3d(getValueAsDouble(points_[0]["x"]), getValueAsDouble(points_[0]["y"]), getValueAsDouble(points_[0]["z"])), int(points_[0]["derivative_order"]));
+        end_.makeStartOrEnd(Eigen::Vector3d(getValueAsDouble(points_[number_of_points-1]["x"]), getValueAsDouble(points_[number_of_points-1]["y"]), getValueAsDouble(points_[0]["z"])), int(points_[0]["derivative_order"]));
+        
         vertices_.push_back(start_);
-        vertices_.push_back(middle_one_);
-        vertices_.push_back(middle_two_);
+        for (int i=1;i<number_of_points-1;i++) {
+            mav_trajectory_generation::Vertex point(dimension_);
+            point.addConstraint(int(points_[i]["derivative_order"]), Eigen::Vector3d(getValueAsDouble(points_[i]["x"]), getValueAsDouble(points_[i]["y"]), getValueAsDouble(points_[i]["z"])));
+            vertices_.push_back(point);
+        }
         vertices_.push_back(end_);
 
-        mav_trajectory_generation::Trajectory result = this->generateTrajectory(vertices_);
-        mav_msgs::EigenTrajectoryPoint::Vector trajectory_points;
-        trajectory_msgs::MultiDOFJointTrajectory generated_trajectory;
+        generateTrajectory(vertices_);
 
-        mav_trajectory_generation::sampleWholeTrajectory(result, 0.1, &trajectory_points);
-        mav_msgs::msgMultiDofJointTrajectoryFromEigen(trajectory_points, &generated_trajectory);
-        
-        std::cout << generated_trajectory; 
-           
     }
 
-mav_trajectory_generation::Trajectory ExampleTrajectoryGeneration::generateTrajectory(std::vector<mav_trajectory_generation::Vertex>& vertices) {
+void ExampleTrajectoryGeneration::run() {
+    visualization_msgs::MarkerArray markers;
+    std::string frame_id = "world";
+
+    mav_trajectory_generation::drawMavTrajectory(result_, distance_, frame_id, &markers);
+
+    marker_pub_ = nh_.advertise<visualization_msgs::MarkerArray>("visualization_marker", 1);
+    marker_pub_.publish(markers);
+}
+
+void ExampleTrajectoryGeneration::generateTrajectory(std::vector<mav_trajectory_generation::Vertex> vertices) {    
     std::vector<double> segment_times;
-    const double v_max = 10.0;
-    const double a_max = 10.0;
 
-    segment_times = mav_trajectory_generation::estimateSegmentTimes(vertices_, v_max, a_max);
+    segment_times = mav_trajectory_generation::estimateSegmentTimes(vertices, v_max_, a_max_);
 
-    const int N = 10;
-    mav_trajectory_generation::PolynomialOptimization<N> opt(dimension_);
+    mav_trajectory_generation::PolynomialOptimization<10> opt(dimension_);
 
-    opt.setupFromVertices(vertices_, segment_times, derivative_to_optimize_);
+    // std::cout << "Segment times:- " << segment_times[0] << " \n";
+    opt.setupFromVertices(vertices, segment_times, derivative_to_optimize_);
     opt.solveLinear();
+    opt.getTrajectory(&result_);
 
-    mav_trajectory_generation::Trajectory trajectory;
-    opt.getTrajectory(&trajectory);    
+    mav_msgs::EigenTrajectoryPoint::Vector trajectory_points;
 
-    return trajectory;
+    mav_trajectory_generation::sampleWholeTrajectory(result_, 0.1, &trajectory_points);
+    mav_msgs::msgMultiDofJointTrajectoryFromEigen(trajectory_points, &generated_trajectory_);
+    
+    trajectory_pub_ = nh_.advertise<trajectory_msgs::MultiDOFJointTrajectory>("firefly/command/trajectory", 1);
+    
+    trajectory_pub_.publish(generated_trajectory_);
+}
+
+double ExampleTrajectoryGeneration::getValueAsDouble(XmlRpc::XmlRpcValue& value) {
+    if (value.getType() == 2) {
+        return (double(int(value)));
+    } else if (value.getType() == 3){
+        return (double(value));
+    } else {
+        ROS_ERROR("Parameter specified is not integer or double. Taking 0.0 as the value.");
+        return 0.0;
+    }
+    
 }
 
 }
