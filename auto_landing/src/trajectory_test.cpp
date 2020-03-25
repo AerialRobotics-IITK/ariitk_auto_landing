@@ -4,7 +4,6 @@ namespace ariitk::auto_landing{
 
 ExampleTrajectoryGeneration::ExampleTrajectoryGeneration()
     : dimension_(3), nh_(), nh_private_("~") {
-        // int number_of_points = 5;
 
         mav_trajectory_generation::Vertex start_(dimension_), end_(dimension_);
         mav_trajectory_generation::Vertex::Vector vertices_;
@@ -21,14 +20,6 @@ ExampleTrajectoryGeneration::ExampleTrajectoryGeneration()
         }
         derivative_to_optimize_ = int(points_[0]["derivative_order"]);
         
-        // points_[0]["x"];
-        // double((points_[0])["x"]);
-        // std::cout << int(points_[number_of_points-1]["derivative_order"]);
-        
-        // XmlRpc::XmlRpcValue k = points_[0]["x"];
-        // double(k);
-        // double k = points_[0]["x"];
-        // Eigen::Vector3d(double(points_[0]["x"]), double(points_[0]["y"]), double(points_[0]["z"]));
         start_.makeStartOrEnd(Eigen::Vector3d(getValueAsDouble(points_[0]["x"]), getValueAsDouble(points_[0]["y"]), getValueAsDouble(points_[0]["z"])), int(points_[0]["derivative_order"]));
         end_.makeStartOrEnd(Eigen::Vector3d(getValueAsDouble(points_[number_of_points-1]["x"]), getValueAsDouble(points_[number_of_points-1]["y"]), getValueAsDouble(points_[0]["z"])), int(points_[0]["derivative_order"]));
         
@@ -61,7 +52,6 @@ void ExampleTrajectoryGeneration::generateTrajectory(std::vector<mav_trajectory_
 
     mav_trajectory_generation::PolynomialOptimization<10> opt(dimension_);
 
-    // std::cout << "Segment times:- " << segment_times[0] << " \n";
     opt.setupFromVertices(vertices, segment_times, derivative_to_optimize_);
     opt.solveLinear();
     opt.getTrajectory(&result_);
@@ -88,4 +78,4 @@ double ExampleTrajectoryGeneration::getValueAsDouble(XmlRpc::XmlRpcValue& value)
     
 }
 
-}
+} //namespace ariitk::auto_landing

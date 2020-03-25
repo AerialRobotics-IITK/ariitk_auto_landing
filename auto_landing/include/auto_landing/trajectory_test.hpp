@@ -42,4 +42,4 @@ class ExampleTrajectoryGeneration {
 
 };
 
-}
+} //namespace ariitk::auto_landing
