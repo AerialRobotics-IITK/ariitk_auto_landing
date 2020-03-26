@@ -11,14 +11,17 @@ namespace ariitk::auto_landing {
     
 class Tracking {
     public:
+        // Tracking();
         void init(ros::NodeHandle& nh);
         void run();
 
-    private:
+    // private:
     
         void poseClbk(const nav_msgs::Odometry& msg);
         bool serverClbk(std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &resp);
     
+        int count=0;
+        int a_=2;
         geometry_msgs::PoseStamped setpt_;
         nav_msgs::Odometry husky_odom_;
         std_srvs::Trigger srv_;

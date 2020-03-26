@@ -18,10 +18,11 @@ void Tracking::run(){
     srv_.response.success=false;
     
     
-    if(((husky_odom_.pose.pose.position.x-0.1<=setpt_.pose.position.x)||
+    
+        if(((husky_odom_.pose.pose.position.x-0.1<=setpt_.pose.position.x)||
         (setpt_.pose.position.x<husky_odom_.pose.pose.position.x+0.1))&&
         (husky_odom_.pose.pose.position.y-0.1<=setpt_.pose.position.y)||
-        (setpt_.pose.position.y<husky_odom_.pose.pose.position.y+0.1))        {} //{ landing_client_.call(srv_);}
+        (setpt_.pose.position.y<husky_odom_.pose.pose.position.y+0.1))           { std::cout<<"over husky";landing_client_.call(srv_);} 
 
     set_firefly_pose_.publish(setpt_);
 }
@@ -30,16 +31,20 @@ void Tracking::run(){
 
 void Tracking::poseClbk(const nav_msgs::Odometry& msg) {
     husky_odom_=msg;
-
     setpt_.pose.position.x=msg.pose.pose.position.x;
     setpt_.pose.position.y=msg.pose.pose.position.y;
-    setpt_.pose.position.z=2;
+    setpt_.pose.position.z=a_;
     }
 
 
 bool Tracking::serverClbk(std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &resp){
+     if(setpt_.pose.position.z>0.3)
+      {   setpt_.pose.position.x=husky_odom_.pose.pose.position.x;
+          setpt_.pose.position.y=husky_odom_.pose.pose.position.y;
+          setpt_.pose.position.z=a_-0.1;}
     resp.success=true;
     resp.message="trigged";
+   
     return true;
 }
 } // namespace ariitk::auto_landing

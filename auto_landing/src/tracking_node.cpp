@@ -7,7 +7,7 @@ int main(int argc, char **argv){
     ros::NodeHandle nh;
 
     Tracking mav_husky;
-
+    
     mav_husky.init(nh);
 
     ros::Rate loop_rate(10);
@@ -16,6 +16,8 @@ int main(int argc, char **argv){
         ros::spinOnce();
         mav_husky.run();
         loop_rate.sleep();
+     
+        std::cout<<mav_husky.setpt_<<std::endl<<mav_husky.count;
     }
 
     return 0;

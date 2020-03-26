@@ -3,14 +3,14 @@
     
   <include file="$(find rotors_gazebo)/launch/mav.launch" >
            <arg name="mav_name" value="firefly" /> 
+            
 
    </include>
 
   <include file="$(find husky_gazebo)/launch/spawn_husky.launch">
-        <arg name="x" value="2.0"/>
-        <arg name="y" value="2.0"/>
+        <arg name="x" value="0.0"/>
+        <arg name="y" value="0.0"/>
         <arg name="z" value="0.3"/>
-        <arg name="yaw" value="30.0"/>
   </include>
  
  
