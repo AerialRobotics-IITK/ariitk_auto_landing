@@ -6,15 +6,15 @@ int main(int argc, char **argv){
     ros::init(argc,argv,"tracking_node");
     ros::NodeHandle nh;
 
-    Tracking mavHusky;
+    Tracking mav_husky;
 
-    mavHusky.init(nh);
+    mav_husky.init(nh);
 
     ros::Rate loop_rate(10);
 
     while(ros::ok()) {
         ros::spinOnce();
-        mavHusky.run();
+        mav_husky.run();
         loop_rate.sleep();
     }
 

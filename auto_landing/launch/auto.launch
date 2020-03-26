@@ -1,26 +1,12 @@
 <?xml version="1.0"?>
 <launch>
-  <!-- <include file="$(find multimaster_launch)/launch/multimaster_gazebo.launch"/>  -->
-   
-   
+    
   <include file="$(find rotors_gazebo)/launch/mav.launch" >
            <arg name="mav_name" value="firefly" /> 
 
    </include>
-    <!-- <include file="$(find aruco_ros)/launch/single.launch" > -->
-    <!-- </include> -->
 
- 
-        <arg name="laser_enabled" default="true"/>
-        <arg name="ur5_enabled" default="false"/>
-        <arg name="kinect_enabled" default="false"/>
-  
-  
   <include file="$(find husky_gazebo)/launch/spawn_husky.launch">
-        <!-- <arg name="laser_enabled" value="$(arg laser_enabled)"/> -->
-        <!-- <arg name="kinect_enabled" value="$(arg kinect_enabled)"/> -->
-        <!-- <arg name="robot_namespace" value="husky"/> -->
-        <!-- <arg name="multimaster" value="true"/> -->
         <arg name="x" value="2.0"/>
         <arg name="y" value="2.0"/>
         <arg name="z" value="0.3"/>
