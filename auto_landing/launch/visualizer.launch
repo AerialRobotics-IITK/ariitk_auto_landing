@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+
+    <node pkg="auto_landing" type="auto_landing_trajectory_publisher_visualizer" name="auto_landing_trajectory_publisher_visualizer" output="screen">
+        <rosparam command="load" file="$(find auto_landing)/cfg/trajectory_parameters.yaml" />
+    </node>
+
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find auto_landing)/rviz/trajectory_visualizer.rviz" />
+
+</launch>
