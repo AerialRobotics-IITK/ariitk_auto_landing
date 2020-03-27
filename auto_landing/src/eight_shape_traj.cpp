@@ -26,7 +26,7 @@ geometry_msgs::Twist Eight_Traj::cmdVelocity(const nav_msgs::Odometry& husky_odo
 
 
 
-    if(t2-t1>7.1){
+    if(t2-t1>22.8){
         t1=ros::Time::now().toSec();
         count_++;
 }
@@ -36,9 +36,9 @@ geometry_msgs::Twist Eight_Traj::cmdVelocity(const nav_msgs::Odometry& husky_odo
         set_vel_.linear.y=0;
         set_vel_.linear.z=0;
 
-        set_vel_.angular.x=-0;
-        set_vel_.angular.y=-0;
-        set_vel_.angular.z=0.5;
+        set_vel_.angular.x=0;
+        set_vel_.angular.y=0;
+        set_vel_.angular.z=0.2;
 }
 
 else {
@@ -46,9 +46,9 @@ else {
         set_vel_.linear.y=0;
         set_vel_.linear.z=0;
 
-        set_vel_.angular.x=-0;
-        set_vel_.angular.y=-0;
-        set_vel_.angular.z=-0.5;
+        set_vel_.angular.x=0;
+        set_vel_.angular.y=0;
+        set_vel_.angular.z=-0.2;
 
 }
 return set_vel_;
