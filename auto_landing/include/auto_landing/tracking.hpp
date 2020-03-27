@@ -11,24 +11,25 @@ namespace ariitk::auto_landing {
     
 class Tracking {
     public:
-        // Tracking();
-        void init(ros::NodeHandle& nh);
+        Tracking();
+        void init(ros::NodeHandle& nh, char** argv);
         void run();
 
-    // private:
+    private:
     
-        void poseClbk(const nav_msgs::Odometry& msg);
-        bool serverClbk(std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &resp);
-    
-        int count=0;
-        int a_=2;
+        void huskyPoseCallback(const nav_msgs::Odometry& msg);
+        void quadPoseCallback(const nav_msgs::Odometry& msg);
+
+        int height_;
         geometry_msgs::PoseStamped setpt_;
-        nav_msgs::Odometry husky_odom_;
-        std_srvs::Trigger srv_;
+        nav_msgs::Odometry husky_odom_, quad_odom_;
+        std_srvs::Trigger landing_service_;
+
+        double husky_relative_x_, husky_relative_y_;
 
         ros::Publisher set_firefly_pose_;
         ros::Subscriber husky_pose_;
-        ros::Subscriber husky_cmd_vel_;
+        ros::Subscriber quad_pose_;
 
         ros::ServiceServer landing_server_;
         ros::ServiceClient landing_client_;

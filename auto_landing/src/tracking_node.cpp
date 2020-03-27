@@ -3,12 +3,12 @@
 using namespace ariitk::auto_landing;
 
 int main(int argc, char **argv){
-    ros::init(argc,argv,"tracking_node");
+    ros::init(argc, argv, "tracking_node");
     ros::NodeHandle nh;
 
     Tracking mav_husky;
-    
-    mav_husky.init(nh);
+
+    mav_husky.init(nh, argv);
 
     ros::Rate loop_rate(10);
 
@@ -16,8 +16,6 @@ int main(int argc, char **argv){
         ros::spinOnce();
         mav_husky.run();
         loop_rate.sleep();
-     
-        std::cout<<mav_husky.setpt_<<std::endl<<mav_husky.count;
     }
 
     return 0;

@@ -1,50 +1,45 @@
 #include<auto_landing/tracking.hpp>
 
-
 namespace ariitk::auto_landing {
 
- void Tracking::init(ros::NodeHandle& nh) {
+Tracking::Tracking() :
+    height_(2) {}
 
-        set_firefly_pose_ = nh.advertise<geometry_msgs::PoseStamped>("/firefly/command/pose", 1);
-        husky_pose_ = nh.subscribe("/husky_velocity_controller/odom", 1, &Tracking::poseClbk,this);
-        landing_server_ = nh.advertiseService("to_land", &Tracking::serverClbk,this);
-        landing_client_ = nh.serviceClient<std_srvs::Trigger>("to_land");
+void Tracking::init(ros::NodeHandle& nh, char** argv) {
+    char* end_ptr;
+    husky_relative_x_ = strtod(argv[2], &end_ptr);
+    husky_relative_y_ = strtod(argv[4], &end_ptr);
 
+    ROS_INFO ("Husky spawned at %lf %lf", husky_relative_x_, husky_relative_y_);
 
+    set_firefly_pose_ = nh.advertise<geometry_msgs::PoseStamped>("commad_pose", 1);
+    husky_pose_ = nh.subscribe("husky_odometry", 1, &Tracking::huskyPoseCallback, this);
+    quad_pose_ = nh.subscribe("quad_odometry", 1, &Tracking::quadPoseCallback, this);
+    landing_client_ = nh.serviceClient<std_srvs::Trigger>("to_land");
 }
 
 void Tracking::run(){
-
-    srv_.response.success=false;
+    landing_service_.response.success=false;
     
-    
-    
-        if(((husky_odom_.pose.pose.position.x-0.1<=setpt_.pose.position.x)||
-        (setpt_.pose.position.x<husky_odom_.pose.pose.position.x+0.1))&&
-        (husky_odom_.pose.pose.position.y-0.1<=setpt_.pose.position.y)||
-        (setpt_.pose.position.y<husky_odom_.pose.pose.position.y+0.1))           { std::cout<<"over husky";landing_client_.call(srv_);} 
+    if((abs(husky_odom_.pose.pose.position.x-quad_odom_.pose.pose.position.x) < 0.1) && (abs(husky_odom_.pose.pose.position.x-quad_odom_.pose.pose.position.x) < 0.1)) {
+        ROS_INFO("Over Husky.");
+        landing_client_.call(landing_service_);
+    }
 
     set_firefly_pose_.publish(setpt_);
 }
 
 
 
-void Tracking::poseClbk(const nav_msgs::Odometry& msg) {
+void Tracking::huskyPoseCallback(const nav_msgs::Odometry& msg) {
     husky_odom_=msg;
-    setpt_.pose.position.x=msg.pose.pose.position.x;
-    setpt_.pose.position.y=msg.pose.pose.position.y;
-    setpt_.pose.position.z=a_;
-    }
-
-
-bool Tracking::serverClbk(std_srvs::Trigger::Request &req, std_srvs::Trigger::Response &resp){
-     if(setpt_.pose.position.z>0.3)
-      {   setpt_.pose.position.x=husky_odom_.pose.pose.position.x;
-          setpt_.pose.position.y=husky_odom_.pose.pose.position.y;
-          setpt_.pose.position.z=a_-0.1;}
-    resp.success=true;
-    resp.message="trigged";
-   
-    return true;
+    setpt_.pose.position.x=msg.pose.pose.position.x+husky_relative_x_;
+    setpt_.pose.position.y=msg.pose.pose.position.y+husky_relative_y_;
+    setpt_.pose.position.z=height_;
 }
+
+void Tracking::quadPoseCallback(const nav_msgs::Odometry& msg) {
+    quad_odom_=msg;
+}
+
 } // namespace ariitk::auto_landing
