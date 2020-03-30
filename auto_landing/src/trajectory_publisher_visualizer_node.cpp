@@ -6,14 +6,20 @@ int main(int argc, char** argv) {
     ros::init(argc, argv, "trajectory_pub");
     ExampleTrajectoryGeneration generator;
     
-    ros::Rate loop_rate(1);
+    ros::Rate loop_rate(10);
 
     int count = 0;
 
-    while (ros::ok()) {
-        if (count == 5) return 0;
-        generator.run();
+    while (count<10) {
+        ros::spinOnce();
+        ros::Duration(0.5).sleep();
         count++;
+    }
+
+
+    while (ros::ok()) {
+        generator.run();
+        ros::spinOnce();
         loop_rate.sleep();
     }
     

@@ -3,14 +3,22 @@
 
     <arg name="mav_name" default="firefly" />
 
-
-    <include file="$(find rotors_gazebo)/launch/mav.launch" />
-    
+    <include file="$(find rotors_gazebo)/launch/mav.launch" >
+        <arg name="paused" value="false" />
+    </include>  
+     
     <node pkg="auto_landing" type="auto_landing_trajectory_publisher_visualizer" name="auto_landing_trajectory_publisher_visualizer" output="screen">
         <rosparam command="load" file="$(find auto_landing)/cfg/trajectory_parameters.yaml" />
         <remap from="command_trajectory" to="$(arg mav_name)/command/trajectory" />
+        <remap from="mav_odometry" to="$(arg mav_name)/ground_truth/odometry" />
+        <remap from="husky_odometry" to="gazebo/model_states" />
     </node>
 
     <include file="$(find mav_linear_mpc)/launch/mav_linear_mpc_sim.launch" /> 
+
+    <include file="$(find husky_gazebo)/launch/spawn_husky.launch">
+        <arg name="x" value="2" />
+        <arg name="y" value="2" />
+    </include>
 
 </launch>
