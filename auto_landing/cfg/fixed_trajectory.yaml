@@ -1,0 +1,275 @@
+trajectory:
+  header:
+    frame_id: "world"
+  joint_names: "quad"
+  points:
+    -
+      transforms:
+        translation:
+          x: 0
+          y: 0
+          z: 5
+        rotation:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      velocities:
+        linear:
+          x: 0
+          y: 0
+          z: 0
+        angular:
+          x: 0
+          y: 0
+          z: 0
+      accelerations:
+        linear:
+          x: 0
+          y: 0
+          z: 0
+        angular:
+          x: 0
+          y: 0
+          z: 0
+      time_from_start: 2.5
+    -
+      transforms:
+        translation:
+          x: 0
+          y: 0
+          z: 5
+        rotation:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      velocities:
+        linear:
+          x: 0
+          y: 0
+          z: 0
+        angular:
+          x: 0
+          y: 0
+          z: 0
+      accelerations:
+        linear:
+          x: 0.5
+          y: 0
+          z: 0
+        angular:
+          x: 0
+          y: 0
+          z: 0
+      time_from_start: 5
+    -
+      transforms:
+        translation:
+          x: 0.25
+          y: 0
+          z: 5
+        rotation:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      velocities:
+        linear:
+          x: 0.5
+          y: 0
+          z: 0
+        angular:
+          x: 0
+          y: 0
+          z: 0
+      accelerations:
+        linear:
+          x: 0.5
+          y: 0
+          z: 0
+        angular:
+          x: 0
+          y: 0
+          z: 0
+      time_from_start: 6
+    -
+      transforms:
+        translation:
+          x: 1
+          y: 0
+          z: 5
+        rotation:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      velocities:
+        linear:
+          x: 1
+          y: 0
+          z: 0
+        angular:
+          x: 0
+          y: 0
+          z: 0
+      accelerations:
+        linear:
+          x: 0.5
+          y: 0
+          z: 0
+        angular:
+          x: 0
+          y: 0
+          z: 0
+      time_from_start: 7
+    -
+      transforms:
+        translation:
+          x: 2.25
+          y: 0
+          z: 5
+        rotation:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      velocities:
+        linear:
+          x: 1.5
+          y: 0
+          z: 0
+        angular:
+          x: 0
+          y: 0
+          z: 0
+      accelerations:
+        linear:
+          x: 0.5
+          y: 0
+          z: 0
+        angular:
+          x: 0
+          y: 0
+          z: 0
+      time_from_start: 8
+    -
+      transforms:
+        translation:
+          x: 4
+          y: 0
+          z: 5
+        rotation:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      velocities:
+        linear:
+          x: 2
+          y: 0
+          z: 0
+        angular:
+          x: 0
+          y: 0
+          z: 0
+      accelerations:
+        linear:
+          x: 0.5
+          y: 0
+          z: 0
+        angular:
+          x: 0
+          y: 0
+          z: 0
+      time_from_start: 9
+    -
+      transforms:
+        translation:
+          x: 6
+          y: 0
+          z: 5
+        rotation:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      velocities:
+        linear:
+          x: 2
+          y: 0
+          z: 0
+        angular:
+          x: 0
+          y: 0
+          z: 0
+      accelerations:
+        linear:
+          x: 0
+          y: 0
+          z: 0
+        angular:
+          x: 0
+          y: 0
+          z: 0
+      time_from_start: 10
+    -
+      transforms:
+        translation:
+          x: 8
+          y: 0
+          z: 5
+        rotation:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      velocities:
+        linear:
+          x: 2
+          y: 0
+          z: 0
+        angular:
+          x: 0
+          y: 0
+          z: 0
+      accelerations:
+        linear:
+          x: 0
+          y: 0
+          z: 0
+        angular:
+          x: 0
+          y: 0
+          z: 0
+      time_from_start: 11
+    -
+      transforms:
+        translation:
+          x: 10
+          y: 0
+          z: 5
+        rotation:
+          x: 0
+          y: 0
+          z: 0
+          w: 0
+      velocities:
+        linear:
+          x: 2
+          y: 0
+          z: 0
+        angular:
+          x: 0
+          y: 0
+          z: 0
+      accelerations:
+        linear:
+          x: 0
+          y: 0
+          z: 0
+        angular:
+          x: 0
+          y: 0
+          z: 0
+      time_from_start: 12
