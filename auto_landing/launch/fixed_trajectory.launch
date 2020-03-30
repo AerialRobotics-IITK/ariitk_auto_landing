@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="mav_name" default="firefly" />
+
+    <include file="$(find rotors_gazebo)/launch/mav.launch">
+        <arg name="paused" value="false" />
+    </include>
+
+    <node pkg="auto_landing" type="auto_landing_fixed_trajectory_publisher" name="auto_landing_fixed_trajectory_publisher" output="screen">
+        <rosparam command="load" file="$(find auto_landing)/cfg/fixed_trajectory.yaml" />
+        <remap from="trajectory" to="$(arg mav_name)/command/trajectory" />
+    </node>
+
+    <include file="$(find mav_linear_mpc)/launch/mav_linear_mpc_sim.launch" /> 
+
+</launch>
