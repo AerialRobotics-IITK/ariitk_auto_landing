@@ -12,5 +12,10 @@ cs_add_library(${PROJECT_NAME}_lib src/trajectory_publisher_visualizer.cpp)
 cs_add_executable(${PROJECT_NAME}_trajectory_publisher_visualizer src/trajectory_publisher_visualizer_node.cpp)
 target_link_libraries(${PROJECT_NAME}_trajectory_publisher_visualizer ${PROJECT_NAME}_lib)
 
+cs_add_library(${PROJECT_NAME}_lib1 src/fixed_trajectory_publisher.cpp)
+
+cs_add_executable(${PROJECT_NAME}_fixed_trajectory_publisher src/fixed_trajectory_publisher_node.cpp)
+target_link_libraries(${PROJECT_NAME}_fixed_trajectory_publisher ${PROJECT_NAME}_lib1)
+
 cs_install()
 cs_export()
