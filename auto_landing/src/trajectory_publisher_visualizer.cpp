@@ -53,13 +53,15 @@ mav_trajectory_generation::Vertex::Vector ExampleTrajectoryGeneration::generateL
     mav_trajectory_generation::Vertex::Vector vertices;
     // ROS_WARN("Odometry is %lf, %lf, %lf\n",mav_odom_.pose.pose.position.x, mav_odom_.pose.pose.position.y, mav_odom_.pose.pose.position.z);
     
-    Eigen::Vector3d start_point(husky_odom_.pose.pose.position.x+0.5, husky_odom_.pose.pose.position.y, 4.0);
+    Eigen::Vector3d start_point(husky_odom_.pose.pose.position.x, husky_odom_.pose.pose.position.y, 4.0);
     Eigen::Vector3d start_point_velocity(husky_odom_.twist.twist.linear.x, husky_odom_.twist.twist.linear.y, husky_odom_.twist.twist.linear.z);
     // Eigen::Vector3d end_point(mav_odom_.pose.pose.position.x+(husky_odom_.pose.pose.position.x-mav_odom_.pose.pose.position.x)/2, mav_odom_.pose.pose.position.y+(husky_odom_.pose.pose.position.y-mav_odom_.pose.pose.position.y)/2, 4.0);
-    Eigen::Vector3d end_point(husky_odom_.pose.pose.position.x+5, husky_odom_.pose.pose.position.y, 4.0);
+    Eigen::Vector3d husky_direction = start_point_velocity;
+    husky_direction.normalize();
+    Eigen::Vector3d end_point(husky_odom_.pose.pose.position.x, husky_odom_.pose.pose.position.y, 4.0);
 // ROS_WARN("Start point is %lf %lf %lf\nEnd Point is %lf %lf %lf\nEnd Point Velocity is %lf %lf %lf\n",start_point[0],start_point[1],start_point[2],end_point[0],end_point[1],end_point[2], end_point_velocity[0],end_point_velocity[1],end_point_velocity[2]);
     start.makeStartOrEnd(start_point, 3);
-    end.makeStartOrEnd(end_point, 3);
+    end.makeStartOrEnd(end_point+(husky_direction*2), 3);
     // end.makeStartOrEnd(Eigen::Vector3d(mav_odom_.pose.pose.position.x+10.5, mav_odom_.pose.pose.position.y, 5.0), 3);
     // end.addConstraint(mav_trajectory_generation::derivative_order::VELOCITY, Eigen::Vector3d(2,0,0));
     start.addConstraint(mav_trajectory_generation::derivative_order::VELOCITY, start_point_velocity);
