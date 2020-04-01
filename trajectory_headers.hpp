@@ -10,5 +10,7 @@ class trajectory{
         
         private:
            ros::Publisher trajectory_pub;
+           double ang_vel,linear_vel;
+           geometry_msgs::Twist msg;
     };
 }//namespace ariitk::namespace_name;
