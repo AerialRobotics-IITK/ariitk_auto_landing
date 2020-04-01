@@ -27,6 +27,7 @@ class ExampleTrajectoryGeneration {
         double distance_;
 
         XmlRpc::XmlRpcValue points_;
+        Eigen::Vector3d husky_acceleration_;
 
         mav_trajectory_generation::Trajectory result_;
 
@@ -40,6 +41,8 @@ class ExampleTrajectoryGeneration {
         ros::Publisher trajectory_pub_, marker_pub_;
 
         ros::Subscriber mav_odometry_sub_, husky_odometry_sub_;
+
+        // double current_time_;
 
         void generateTrajectory (std::vector<mav_trajectory_generation::Vertex> vertices);
         double getValueAsDouble (XmlRpc::XmlRpcValue& value);

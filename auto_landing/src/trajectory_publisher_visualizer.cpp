@@ -3,14 +3,13 @@
 namespace ariitk::auto_landing{
 
 ExampleTrajectoryGeneration::ExampleTrajectoryGeneration()
-    : dimension_(3), nh_(), nh_private_("~") {
+    : dimension_(3), nh_(), nh_private_("~"), husky_acceleration_(0,0,0) {
 
         trajectory_pub_ = nh_.advertise<trajectory_msgs::MultiDOFJointTrajectory>("command_trajectory", 1);
         marker_pub_ = nh_.advertise<visualization_msgs::MarkerArray>("visualization_marker_array", 1);
         mav_odometry_sub_ = nh_.subscribe("mav_odometry", 10, &ExampleTrajectoryGeneration::mavOdometryCallback, this);
         husky_odometry_sub_ = nh_.subscribe("husky_odometry", 10, &ExampleTrajectoryGeneration::huskyOdometryCallback, this);
 
-        
         mav_trajectory_generation::Vertex start_(dimension_), end_(dimension_);
         mav_trajectory_generation::Vertex::Vector vertices_;
         
@@ -38,7 +37,6 @@ ExampleTrajectoryGeneration::ExampleTrajectoryGeneration()
         // }
         // vertices_.push_back(end_);
 
-
     }
 
 void ExampleTrajectoryGeneration::run() {
@@ -55,16 +53,20 @@ mav_trajectory_generation::Vertex::Vector ExampleTrajectoryGeneration::generateL
     
     Eigen::Vector3d start_point(husky_odom_.pose.pose.position.x, husky_odom_.pose.pose.position.y, 4.0);
     Eigen::Vector3d start_point_velocity(husky_odom_.twist.twist.linear.x, husky_odom_.twist.twist.linear.y, husky_odom_.twist.twist.linear.z);
+    Eigen::Vector3d start_point_acceleration();
     // Eigen::Vector3d end_point(mav_odom_.pose.pose.position.x+(husky_odom_.pose.pose.position.x-mav_odom_.pose.pose.position.x)/2, mav_odom_.pose.pose.position.y+(husky_odom_.pose.pose.position.y-mav_odom_.pose.pose.position.y)/2, 4.0);
     Eigen::Vector3d husky_direction = start_point_velocity;
     husky_direction.normalize();
     Eigen::Vector3d end_point(husky_odom_.pose.pose.position.x, husky_odom_.pose.pose.position.y, 4.0);
-// ROS_WARN("Start point is %lf %lf %lf\nEnd Point is %lf %lf %lf\nEnd Point Velocity is %lf %lf %lf\n",start_point[0],start_point[1],start_point[2],end_point[0],end_point[1],end_point[2], end_point_velocity[0],end_point_velocity[1],end_point_velocity[2]);
+    // ROS_WARN("Start point is %lf %lf %lf\nEnd Point is %lf %lf %lf\nEnd Point Velocity is %lf %lf %lf\n",start_point[0],start_point[1],start_point[2],end_point[0],end_point[1],end_point[2], end_point_velocity[0],end_point_velocity[1],end_point_velocity[2]);
     start.makeStartOrEnd(start_point, 3);
     end.makeStartOrEnd(end_point+(husky_direction*2), 3);
     // end.makeStartOrEnd(Eigen::Vector3d(mav_odom_.pose.pose.position.x+10.5, mav_odom_.pose.pose.position.y, 5.0), 3);
     // end.addConstraint(mav_trajectory_generation::derivative_order::VELOCITY, Eigen::Vector3d(2,0,0));
     start.addConstraint(mav_trajectory_generation::derivative_order::VELOCITY, start_point_velocity);
+    start.addConstraint(mav_trajectory_generation::derivative_order::ACCELERATION, husky_acceleration_);
+
+    ROS_ERROR("acceleration: %lf, %lf, %lf\n",husky_acceleration_[0], husky_acceleration_[1], husky_acceleration_[2]);
 
     vertices.push_back(start);
 
@@ -87,7 +89,6 @@ mav_trajectory_generation::Vertex::Vector ExampleTrajectoryGeneration::generateL
     vertices.push_back(end);
 
     return vertices;
-
 }
 
 void ExampleTrajectoryGeneration::generateTrajectory(std::vector<mav_trajectory_generation::Vertex> vertices) {    
@@ -108,8 +109,7 @@ void ExampleTrajectoryGeneration::generateTrajectory(std::vector<mav_trajectory_
 
     std::string frame_id = "world";
 
-    mav_trajectory_generation::drawMavTrajectory(result_, distance_, frame_id, &markers_);
-        
+    mav_trajectory_generation::drawMavTrajectory(result_, distance_, frame_id, &markers_); 
 }
 
 double ExampleTrajectoryGeneration::getValueAsDouble(XmlRpc::XmlRpcValue& value) {
@@ -121,7 +121,6 @@ double ExampleTrajectoryGeneration::getValueAsDouble(XmlRpc::XmlRpcValue& value)
         ROS_ERROR("Parameter specified is not integer or double. Taking 0.0 as the value.");
         return 0.0;
     }
-    
 }
 
 void ExampleTrajectoryGeneration::mavOdometryCallback(const nav_msgs::Odometry& msg) {
@@ -136,9 +135,20 @@ void ExampleTrajectoryGeneration::huskyOdometryCallback(const gazebo_msgs::Model
         index++;
         name = msg.name[index];
     }
-
+    // double time = ros::Time::now().toSec();
+    // double dt_= time-current_time_;
+    // ROS_ERROR("t1:- %lf, t2-%lf, dt-%lf",time, current_time_, dt_);
+    // current_time_ = time;
+    // std::cout << current_time_.toSec() <<"\n";
+    husky_acceleration_(0) = (msg.twist[index].linear.x-husky_odom_.twist.twist.linear.x)/0.1;
+    husky_acceleration_(1) = (msg.twist[index].linear.y-husky_odom_.twist.twist.linear.y)/0.1;
+    husky_acceleration_(2) = (msg.twist[index].linear.z-husky_odom_.twist.twist.linear.z)/0.1;
+    // if (dt_<0.0001) return;
+    // ROS_ERROR("time=%lf",dt_);
+    // ROS_ERROR("velocity1= %lf, %lf, %lf", msg.twist[index].linear.x, msg.twist[index].linear.y, msg.twist[index].linear.z);
+    // ROS_ERROR("velocity2= %lf, %lf, %lf", msg.twist[index].linear.x, msg.twist[index].linear.y, msg.twist[index].linear.z);
     husky_odom_.pose.pose = msg.pose[index];
     husky_odom_.twist.twist = msg.twist[index];
-}
+} 
 
-} //namespace ariitk::auto_landing
+}//namespace ariitk::auto_landing
