@@ -2,11 +2,12 @@
 
 using namespace ariitk::auto_landing;
 
-int main(int argc, char **argv){
+int main(int argc, char **argv) {
+
     ros::init(argc,argv,"eight_shape_traj_node");
     ros::NodeHandle nh;
 
-    Eight_Traj traj;
+    EightTraj traj;
     
     traj.init(nh);
 

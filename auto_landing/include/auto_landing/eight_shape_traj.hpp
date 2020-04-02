@@ -7,7 +7,8 @@
 
 namespace ariitk::auto_landing {
 
-class Eight_Traj {
+class EightTraj {
+    
     public:
         
         void init(ros::NodeHandle& nh);
@@ -15,8 +16,9 @@ class Eight_Traj {
 
     private:
 
-        geometry_msgs::Twist cmdVelocity(const nav_msgs::Odometry& husky_odom_,int& count_,double& t1,double& t2);
-        void poseClbk(const nav_msgs::Odometry& msg);
+        geometry_msgs::Twist cmdVelocity(const nav_msgs::Odometry& husky_odom_, int& count_, double& t1, double& t2);
+        
+        void poseCallback(const nav_msgs::Odometry& msg);
 
         ros::Publisher set_husky_vel_;
         ros::Subscriber husky_pose_;
@@ -29,4 +31,5 @@ class Eight_Traj {
         geometry_msgs::Twist cmd_vel_;
         nav_msgs::Odometry husky_odom_;
 };
-} // namespace ariitk::auto_landing
+
+} //ariitk::auto_landing
