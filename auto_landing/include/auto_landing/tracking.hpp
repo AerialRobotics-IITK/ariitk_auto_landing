@@ -19,27 +19,26 @@ class Tracking {
 
     private:
     
-        // void huskyPoseCallback(const nav_msgs::Odometry& msg);
         void modelStateCallback(const gazebo_msgs::ModelStates& msg);
         void quadPoseCallback(const nav_msgs::Odometry& msg);
-        void quadSetPointUpdate(nav_msgs::Odometry& husky_odom_, nav_msgs::Odometry& quad_odom_);
-        // void huskyVelocityCallback(const geometry_msgs::Twist& msg);
-        // void spericalCoordinates(nav_msgs::Odometry& husky_odom_);
+        void quadSetPointUpdate();
 
-        int height_,n;
+        int height_,index_;
+        int appx_value_[2]={3,3};
+
         geometry_msgs::PoseStamped setpt_;
         nav_msgs::Odometry husky_odom_,quad_odom_;
         std_srvs::Trigger landing_service_;
-        geometry_msgs::Twist husky_cmd_vel_;
+        geometry_msgs::Twist husky_cmd_vel_[2];
 
         double husky_relative_x_, husky_relative_y_;
-        double t1=0,t2=0,t_now;
-        double rad_,angle_;
-
+        double time_[2]={0,0},time_diff_;
+        double setpt_approximation_[2];
+        double norm_;
+        
         ros::Publisher set_firefly_pose_;
         ros::Subscriber husky_pose_;
         ros::Subscriber quad_pose_;
-        // ros::Subscriber husky_velocity_;
         ros::Subscriber gazebo_model_state_;
 
         ros::ServiceServer landing_server_;
