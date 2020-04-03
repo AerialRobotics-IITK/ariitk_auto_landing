@@ -34,6 +34,7 @@
   
   <depend>roscpp</depend>
   <depend>geometry_msgs</depend>
+  <depend>gazebo_msgs</depend>
   <depend>nav_msgs</depend>
   <depend>std_srvs</depend>
 
