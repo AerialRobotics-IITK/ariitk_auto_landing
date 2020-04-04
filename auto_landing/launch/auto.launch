@@ -1,9 +1,8 @@
 <?xml version="1.0"?>
-<launch>
-    
-    	<arg name="mav_name" default="firefly" />
-		<arg name="x" value="2.0" />
-    	<arg name="y" value="3.0" />
+<launch>    
+	<arg name="mav_name" default="firefly" />
+	<arg name="x" value="2.0" />
+    <arg name="y" value="3.0" />
 	
 	<include file="$(find rotors_gazebo)/launch/mav.launch" />
 
@@ -16,12 +15,14 @@
  
  	<include file="$(find mav_linear_mpc)/launch/mav_linear_mpc_sim.launch" />
 
-    <node pkg="auto_landing" type="auto_landing_node" name="auto_landing_node" output="screen" args="-x $(arg x) -y $(arg y)">
-		<remap from="commad_pose" to="$(arg mav_name)/command/pose" />
-		<remap from="husky_odometry" to="/odometry/filtered" />
-		<remap from="quad_odometry" to="$(arg mav_name)/ground_truth/odometry" />
-		<remap from="husky_cmd_velocity" to="husky_velocity_controller/cmd_vel" />
-		<remap from="model_state" to="gazebo/model_states" />
-	</node>
+	<group ns="$(arg mav_name)">
+		<node pkg="auto_landing" type="auto_landing_node" name="auto_landing_node" output="screen" args="-x $(arg x) -y $(arg y)">
+			<remap from="command_pose" 	     to="command/pose" />
+			<remap from="husky_odometry"     to="/odometry/filtered" />
+			<remap from="quad_odometry"  	 to="ground_truth/odometry" />
+			<remap from="husky_cmd_velocity" to="/husky_velocity_controller/cmd_vel" />
+			<remap from="model_state" 		 to="/gazebo/model_states" />
+		</node>
+	</group>
 
 </launch>
