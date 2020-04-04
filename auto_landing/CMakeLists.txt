@@ -7,7 +7,6 @@ catkin_simple(ALL_DEPS_REQUIRED)
 add_definitions(-std=c++17)
 set(CMAKE_BUILD_TYPE Release)
 
-
 cs_add_library(${PROJECT_NAME}_lib src/tracking.cpp)
 
 cs_add_executable(${PROJECT_NAME}_node src/tracking_node.cpp)
