@@ -69,7 +69,6 @@ void Tracking::updateSetPoint() {
     int approximation_value_[2] = {3,3};
     inv_state_publish_rate_ = 0.1;
     
-    
     double x_approx_  = husky_cmd_vel_[1].linear.x*inv_state_publish_rate_ + 0.5*(husky_cmd_vel_[1].linear.x-husky_cmd_vel_[0].linear.x)*pow(inv_state_publish_rate_,2);
     double y_approx_  = husky_cmd_vel_[1].linear.y*inv_state_publish_rate_ + 0.5*(husky_cmd_vel_[1].linear.y-husky_cmd_vel_[0].linear.y)*pow(inv_state_publish_rate_,2);
     
