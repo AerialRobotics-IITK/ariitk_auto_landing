@@ -5,6 +5,7 @@
   <description>The auto_landing package</description>
 
   <maintainer email="kabeer@iitk.ac.in">Kshitij Kabeer</maintainer>
+  <maintainer email="varunk@iitk.ac.in">varun khatri</maintainer>
 
   <license>TODO</license>
 
@@ -14,5 +15,11 @@
   <depend>roscpp</depend>
   <depend>mav_trajectory_generation</depend>
   <depend>mav_trajectory_generation_ros</depend>
-
+  <depend>geometry_msgs</depend>
+  <depend>gazebo_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>std_srvs</depend>
+  <depend>mav_trajectory_generation</depend>
+  <depend>mav_trajectory_generation_ros</depend>
+  
 </package>
