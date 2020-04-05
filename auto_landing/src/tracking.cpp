@@ -19,7 +19,7 @@ void Tracking::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, char** arg
 void Tracking::run() {
         
     if((fabs(husky_odom_.pose.pose.position.x-quad_odom_.pose.pose.position.x) < 0.1) 
-        && (fabs(husky_odom_.pose.pose.position.x-quad_odom_.pose.pose.position.x) < 0.1)) {
+        && (fabs(husky_odom_.pose.pose.position.y-quad_odom_.pose.pose.position.y) < 0.1)) {
         ROS_INFO("Over Husky.");
         landing_client_.call(landing_service_);
     }
