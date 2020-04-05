@@ -1,0 +1,2 @@
+ang_vel: 0.5     #Angular velocity of husky for circular trajectory
+linear_vel: 5    #Linear velocity of husky for circular trajectory    
