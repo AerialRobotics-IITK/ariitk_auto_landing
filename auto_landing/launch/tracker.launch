@@ -8,7 +8,7 @@
         <arg name="paused" value="false" />
     </include>  
      
-    <node pkg="auto_landing" type="auto_landing_trajectory_publisher_visualizer" name="auto_landing_trajectory_publisher_visualizer" output="screen" args="$(arg publish_visualization_marker)">
+    <node pkg="auto_landing" type="auto_landing_trajectory_generation_tracker" name="auto_landing_trajectory_generation_tracker" output="screen" args="$(arg publish_visualization_marker)">
         <rosparam command="load" file="$(find auto_landing)/cfg/trajectory_parameters.yaml" />
         <remap from="command_trajectory" to="$(arg mav_name)/command/trajectory" />
         <remap from="mav_odometry" to="$(arg mav_name)/ground_truth/odometry" />
