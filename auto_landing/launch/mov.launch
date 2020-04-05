@@ -9,7 +9,7 @@
         <arg name="y" value="2" />
     </include>
 
-    <node pkg="auto_landing" type="auto_landing_node" name="auto_landing_node" output="screen">
+    <node pkg="auto_landing" type="auto_landing_husky_node" name="auto_landing_husky_node" output="screen">
         <rosparam command="load" file="$(find auto_landing)/cfg/husky_trajectory_params.yaml" />
     </node>
 
