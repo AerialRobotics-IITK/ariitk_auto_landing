@@ -5,10 +5,12 @@ using namespace ariitk::land_uav;
 int main(int argc,char** argv){
     ros::init(argc,argv,"landing_node");
     ros::NodeHandle nh;
+    ros::NodeHandle nh_private("~");
 
     Landing firefly;
-    firefly.init(nh);
+    firefly.init(nh,nh_private,argv);
     ros::spin();
-    firefly.run();
-    return 0;
+    if(firefly.position())firefly.run();
+    //else 
+    return 0; 
 }
