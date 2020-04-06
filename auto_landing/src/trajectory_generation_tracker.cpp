@@ -14,13 +14,13 @@ TrajectoryGenerationTracking::TrajectoryGenerationTracking(char** argv)
     nh_private_.getParam("a_max", a_max_);
     nh_private_.getParam("distance", distance_);
 
-    if (std::string(argv[1]) == "false") publish_visualization_=false;
-    else publish_visualization_=true;
+    if (std::string(argv[1]) == "false") { publish_visualization_=false; }
+    else { publish_visualization_=true; }
 }
 
 void TrajectoryGenerationTracking::run() {
     generateTrajectory(computePoints());
-    if (publish_visualization_) marker_pub_.publish(markers_);
+    if (publish_visualization_) { marker_pub_.publish(markers_); }
     trajectory_pub_.publish(generated_trajectory_);
 }
 
@@ -34,7 +34,7 @@ mav_trajectory_generation::Vertex::Vector TrajectoryGenerationTracking::computeP
     husky_direction.normalize();
     
     start.makeStartOrEnd(start_point, 3);
-    end.makeStartOrEnd(start_point+(husky_direction*2), 3);
+    end.makeStartOrEnd(start_point + (husky_direction*2), 3);
     
     start.addConstraint(mav_trajectory_generation::derivative_order::VELOCITY, start_point_velocity);
     start.addConstraint(mav_trajectory_generation::derivative_order::ACCELERATION, husky_acceleration_);

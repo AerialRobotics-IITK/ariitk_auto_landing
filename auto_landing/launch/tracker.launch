@@ -18,8 +18,8 @@
     <include file="$(find mav_linear_mpc)/launch/mav_linear_mpc_sim.launch" /> 
 
     <include file="$(find husky_gazebo)/launch/spawn_husky.launch">
-        <arg name="x" value="2" />
-        <arg name="y" value="2" />
+        <arg name="x"      value="2" />
+        <arg name="y"      value="2" />
     </include>
 
     <group if="$(arg publish_visualization_marker)">

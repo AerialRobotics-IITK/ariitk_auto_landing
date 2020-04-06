@@ -3,7 +3,6 @@
 #include <mav_msgs/conversions.h>
 #include <trajectory_msgs/MultiDOFJointTrajectory.h>
 #include <gazebo_msgs/ModelStates.h>
-
 #include <mav_trajectory_generation/polynomial_optimization_linear.h>
 #include <mav_trajectory_generation/trajectory_sampling.h>
 #include <mav_trajectory_generation_ros/ros_visualization.h>
@@ -19,7 +18,6 @@ class TrajectoryGenerationTracking {
         void mavOdometryCallback(const nav_msgs::Odometry& msg);
         void huskyOdometryCallback(const gazebo_msgs::ModelStates& msg);
         void generateTrajectory (std::vector<mav_trajectory_generation::Vertex> vertices);
-
         mav_trajectory_generation::Vertex::Vector computePoints();
 
         bool publish_visualization_;
