@@ -3,6 +3,8 @@
   <name>auto_landing</name>
   <version>0.0.0</version>
   <description>The auto_landing package</description>
+  
+  <maintainer email="sanjayso@iitk.ac.in">Sanjay Sukumaran</maintainer>
   <maintainer email="varunk@iitk.ac.in">varun khatri</maintainer>
 
   <license>TODO</license>
@@ -17,3 +19,4 @@
   <depend>std_srvs</depend>
   
 </package>
+
