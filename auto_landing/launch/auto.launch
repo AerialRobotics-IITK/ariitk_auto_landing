@@ -17,7 +17,7 @@
  	<include file="$(find mav_linear_mpc)/launch/mav_linear_mpc_sim.launch" />
 
 	<group ns="$(arg mav_name)">
-		<node pkg="auto_landing" type="auto_landing_node" name="auto_landing_node" output="screen" args="-x $(arg x) -y $(arg y)">
+		<node pkg="auto_landing" type="auto_landing_tracking_node" name="auto_landing_tracking_node" output="screen" args="-x $(arg x) -y $(arg y)">
 			<remap from="command_pose" 	     to="command/pose" />
 			<remap from="husky_odometry"     to="/odometry/filtered" />
 			<remap from="quad_odometry"  	 to="ground_truth/odometry" />
@@ -27,3 +27,4 @@
 	</group>
 
 </launch>
+
