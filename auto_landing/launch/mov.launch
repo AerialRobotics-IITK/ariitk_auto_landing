@@ -5,12 +5,14 @@
     </include> 
 
     <include file="$(find husky_gazebo)/launch/spawn_husky.launch">
-        <arg name="x" value="2" />
-        <arg name="y" value="2" />
+        <arg name="x"        value="2" />
+        <arg name="y"        value="2" />
     </include>
 
     <node pkg="auto_landing" type="auto_landing_husky_node" name="auto_landing_husky_node" output="screen">
         <rosparam command="load" file="$(find auto_landing)/cfg/husky_trajectory_params.yaml" />
+        <remap from="command_velocity" to="husky_velocity_controller/cmd_vel" />
     </node>
 
 </launch>
+

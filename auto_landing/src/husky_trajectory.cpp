@@ -4,7 +4,7 @@ namespace ariitk::auto_landing{
     
 void Huskytrajectory::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private){
     
-    trajectory_pub_=nh.advertise<geometry_msgs::Twist>("/husky_velocity_controller/cmd_vel",10);
+    trajectory_pub_=nh.advertise<geometry_msgs::Twist>("command_velocity",10);
     
     nh_private.getParam("linear_vel",linear_velocity_);
     nh_private.getParam("ang_vel",angular_velocity_);
@@ -18,3 +18,4 @@ void Huskytrajectory::run(){
 }
 
 } //namespace ariitk::auto_landing;
+
