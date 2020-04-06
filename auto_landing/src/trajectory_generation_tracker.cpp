@@ -1,6 +1,6 @@
 #include <auto_landing/trajectory_generation_tracker.hpp>
 
-namespace ariitk::auto_landing{
+namespace ariitk::auto_landing {
 
 TrajectoryGenerationTracking::TrajectoryGenerationTracking(char** argv)
     : dimension_(3), nh_(), nh_private_("~"), husky_acceleration_(0,0,0) {
@@ -14,8 +14,8 @@ TrajectoryGenerationTracking::TrajectoryGenerationTracking(char** argv)
     nh_private_.getParam("a_max", a_max_);
     nh_private_.getParam("distance", distance_);
 
-    if (std::string(argv[1]) == "false") { publish_visualization_=false; }
-    else { publish_visualization_=true; }
+    if (std::string(argv[1]) == "false") { publish_visualization_ = false; }
+    else { publish_visualization_ = true; }
 }
 
 void TrajectoryGenerationTracking::run() {
@@ -34,7 +34,7 @@ mav_trajectory_generation::Vertex::Vector TrajectoryGenerationTracking::computeP
     husky_direction.normalize();
     
     start.makeStartOrEnd(start_point, 3);
-    end.makeStartOrEnd(start_point + (husky_direction*2), 3);
+    end.makeStartOrEnd(start_point + (husky_direction * 2), 3);
     
     start.addConstraint(mav_trajectory_generation::derivative_order::VELOCITY, start_point_velocity);
     start.addConstraint(mav_trajectory_generation::derivative_order::ACCELERATION, husky_acceleration_);
@@ -65,7 +65,6 @@ void TrajectoryGenerationTracking::generateTrajectory(std::vector<mav_trajectory
         std::string frame_id = "world";
         mav_trajectory_generation::drawMavTrajectory(result_, distance_, frame_id, &markers_);    
     }
-
 }
 
 void TrajectoryGenerationTracking::mavOdometryCallback(const nav_msgs::Odometry& msg) {
@@ -73,16 +72,16 @@ void TrajectoryGenerationTracking::mavOdometryCallback(const nav_msgs::Odometry&
 }
 
 void TrajectoryGenerationTracking::huskyOdometryCallback(const gazebo_msgs::ModelStates& msg) {
-    int index=0;
+    int index = 0;
     std::string name = msg.name[index];
     while (name != "/") {
         index++;
         name = msg.name[index];
     }
 
-    husky_acceleration_(0) = (msg.twist[index].linear.x-husky_odom_.twist.twist.linear.x)/0.1;
-    husky_acceleration_(1) = (msg.twist[index].linear.y-husky_odom_.twist.twist.linear.y)/0.1;
-    husky_acceleration_(2) = (msg.twist[index].linear.z-husky_odom_.twist.twist.linear.z)/0.1;
+    husky_acceleration_(0) = (msg.twist[index].linear.x-husky_odom_.twist.twist.linear.x) / 0.1;
+    husky_acceleration_(1) = (msg.twist[index].linear.y-husky_odom_.twist.twist.linear.y) / 0.1;
+    husky_acceleration_(2) = (msg.twist[index].linear.z-husky_odom_.twist.twist.linear.z) / 0.1;
 
     husky_odom_.pose.pose = msg.pose[index];
     husky_odom_.twist.twist = msg.twist[index];

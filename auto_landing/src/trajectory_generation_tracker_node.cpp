@@ -9,7 +9,7 @@ int main(int argc, char** argv) {
     ros::Rate loop_rate(10);
 
     int count = 0;
-    while (count<10) {
+    while (count < 10) {
         ros::spinOnce();
         ros::Duration(0.5).sleep();
         count++;

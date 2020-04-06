@@ -1,3 +1,5 @@
+#pragma once
+
 #include <ros/ros.h>
 #include <mav_msgs/eigen_mav_msgs.h>
 #include <mav_msgs/conversions.h>
@@ -17,8 +19,9 @@ class TrajectoryGenerationTracking {
     private:
         void mavOdometryCallback(const nav_msgs::Odometry& msg);
         void huskyOdometryCallback(const gazebo_msgs::ModelStates& msg);
-        void generateTrajectory (std::vector<mav_trajectory_generation::Vertex> vertices);
+        
         mav_trajectory_generation::Vertex::Vector computePoints();
+        void generateTrajectory (std::vector<mav_trajectory_generation::Vertex> vertices);
 
         bool publish_visualization_;
 
