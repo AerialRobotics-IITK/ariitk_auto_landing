@@ -1,5 +1,6 @@
-#include<ros/ros.h>
+#pragma once
 
+#include<ros/ros.h>
 #include<geometry_msgs/Twist.h>
 #include<geometry_msgs/PoseStamped.h>
 #include<gazebo_msgs/ModelStates.h>
@@ -35,3 +36,4 @@ class Tracking {
 };
 
 } // namespace ariitk::auto_landing
+
