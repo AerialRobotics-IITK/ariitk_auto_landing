@@ -3,7 +3,7 @@
 namespace ariitk::auto_landing {
 
 Tracking::Tracking() 
-    : height_(1)
+    : height_(4)
     , inv_state_publish_rate_(0.1) {}
 
 void Tracking::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, char** argv) {
@@ -11,19 +11,11 @@ void Tracking::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, char** arg
     set_firefly_pose_pub_  = nh.advertise<geometry_msgs::PoseStamped>("command_pose", 1);
     quad_pose_sub_  = nh.subscribe("quad_odometry", 1, &Tracking::quadPoseCallback, this);
     gazebo_model_state_sub_ = nh.subscribe("model_state",1,&Tracking::modelStateCallback,this);
-    landing_client_  = nh_private.serviceClient<std_srvs::Trigger>("to_land");
 
     setpt_.pose.position.z = height_;
 }
 
 void Tracking::run() {
-        
-    if((fabs(husky_odom_.pose.pose.position.x-quad_odom_.pose.pose.position.x) < 0.1) 
-        && (fabs(husky_odom_.pose.pose.position.y-quad_odom_.pose.pose.position.y) < 0.1)) {
-        ROS_INFO("Over Husky.");
-        landing_client_.call(landing_service_);
-    }
-    
     if((fabs(husky_cmd_vel_[0].linear.x) > 0.0001 || fabs(husky_cmd_vel_[0].linear.y) > 0.0001)) {
         updateSetPoint();
     }
@@ -63,7 +55,7 @@ void Tracking::updateSetPoint() {
     double distance_x = husky_odom_.pose.pose.position.x - quad_odom_.pose.pose.position.x;
     double distance_y = husky_odom_.pose.pose.position.y - quad_odom_.pose.pose.position.y;
 
-    int approximation_value[2] = {3,3};
+    float approximation_value[2] = {1,1};
 
     double x_approx = husky_cmd_vel_[1].linear.x * inv_state_publish_rate_ + 0.5 * (husky_cmd_vel_[1].linear.x - husky_cmd_vel_[0].linear.x) * pow(inv_state_publish_rate_, 2);
     double y_approx = husky_cmd_vel_[1].linear.y * inv_state_publish_rate_ + 0.5 * (husky_cmd_vel_[1].linear.y - husky_cmd_vel_[0].linear.y) * pow(inv_state_publish_rate_, 2);
