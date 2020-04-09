@@ -5,7 +5,7 @@
 #include <nav_msgs/Odometry.h>
 #include <gazebo_msgs/ModelStates.h>
 
-namespace ariitk::auto_landing{
+namespace ariitk::auto_landing {
 
 class Landing {
     public:
@@ -15,7 +15,7 @@ class Landing {
     private:
         void mavCommandCallback (const geometry_msgs::PoseStamped& msg);
         void mavOdometryCallback (const nav_msgs::Odometry& msg);
-        void modelStateCallback(const gazebo_msgs::ModelStates& msg);  
+        void modelStateCallback (const gazebo_msgs::ModelStates& msg);  
 
         geometry_msgs::PoseStamped mav_command_, mav_final_command_;
 
@@ -24,4 +24,4 @@ class Landing {
         ros::Subscriber mav_command_sub_, mav_odometry_sub_, husky_odometry_sub_;
         ros::Publisher mav_final_command_pub_;
     };
-} // namespace ariitk::land_uav
+} // namespace ariitk::auto_landing

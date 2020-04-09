@@ -1,15 +1,15 @@
 #include<auto_landing/landing.hpp>
 
-namespace ariitk::auto_landing{
+namespace ariitk::auto_landing {
 
-void Landing::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, char** argv){
+void Landing::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, char** argv) {
     mav_command_sub_ = nh.subscribe("mav_command", 1, &Landing::mavCommandCallback, this);
     mav_odometry_sub_ = nh.subscribe("mav_odometry", 1, &Landing::mavOdometryCallback, this);
     husky_odometry_sub_ = nh.subscribe("model_state", 1, &Landing::modelStateCallback, this);
     mav_final_command_pub_ = nh.advertise<geometry_msgs::PoseStamped>("mav_final_command", 1);
 }
 
-void Landing::run(){
+void Landing::run() {
     mav_final_command_ = mav_command_;
 
     if((fabs(husky_odometry_.pose.pose.position.x-mav_odometry_.pose.pose.position.x) < 0.025) 
