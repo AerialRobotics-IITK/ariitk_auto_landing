@@ -1,10 +1,9 @@
 #pragma once
 
-#include<ros/ros.h>
-#include<geometry_msgs/PoseStamped.h>
-#include<nav_msgs/Odometry.h>
-#include<std_srvs/Trigger.h>
-#include<gazebo_msgs/ModelStates.h>
+#include <ros/ros.h>
+#include <geometry_msgs/PoseStamped.h>
+#include <nav_msgs/Odometry.h>
+#include <gazebo_msgs/ModelStates.h>
 
 namespace ariitk::auto_landing{
 
@@ -12,6 +11,7 @@ class Landing {
     public:
         void init(ros::NodeHandle& nh, ros::NodeHandle& nh_private,char** argv);
         void run();
+        
     private:
         void mavCommandCallback (const geometry_msgs::PoseStamped& msg);
         void mavOdometryCallback (const nav_msgs::Odometry& msg);

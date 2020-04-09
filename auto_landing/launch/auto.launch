@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <launch>    
 	<arg name="mav_name" default="firefly" />
-	<arg name="x" value="5.0" />
-    <arg name="y" value="5.0" />
+	<arg name="x"     value="5.0" />
+    <arg name="y"     value="5.0" />
 	
 	<include file="$(find rotors_gazebo)/launch/mav.launch" />
 
@@ -10,7 +10,6 @@
 	    <arg name="x" value="$(arg x)" />
         <arg name="y" value="$(arg y)" />
         <arg name="z" value="0.3" />
-		
 	</include>
  
  	<include file="$(find mav_linear_mpc)/launch/mav_linear_mpc_sim.launch" />
@@ -24,10 +23,10 @@
 		</node>
 
 		<node pkg="auto_landing" type="landing_node" name="landing_node" output="screen">
-			<remap from="mav_command" to="firefly/command/track/pose" />
-			<remap from="mav_odometry" to="firefly/ground_truth/odometry" />
-			<remap from="model_state" to="gazebo/model_states" />
-			<remap from="mav_final_command" to="firefly/command/pose" />
+			<remap from="mav_command"        to="firefly/command/track/pose" />
+			<remap from="mav_odometry"       to="firefly/ground_truth/odometry" />
+			<remap from="model_state"        to="gazebo/model_states" />
+			<remap from="mav_final_command"  to="firefly/command/pose" />
 		</node>
 
 </launch>
