@@ -1,0 +1,4 @@
+## Trajectory Generation Parameters
+v_max: 2        #float: maximum allowable velocity
+a_max: 2        #float: maximum allowable acceleration
+distance: 1.0   #float: distance (in meters) by which to separate markers for visualization in rviz
