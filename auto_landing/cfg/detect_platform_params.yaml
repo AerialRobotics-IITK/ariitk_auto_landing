@@ -1,0 +1,13 @@
+camera_matrix:
+   rows: 3
+   cols: 3
+   data: [358.4701893587005, 0, 323.8761965975529, 0, 359.5166951760163, 233.6390334982792, 0, 0, 1]
+distortion_coefficients:
+   rows: 1
+   cols: 5
+   data: [-0.3263238172477361, 0.08120101574385939, -0.0001620190119734289, -0.0009502949222392523, 0]
+low_threshold_canny : 0
+upper_threshold_canny : 20
+publish_preprocess : true
+publish_detected_platform : true
+is_undistort : true
