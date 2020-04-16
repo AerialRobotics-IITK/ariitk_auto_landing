@@ -43,4 +43,8 @@ void Landing::modelStateCallback(const gazebo_msgs::ModelStates& msg) {
     husky_odometry_.pose.pose.position.z = msg.pose[index].position.z;
 }
 
+void Landing::trajectoryCallback (const trajectory_msgs::MultiDOFJointTrajectory& msg) {
+    command_trajectory = msg;
+}
+
 } //namespace ariitk::auto_landing

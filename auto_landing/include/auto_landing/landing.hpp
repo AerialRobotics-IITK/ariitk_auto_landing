@@ -4,6 +4,7 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <nav_msgs/Odometry.h>
 #include <gazebo_msgs/ModelStates.h>
+#include <trajectory_msgs/MultiDOFJointTrajectory.h>
 
 namespace ariitk::auto_landing {
 
@@ -16,8 +17,10 @@ class Landing {
         void mavCommandCallback (const geometry_msgs::PoseStamped& msg);
         void mavOdometryCallback (const nav_msgs::Odometry& msg);
         void modelStateCallback (const gazebo_msgs::ModelStates& msg);  
+        void trajectoryCallback (const trajectory_msgs::MultiDOFJointTrajectory& msg);
 
         geometry_msgs::PoseStamped mav_command_, mav_final_command_;
+        trajectory_msgs::MultiDOFJointTrajectory command_trajectory;
 
         nav_msgs::Odometry mav_odometry_, husky_odometry_;
 
