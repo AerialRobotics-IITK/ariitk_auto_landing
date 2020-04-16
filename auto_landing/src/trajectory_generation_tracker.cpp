@@ -1,3 +1,4 @@
+
 #include <auto_landing/trajectory_generation_tracker.hpp>
 
 namespace ariitk::auto_landing {
@@ -29,7 +30,7 @@ mav_trajectory_generation::Vertex::Vector TrajectoryGenerationTracking::computeP
     mav_trajectory_generation::Vertex::Vector vertices;
     
     Eigen::Vector3d start_point(husky_odom_.pose.pose.position.x, husky_odom_.pose.pose.position.y, 4.0);
-    Eigen::Vector3d start_point_velocity(husky_odom_.twist.twist.linear.x, husky_odom_.twist.twist.linear.y, husky_odom_.twist.twist.linear.z);    
+    Eigen::Vector3d start_point_velocity(husky_odom_.twist.twist.linear.x, husky_odom_.twist.twist.linear.y, 0);    
     Eigen::Vector3d husky_direction = start_point_velocity;
     husky_direction.normalize();
     
@@ -87,4 +88,4 @@ void TrajectoryGenerationTracking::huskyOdometryCallback(const gazebo_msgs::Mode
     husky_odom_.twist.twist = msg.twist[index];
 } 
 
-}//namespace ariitk::auto_landing
+} // namespace ariitk::auto_landing
