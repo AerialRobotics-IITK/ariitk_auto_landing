@@ -2,14 +2,14 @@
 <launch>
 
     <include file="$(find husky_gazebo)/launch/spawn_husky.launch">
-        <arg name="x" value="2" />
         <arg name="y" value="2" />
+        <arg name="x" value="2" />
     </include>
 
     <include file="$(find mav_linear_mpc)/launch/mav_linear_mpc_sim.launch" />
 
-    <node pkg="land" type="detect_platform_node" name="detect_platform_node" output="screen">
-    <rosparam file="$(find land)/config/detect_platform_params.yaml" />
+    <node pkg="auto_landing" type="auto_landing_detect_platform_node" name="auto_landing_detect_platform_node" output="screen">
+    <rosparam file="$(find auto_landing)/cfg/detect_platform_params.yaml" />
     <remap from="image_raw" to="/firefly/camera_front/image_raw" />
     </node>
 
@@ -37,11 +37,11 @@
 
     <group ns="$(arg mav_name)">
         <include file="$(find rotors_gazebo)/launch/spawn_mav.launch">
-        <arg name="mav_name" value="$(arg mav_name)" />
-        <arg name="model" value="$(find rotors_description)/urdf/camera.xacro" />
-        <arg name="enable_logging" value="$(arg enable_logging)" />
-        <arg name="enable_ground_truth" value="$(arg enable_ground_truth)" />
-        <arg name="log_file" value="$(arg log_file)"/>
+            <arg name="mav_name" value="$(arg mav_name)" />
+            <arg name="model" value="$(find auto_landing)/models/mav_with_camera.gazebo" />
+            <arg name="enable_logging" value="$(arg enable_logging)" />
+            <arg name="enable_ground_truth" value="$(arg enable_ground_truth)" />
+            <arg name="log_file" value="$(arg log_file)"/>
         </include>
     </group>
 </launch>  
