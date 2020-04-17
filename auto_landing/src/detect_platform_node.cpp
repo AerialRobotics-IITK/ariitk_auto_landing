@@ -1,23 +1,21 @@
-#include <template/detect_platform.hpp>
+#include <auto_landing/detect_platform.hpp>
 
 using namespace ariitk::detect;
 
-int main(int argc,char** argv)
-{
-    ros::init(argc,argv,"detect_platform_node");
-    ros::NodeHandle nh;
-    ros::NodeHandle nh_private("~");
-    
-    platform_detect detect;
+int main(int argc, char** argv) {
+	ros::init(argc, argv, "detect_platform_node");
+	ros::NodeHandle nh;
+	ros::NodeHandle nh_private("~");
 
-    detect.init(nh,nh_private);
+	platform_detect detect;
 
-    ros::Rate loopRate(10);
+	detect.init(nh, nh_private);
 
-    while(ros::ok())
-    {
-        ros::spinOnce();
-        loopRate.sleep();
-    }
-    return 0;
+	ros::Rate loopRate(10);
+
+	while (ros::ok()) {
+		ros::spinOnce();
+		loopRate.sleep();
+	}
+	return 0;
 }
