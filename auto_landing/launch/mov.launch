@@ -1,12 +1,17 @@
 <?xml version="1.0"?>
 <launch>
+    
+    <arg name="mav_name" default="firefly" />
+    <arg name="x" default="2" />
+    <arg name="y" default="2" />
+    
     <include file="$(find rotors_gazebo)/launch/mav.launch" >
-        <arg name="mav_name" value="firefly" />
+        <arg name="mav_name" value="$(arg mav_name)" />
     </include> 
 
     <include file="$(find husky_gazebo)/launch/spawn_husky.launch">
-        <arg name="x"        value="2" />
-        <arg name="y"        value="2" />
+        <arg name="x"        value="$(arg x)" />
+        <arg name="y"        value="$(arg y)" />
     </include>
 
     <node pkg="auto_landing" type="auto_landing_husky_node" name="auto_landing_husky_node" output="screen">
