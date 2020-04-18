@@ -3,22 +3,61 @@
 namespace ariitk::auto_landing {
 
 void Landing::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, char** argv) {
-    mav_command_sub_ = nh.subscribe("mav_command", 1, &Landing::mavCommandCallback, this);
+    // ROS_ERROR ("%s\n\n\n\n\n\n",argv[2]);
+    
+    if (std::string(argv[2]) == "true") {
+        using_trajectory_generation_ = true;
+        ROS_WARN ("Using trajectory_generation.");
+    } else {
+        using_trajectory_generation_ = false;
+        ROS_WARN ("Not using trajectory_generation.");
+    }
+    // ROS_ERROR("Argv is %s\n", argv[2]);
     mav_odometry_sub_ = nh.subscribe("mav_odometry", 1, &Landing::mavOdometryCallback, this);
     husky_odometry_sub_ = nh.subscribe("model_state", 1, &Landing::modelStateCallback, this);
-    mav_final_command_pub_ = nh.advertise<geometry_msgs::PoseStamped>("mav_final_command", 1);
+
+    if (!using_trajectory_generation_) {
+        mav_command_sub_ = nh.subscribe("mav_command", 1, &Landing::mavCommandCallback, this);
+        mav_final_command_pub_ = nh.advertise<geometry_msgs::PoseStamped>("mav_final_command", 1);
+    } else {
+        mav_command_trajectory_sub_ = nh.subscribe("command_trajectory", 1, &Landing::trajectoryCallback, this);
+        mav_final_command_trajectory_pub_ = nh.advertise<trajectory_msgs::MultiDOFJointTrajectory>("command_trajectory_result", 1);
+    }
+    
 }
 
 void Landing::run() {
-    mav_final_command_ = mav_command_;
+    if (using_trajectory_generation_) {
+        mav_final_command_trajectory_ = mav_command_trajectory_;
+        ROS_WARN("Husky odom : %lf, %lf", husky_odometry_.pose.pose.position.x, husky_odometry_.pose.pose.position.y);
+        ROS_WARN("quad odom : %lf, %lf", mav_odometry_.pose.pose.position.x, mav_odometry_.pose.pose.position.y);
+        
+        ROS_WARN("%lf",(fabs(husky_odometry_.pose.pose.position.y-mav_odometry_.pose.pose.position.y))) ;
+        if((fabs(husky_odometry_.pose.pose.position.x-mav_odometry_.pose.pose.position.x) < 0.25) 
+            && (fabs(husky_odometry_.pose.pose.position.y-mav_odometry_.pose.pose.position.y) < 0.25)) {
+            ROS_INFO("Over Husky.");
 
-    if((fabs(husky_odometry_.pose.pose.position.x-mav_odometry_.pose.pose.position.x) < 0.025) 
-        && (fabs(husky_odometry_.pose.pose.position.y-mav_odometry_.pose.pose.position.y) < 0.025)) {
-        ROS_INFO("Over Husky.");
-        mav_final_command_.pose.position.z = 0.45;
+            for (int i=0; i<mav_final_command_trajectory_.points.size(); i++) {
+                mav_final_command_trajectory_.points[i].transforms[0].translation.z = 0.45;
+                ROS_WARN("Nice\n");
+            }
+
+        }
+
+        mav_final_command_trajectory_pub_.publish(mav_final_command_trajectory_);
+        
+    } else {
+        mav_final_command_ = mav_command_;
+
+        if((fabs(husky_odometry_.pose.pose.position.x-mav_odometry_.pose.pose.position.x) < 0.025) 
+            && (fabs(husky_odometry_.pose.pose.position.y-mav_odometry_.pose.pose.position.y) < 0.025)) {
+            ROS_INFO("Over Husky.");
+            mav_final_command_.pose.position.z = 0.45;
+        }
+
+        mav_final_command_pub_.publish(mav_final_command_);
     }
 
-    mav_final_command_pub_.publish(mav_final_command_);
 }
 
 void Landing::mavCommandCallback (const geometry_msgs::PoseStamped& msg) {
@@ -44,7 +83,7 @@ void Landing::modelStateCallback(const gazebo_msgs::ModelStates& msg) {
 }
 
 void Landing::trajectoryCallback (const trajectory_msgs::MultiDOFJointTrajectory& msg) {
-    command_trajectory = msg;
+    mav_command_trajectory_ = msg;
 }
 
 } //namespace ariitk::auto_landing
