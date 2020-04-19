@@ -29,17 +29,13 @@ void Landing::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, char** argv
 void Landing::run() {
     if (using_trajectory_generation_) {
         mav_final_command_trajectory_ = mav_command_trajectory_;
-        ROS_WARN("Husky odom : %lf, %lf", husky_odometry_.pose.pose.position.x, husky_odometry_.pose.pose.position.y);
-        ROS_WARN("quad odom : %lf, %lf", mav_odometry_.pose.pose.position.x, mav_odometry_.pose.pose.position.y);
         
-        ROS_WARN("%lf",(fabs(husky_odometry_.pose.pose.position.y-mav_odometry_.pose.pose.position.y))) ;
         if((fabs(husky_odometry_.pose.pose.position.x-mav_odometry_.pose.pose.position.x) < 0.25) 
             && (fabs(husky_odometry_.pose.pose.position.y-mav_odometry_.pose.pose.position.y) < 0.25)) {
             ROS_INFO("Over Husky.");
 
             for (int i=0; i<mav_final_command_trajectory_.points.size(); i++) {
                 mav_final_command_trajectory_.points[i].transforms[0].translation.z = 0.45;
-                ROS_WARN("Nice\n");
             }
 
         }
