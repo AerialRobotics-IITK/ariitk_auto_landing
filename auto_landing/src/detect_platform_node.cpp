@@ -1,4 +1,4 @@
-#include <template/detect_platform.hpp>
+#include <auto_landing/detect_platform.hpp>
 
 using namespace ariitk::detect;
 
