@@ -135,7 +135,7 @@ namespace ariitk::detect
                 ROS_INFO("Platform Detected");
                 cv::Rect bound_rect=cv::boundingRect(hull[i]);
                 center.x=bound_rect.x+bound_rect.width/2;
-                center.y=bound_rect.x+bound_rect.width/2;
+                center.y=bound_rect.y+bound_rect.height/2;
                 center.z=0.0;
                 flag=1;
             }
