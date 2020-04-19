@@ -11,3 +11,6 @@ upper_threshold_canny : 20
 publish_preprocess : true
 publish_detected_platform : true
 is_undistort : true
+error_limit: 0.06
+contour_perimeter_thresh: 300
+contour_perimeter_scale: 25
