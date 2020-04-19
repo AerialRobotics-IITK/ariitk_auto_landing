@@ -26,4 +26,5 @@
 		<remap from="mav_final_command"  to="$(arg mav_name)/command/pose" />
 	</node>
 
+	<node pkg="rqt_gui" type="rqt_gui" name="rqt_gui" args="--perspective-file $(find auto_landing)/rqt/node_monitor.perspective" />
 </launch>
