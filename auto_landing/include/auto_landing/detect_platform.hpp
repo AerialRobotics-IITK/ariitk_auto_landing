@@ -8,6 +8,7 @@
 #include <image_transport/image_transport.h>
 #include <nav_msgs/Odometry.h>
 #include <geometry_msgs/Point.h>
+#include <xmlrpcpp/XmlRpc.h>
 
 namespace ariitk::detect
 {
@@ -30,7 +31,9 @@ namespace ariitk::detect
               double quad_height;
               double error_limit;
               int contour_perimeter_thresh,contour_perimeter_scale;
+              int kernel_size_;
               geometry_msgs::Point center;
+              XmlRpc::XmlRpcValue thresholding_parameters;
 
        public:
               void imageCb(const sensor_msgs::ImageConstPtr& msg);
