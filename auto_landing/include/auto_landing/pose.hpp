@@ -26,10 +26,10 @@ class PoseEstimation {
         void arrayToMatrixConversion();
 
         int height_, count_;
-        std::vector<float> distortion_matrix_, camera_to_quad_matrix_, rectification_matrix_, camera_matrix_, tcamera_;
+        std::vector<float> distortion_matrix_, camera_to_quad_matrix_, camera_matrix_, tcamera_;
         Eigen::Matrix3f cameraMatrix, invCameraMatrix ;
         Eigen::Matrix3f cameraToQuadMatrix ;
-        Eigen::Matrix3f rectificationMatrix , quadOrientationMatrix , scaleUpMatrix ;
+        Eigen::Matrix3f quadOrientationMatrix , scaleUpMatrix ;
         Eigen::Vector3f translation_,tcam_;
 
         geometry_msgs::PoseStamped setpt_firefly_;
