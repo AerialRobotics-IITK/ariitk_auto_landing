@@ -38,7 +38,7 @@ void PoseEstimation::arrayToMatrixConversion() {
             rectificationMatrix(i , j) = rectification_matrix_[3 * i + j];
         } 
     }
-    invCameraMatrix = cameraMatrix;
+    invCameraMatrix = cameraMatrix.inverse();
    }
 
 void PoseEstimation::quadPoseCallBack(const geometry_msgs::Pose& msg) {
@@ -59,7 +59,7 @@ void PoseEstimation::pixelCoordinatesCallBack(const geometry_msgs::Point& msg) {
 void PoseEstimation::setptUpdate() {
     Eigen::Vector3f pixel_coordinates(pixel_coordinates_.x , pixel_coordinates_.y , 1);
     // std::cout<<pixel_coordinates<<std::endl;
-    Eigen::Vector3f coordinates_quad_frame = cameraToQuadMatrix * scaleUpMatrix * rectificationMatrix * cameraMatrix * pixel_coordinates; //gives coordinates in quad frame
+    Eigen::Vector3f coordinates_quad_frame = cameraToQuadMatrix * scaleUpMatrix * invCameraMatrix * pixel_coordinates; //gives coordinates in quad frame
     // std::cout<<"1st" <<coordinates_quad_frame<<std::endl;
 
     coordinates_quad_frame += tcam_;
