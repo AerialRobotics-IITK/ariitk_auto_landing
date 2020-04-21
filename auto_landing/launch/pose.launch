@@ -3,7 +3,6 @@
     <node pkg="auto_landing" type="auto_landing_pose_node" name="auto_landing_pose_node" output="screen">
         <rosparam file="$(find auto_landing)/cfg/camera_params.yaml" />
         <remap from="quad_odometry" to="/firefly/ground_truth/pose" />
-        <remap from="command_pose" to="/firefly/command/pose" />
         <remap from="pixel_coordinates" to="/platform_centre" />
     </node>
 </launch>  

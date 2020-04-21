@@ -15,7 +15,6 @@ namespace ariitk::auto_landing {
 
 class PoseEstimation {
     public:
-        PoseEstimation();
         void init(ros::NodeHandle& nh, ros::NodeHandle& nh_private);
         void run();
 
@@ -25,18 +24,17 @@ class PoseEstimation {
         void setptUpdate();
         void arrayToMatrixConversion();
 
-        int height_, count_;
         std::vector<float> distortion_matrix_, camera_to_quad_matrix_, camera_matrix_, tcamera_;
         Eigen::Matrix3f cameraMatrix, invCameraMatrix ;
         Eigen::Matrix3f cameraToQuadMatrix ;
         Eigen::Matrix3f quadOrientationMatrix , scaleUpMatrix ;
         Eigen::Vector3f translation_,tcam_;
 
-        geometry_msgs::PoseStamped setpt_firefly_;
+        geometry_msgs::PoseStamped husky_odom_;
         geometry_msgs::Point pixel_coordinates_;
         geometry_msgs::Pose firefly_odom_;
 
-        ros::Publisher set_firefly_pose_pub_;
+        ros::Publisher detected_husky_odom_pub_;
         ros::Subscriber firefly_pose_sub_;
         ros::Subscriber firefly_pixel_coordinates_sub_;
 };
