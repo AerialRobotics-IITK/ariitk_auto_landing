@@ -11,16 +11,21 @@ cs_add_library(${PROJECT_NAME}_husky_lib src/husky_trajectory.cpp)
 cs_add_library(${PROJECT_NAME}_tracking_lib src/tracking.cpp)
 cs_add_library(${PROJECT_NAME}_trajectory_generation_tracker_lib src/trajectory_generation_tracker.cpp)
 cs_add_library(${PROJECT_NAME}_landing_lib src/landing.cpp)
+cs_add_library(${PROJECT_NAME}_pose_lib src/pose.cpp)
 
 cs_add_executable(${PROJECT_NAME}_husky_node src/husky_trajectory_node.cpp)
 cs_add_executable(${PROJECT_NAME}_tracking_node src/tracking_node.cpp)
 cs_add_executable(${PROJECT_NAME}_trajectory_generation_tracker src/trajectory_generation_tracker_node.cpp)
 cs_add_executable(${PROJECT_NAME}_landing_node src/landing_node.cpp)
+cs_add_executable(${PROJECT_NAME}_pose_node src/pose_node.cpp)
+
 
 target_link_libraries(${PROJECT_NAME}_husky_node ${PROJECT_NAME}_husky_lib)
 target_link_libraries(${PROJECT_NAME}_tracking_node ${PROJECT_NAME}_tracking_lib)
 target_link_libraries(${PROJECT_NAME}_trajectory_generation_tracker ${PROJECT_NAME}_trajectory_generation_tracker_lib)
 target_link_libraries(${PROJECT_NAME}_landing_node ${PROJECT_NAME}_landing_lib)
+target_link_libraries(${PROJECT_NAME}_pose_node ${PROJECT_NAME}_pose_lib)
+
 
 cs_install()
 cs_export()
