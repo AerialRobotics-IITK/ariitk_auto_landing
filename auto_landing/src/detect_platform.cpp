@@ -100,12 +100,12 @@ void platform_detect::imageCb(const sensor_msgs::ImageConstPtr& msg) {
 		preprocessed_img.header.stamp = ros::Time::now();
 		preprocessed_img.image = processed_frame;
 		image_pub_preprocess.publish(preprocessed_img.toImageMsg());
-		ROS_INFO("preprocessed image send");
+		// ROS_INFO("preprocessed image send");
 	}
 
 	cv::findContours(processed_frame, list_contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
 	std::vector<std::vector<cv::Point>> hull(list_contours.size());
-
+	// std::cout << list_contours.size() << std::endl;
 	for (int i = 0; i < list_contours.size(); i++) {
 		if (cv::arcLength(cv::Mat(list_contours[i]), true) > 7500 ||
 		    cv::arcLength(cv::Mat(list_contours[i]), true) < 250 - (quad_height - 4) * 20)
@@ -130,15 +130,22 @@ void platform_detect::imageCb(const sensor_msgs::ImageConstPtr& msg) {
 	std::vector<cv::Point> approx;
 	int flag = 0;
 	for (int i = 0; i < hull.size(); i++) {
+		// ROS_WARN("%dth contour size = %d", i, list_contours[i].size());
 		if (std::fabs(cv::arcLength(cv::Mat(hull[i]), true)) <
-		    contour_perimeter_thresh - (quad_height) *contour_perimeter_scale) // excluding the
-		                                                                       // quad shadow
+		    contour_perimeter_thresh - (quad_height) *contour_perimeter_scale) {
+			// cv::drawContours(drawing, list_contours, i, cv::Scalar(0,255,255));
+			cv::drawContours(drawing,list_contours,i,cv::Scalar(121,25,87),10);
+			// ROS_WARN("%dth contour is too sm	all", i);
 			continue;
+		}
+
+				// excluding the quad shadow
 		cv::approxPolyDP(cv::Mat(hull[i]),
 		    approx,
 		    cv::arcLength(cv::Mat(hull[i]), true) * error_limit,
 		    true); // Approximate contour with accuracy proportional to
 		           // the contour perimeter
+			// std::cout << approx.size() << std::endl;
 		if (approx.size() == 4) {
 			double d1, d2, d3, d4;
 			d1 = sqrt(pow(double(approx[0].x - approx[1].x), 2) +
@@ -150,25 +157,30 @@ void platform_detect::imageCb(const sensor_msgs::ImageConstPtr& msg) {
 			d4 = sqrt(pow(double(approx[3].x - approx[0].x), 2) +
 			          pow(double(approx[3].y - approx[0].y), 2));
 
-			if (fabs(d1 - d2) < 20 && fabs(d3 - d4) < 20) {
+			if (fabs(d1 - d2) < 50 && fabs(d3 - d4) < 50) {
 				cv::Scalar color = cv::Scalar(255, 0, 0);
-				cv::drawContours(drawing, hull, i, color, 1, 8, hierarchy, 0, cv::Point());
-				ROS_INFO("Platform Detected");
+				cv::drawContours(drawing, list_contours, i, color, 1, 8, hierarchy, 0, cv::Point());
+				// ROS_INFO("Platform Detected");
 				cv::Rect bound_rect = cv::boundingRect(hull[i]);
 				center.x = bound_rect.x + bound_rect.width / 2;
 				center.y = bound_rect.y + bound_rect.height / 2;
 				center.z = 0.0;
-				flag = 1;
+				// flag = 1;
+			} else {
+				cv::drawContours(drawing, list_contours, i, cv::Scalar(0,0,255), 1, 8, hierarchy, 0, cv::Point());
 			}
+		} else {
+			cv::drawContours(drawing, list_contours, i, cv::Scalar(0,255,0), 1, 8, hierarchy, 0, cv::Point());
+			cv::putText(drawing, std::to_string(approx.size()), list_contours[0][0],CV_FONT_HERSHEY_PLAIN,1,cv::Scalar(0,255,0));
 		}
 	}
-	if (publish_detected_platform && flag) {
+	if (publish_detected_platform) {
 		cv_bridge::CvImage Detected_H;
 		Detected_H.encoding = sensor_msgs::image_encodings::BGR8;
 		Detected_H.header.stamp = ros::Time::now();
 		Detected_H.image = drawing;
 		image_pub.publish(Detected_H.toImageMsg());
-		ROS_INFO("detected image send");
+		// ROS_INFO("detected image send");
 	}
 }
 

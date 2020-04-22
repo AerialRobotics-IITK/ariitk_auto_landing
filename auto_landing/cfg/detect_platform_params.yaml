@@ -12,8 +12,8 @@ publish_preprocess : true
 publish_detected_platform : true
 is_undistort : true
 error_limit: 0.06
-contour_perimeter_thresh: 250
-contour_perimeter_scale: 25
+contour_perimeter_thresh: 0
+contour_perimeter_scale: 15
 kernel_size: 7
 thresholding_parameters: 
    h:
