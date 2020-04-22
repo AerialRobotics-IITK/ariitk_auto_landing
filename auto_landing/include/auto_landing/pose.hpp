@@ -1,15 +1,13 @@
 #pragma once
 
-#include <ros/ros.h>
-
+#include <eigen3/Eigen/Core>
+#include <eigen3/Eigen/Dense>
 #include <geometry_msgs/Point.h>
 #include <geometry_msgs/Pose.h>
-#include <nav_msgs/Odometry.h>
 #include <geometry_msgs/PoseStamped.h>
+#include <nav_msgs/Odometry.h>
+#include <ros/ros.h>
 #include <tf/tf.h>
-
-#include <eigen3/Eigen/Dense>
-#include <eigen3/Eigen/Core>
 
 namespace ariitk::auto_landing {
 
@@ -21,14 +19,14 @@ class PoseEstimation {
     private:
         void pixelCoordinatesCallBack(const geometry_msgs::Point& msg);
         void quadPoseCallBack(const geometry_msgs::Pose& msg);
-        void setptUpdate();
+        void huskyOdomUpdate();
         void arrayToMatrixConversion();
 
-        std::vector<float> distortion_matrix_, camera_to_quad_matrix_, camera_matrix_, tcamera_;
-        Eigen::Matrix3f cameraMatrix, invCameraMatrix ;
-        Eigen::Matrix3f cameraToQuadMatrix ;
-        Eigen::Matrix3f quadOrientationMatrix , scaleUpMatrix ;
-        Eigen::Vector3f translation_,tcam_;
+        std::vector<float> distortion_matrix_, camera_to_quad_matrix_, camera_matrix_, camera_translation_;
+        Eigen::Matrix3f cameraMatrix, invCameraMatrix;
+        Eigen::Matrix3f cameraToQuadMatrix;
+        Eigen::Matrix3f quadOrientationMatrix, scaleUpMatrix;
+        Eigen::Vector3f translation_, camera_translation_vector_;
 
         geometry_msgs::PoseStamped husky_odom_;
         geometry_msgs::Point pixel_coordinates_;
@@ -39,4 +37,4 @@ class PoseEstimation {
         ros::Subscriber firefly_pixel_coordinates_sub_;
 };
 
-} //namespace ariitk::auto_landing
+} // namespace ariitk::auto_landing
