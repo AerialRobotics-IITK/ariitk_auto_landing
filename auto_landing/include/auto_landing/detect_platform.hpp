@@ -24,8 +24,6 @@ class platform_detect {
 	bool is_undistort;
 	bool publish_preprocess;
 	bool publish_detected_platform;
-	int low_threshold_canny;
-	int upper_threshold_canny;
 	double quad_height;
 	double error_limit;
 	int contour_perimeter_thresh, contour_perimeter_scale;
@@ -38,7 +36,6 @@ class platform_detect {
 	void heightCb(const nav_msgs::Odometry& height_msg);
 	void init(ros::NodeHandle& nh, ros::NodeHandle& nh_private);
 	void run();
-	cv::Mat
-	preprocess(cv::Mat& img, std::vector<double>& cam_mat, std::vector<double>& dist_coeff, bool is_undistort);
+	cv::Mat preprocess(cv::Mat& img, std::vector<double>& cam_mat, std::vector<double>& dist_coeff, bool is_undistort);
 };
 } // namespace ariitk::detect
