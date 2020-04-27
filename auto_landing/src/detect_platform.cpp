@@ -1,7 +1,7 @@
 #include <auto_landing/detect_platform.hpp>
 
-namespace ariitk::detect {
-cv::Mat platform_detect::preprocess(cv::Mat& img, std::vector<double>& cam_mat, std::vector<double>& dist_coeff, bool is_undistort) {
+namespace ariitk::auto_landing {
+cv::Mat PlatformDetect::preprocessImage(cv::Mat& img, std::vector<double>& camera_matrix_, std::vector<double>& distortion_coefficients_, bool is_undistort_) {
 	ROS_ASSERT(img.empty() != true);
 
 	cv::Mat img_, img_hsv, blur, result;
@@ -13,48 +13,48 @@ cv::Mat platform_detect::preprocess(cv::Mat& img, std::vector<double>& cam_mat, 
 	cv::Mat dist_coeff_ = cv::Mat_<double>(1, 5);
 
 	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) { intrinsic.at<double>(i, j) = cam_mat.at(tempIdx++); }
+		for (int j = 0; j < 3; j++) { intrinsic.at<double>(i, j) = camera_matrix_.at(tempIdx++); }
 	}
 
-	for (int i = 0; i < 5; i++) { dist_coeff_.at<double>(i) = dist_coeff[i]; }
+	for (int i = 0; i < 5; i++) { dist_coeff_.at<double>(i) = distortion_coefficients_[i]; }
 
-	if (!is_undistort) {
+	if (!is_undistort_) {
 		cv::undistort(img, img_, intrinsic, dist_coeff_);
 		img = img_.clone();
 	}
 	cv::cvtColor(img, img_hsv, CV_BGR2HSV);
 	cv::GaussianBlur(img_hsv, blur, cv::Size(3, 3), 0, 0);
 	cv::inRange(img,
-	    cv::Scalar(int(thresholding_parameters["h"]["min"]), int(thresholding_parameters["s"]["min"]), int(thresholding_parameters["v"]["min"])),
-	    cv::Scalar(int(thresholding_parameters["h"]["max"]), int(thresholding_parameters["s"]["max"]), int(thresholding_parameters["v"]["max"])),
+	    cv::Scalar(int(thresholding_parameters_["h"]["min"]), int(thresholding_parameters_["s"]["min"]), int(thresholding_parameters_["v"]["min"])),
+	    cv::Scalar(int(thresholding_parameters_["h"]["max"]), int(thresholding_parameters_["s"]["max"]), int(thresholding_parameters_["v"]["max"])),
 	    result);
 	cv::morphologyEx(result, result, cv::MORPH_OPEN, kernel);
 	return result;
 }
 
-void platform_detect::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private) {
-	nh_private.getParam("camera_matrix/data", cam_mat);
-	nh_private.getParam("distortion_coefficients/data", dist_coeff);
-	nh_private.getParam("is_undistort", is_undistort);
-	nh_private.getParam("publish_preprocess", publish_preprocess);
-	nh_private.getParam("publish_detected_platform", publish_detected_platform);
-	nh_private.getParam("error_limit", error_limit);
-	nh_private.getParam("contour_perimeter_thresh", contour_perimeter_thresh);
-	nh_private.getParam("contour_perimeter_scale", contour_perimeter_scale);
-	nh_private.getParam("thresholding_parameters", thresholding_parameters);
+void PlatformDetect::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private) {
+	nh_private.getParam("camera_matrix/data", camera_matrix_);
+	nh_private.getParam("distortion_coefficients/data", distortion_coefficients_);
+	nh_private.getParam("is_undistort_", is_undistort_);
+	nh_private.getParam("publish_preprocess_", publish_preprocess_);
+	nh_private.getParam("publish_detected_platform_", publish_detected_platform_);
+	nh_private.getParam("error_limit_", error_limit_);
+	nh_private.getParam("contour_perimeter_threshold_", contour_perimeter_threshold_);
+	nh_private.getParam("contour_perimeter_scale_", contour_perimeter_scale_);
+	nh_private.getParam("thresholding_parameters_", thresholding_parameters_);
 	nh_private.getParam("kernel_size", kernel_size_);
 
-	image_sub = nh.subscribe("image_raw", 1, &platform_detect::imageCb, this);
-	quad_height_sub = nh.subscribe("height_quad", 1, &platform_detect::heightCb, this);
+	image_sub = nh.subscribe("image_raw", 1, &PlatformDetect::imageCallback, this);
+	quad_height_sub = nh.subscribe("height_quad", 1, &PlatformDetect::heightCallback, this);
 	image_transport::ImageTransport it(nh);
 	image_pub = it.advertise("detected_platform", 1);
 	image_pub_preprocess = it.advertise("preprocessed_image", 1);
 	platform_centre_pub = nh.advertise<geometry_msgs::Point>("platform_centre", 1);
 }
 
-void platform_detect::heightCb(const nav_msgs::Odometry& height_msg) { quad_height = height_msg.pose.pose.position.z; }
+void PlatformDetect::heightCallback(const nav_msgs::Odometry& height_msg) { quad_height_ = height_msg.pose.pose.position.z; }
 
-void platform_detect::imageCb(const sensor_msgs::ImageConstPtr& msg) {
+void PlatformDetect::imageCallback(const sensor_msgs::ImageConstPtr& msg) {
 	cv_bridge::CvImagePtr cv_ptr;
 	try {
 		cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
@@ -68,8 +68,8 @@ void platform_detect::imageCb(const sensor_msgs::ImageConstPtr& msg) {
 	std::vector<cv::Vec4i> hierarchy;
 
 	cv::Mat processed_frame;
-	processed_frame = preprocess(frame, cam_mat, dist_coeff, is_undistort);
-	if (publish_preprocess) {
+	processed_frame = preprocessImage(frame, camera_matrix_, distortion_coefficients_, is_undistort_);
+	if (publish_preprocess_) {
 		cv_bridge::CvImage preprocessed_img;
 		preprocessed_img.encoding = sensor_msgs::image_encodings::MONO8;
 		preprocessed_img.header.stamp = ros::Time::now();
@@ -92,23 +92,23 @@ void platform_detect::imageCb(const sensor_msgs::ImageConstPtr& msg) {
 		cv::convexHull(cv::Mat(list_contours[i]), hull[i]);
 		cv::convexHull(cv::Mat(list_contours[i]), hull1[i]);
 
-		if (std::fabs(cv::arcLength(cv::Mat(hull1[i]), true)) < contour_perimeter_thresh - quad_height * contour_perimeter_scale) {
+		if (std::fabs(cv::arcLength(cv::Mat(hull1[i]), true)) < contour_perimeter_threshold_ - quad_height_ * contour_perimeter_scale_) {
 			cv::drawContours(drawing, hull1, i, cv::Scalar(0, 255, 255), 1, 8);
 			continue;
 		}
 
-		cv::approxPolyDP(cv::Mat(hull1[i]), corners, cv::arcLength(cv::Mat(hull1[i]), true) * error_limit, true);
+		cv::approxPolyDP(cv::Mat(hull1[i]), corners, cv::arcLength(cv::Mat(hull1[i]), true) * error_limit_, true);
 		list_corners.push_back(corners);
 		if (corners.size() == 4) {
 			cv::drawContours(drawing, list_corners, 0, cv::Scalar(255, 0, 0), 1, 8);
-			center.x = (list_corners.at(0).at(0).x + list_corners.at(0).at(1).x + list_corners.at(0).at(2).x + list_corners.at(0).at(3).x) / 4;
-			center.y = (list_corners.at(0).at(0).y + list_corners.at(0).at(1).y + list_corners.at(0).at(2).y + list_corners.at(0).at(3).y) / 4;
-			center.z = 0.0;
+			center_.x = (list_corners.at(0).at(0).x + list_corners.at(0).at(1).x + list_corners.at(0).at(2).x + list_corners.at(0).at(3).x) / 4;
+			center_.y = (list_corners.at(0).at(0).y + list_corners.at(0).at(1).y + list_corners.at(0).at(2).y + list_corners.at(0).at(3).y) / 4;
+			center_.z = 0.0;
 			ROS_INFO("Platform Detected");
 		}
 	}
 
-	if (publish_detected_platform) {
+	if (publish_detected_platform_) {
 		cv_bridge::CvImage Detected_H;
 		Detected_H.encoding = sensor_msgs::image_encodings::BGR8;
 		Detected_H.header.stamp = ros::Time::now();
@@ -117,6 +117,6 @@ void platform_detect::imageCb(const sensor_msgs::ImageConstPtr& msg) {
 	}
 }
 
-void platform_detect::run() { platform_centre_pub.publish(center); }
+void PlatformDetect::run() { platform_centre_pub.publish(center_); }
 
-} // namespace ariitk::detect
+} // namespace ariitk::auto_landing

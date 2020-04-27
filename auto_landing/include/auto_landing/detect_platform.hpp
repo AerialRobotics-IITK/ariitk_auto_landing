@@ -10,8 +10,8 @@
 #include <sensor_msgs/image_encodings.h>
 #include <xmlrpcpp/XmlRpc.h>
 
-namespace ariitk::detect {
-class platform_detect {
+namespace ariitk::auto_landing {
+class PlatformDetect {
 	private:
 		image_transport::Publisher image_pub;
 		image_transport::Publisher image_pub_preprocess;
@@ -19,23 +19,23 @@ class platform_detect {
 		ros::Subscriber quad_height_sub;
 		ros::Publisher platform_centre_pub;
 
-		std::vector<double> cam_mat;
-		std::vector<double> dist_coeff;
-		bool is_undistort;
-		bool publish_preprocess;
-		bool publish_detected_platform;
-		double quad_height;
-		double error_limit;
-		int contour_perimeter_thresh, contour_perimeter_scale;
+		std::vector<double> camera_matrix_;
+		std::vector<double> distortion_coefficients_;
+		bool is_undistort_;
+		bool publish_preprocess_;
+		bool publish_detected_platform_;
+		double quad_height_;
+		double error_limit_;
+		int contour_perimeter_threshold_, contour_perimeter_scale_;
 		int kernel_size_;
-		geometry_msgs::Point center;
-		XmlRpc::XmlRpcValue thresholding_parameters;
+		geometry_msgs::Point center_;
+		XmlRpc::XmlRpcValue thresholding_parameters_;
 
 	public:
-		void imageCb(const sensor_msgs::ImageConstPtr& msg);
-		void heightCb(const nav_msgs::Odometry& height_msg);
+		void imageCallback(const sensor_msgs::ImageConstPtr& msg);
+		void heightCallback(const nav_msgs::Odometry& height_msg);
 		void init(ros::NodeHandle& nh, ros::NodeHandle& nh_private);
 		void run();
-		cv::Mat preprocess(cv::Mat& img, std::vector<double>& cam_mat, std::vector<double>& dist_coeff, bool is_undistort);
+		cv::Mat preprocessImage(cv::Mat& img, std::vector<double>& camera_matrix_, std::vector<double>& distortion_coefficients_, bool is_undistort_);
 };
-} // namespace ariitk::detect
+} // namespace ariitk::auto_landing

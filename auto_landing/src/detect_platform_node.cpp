@@ -1,13 +1,13 @@
 #include <auto_landing/detect_platform.hpp>
 
-using namespace ariitk::detect;
+using namespace ariitk::auto_landing;
 
 int main(int argc, char** argv) {
 	ros::init(argc, argv, "detect_platform_node");
 	ros::NodeHandle nh;
 	ros::NodeHandle nh_private("~");
 
-	platform_detect detect;
+	PlatformDetect detect;
 
 	detect.init(nh, nh_private);
 
