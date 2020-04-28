@@ -20,5 +20,12 @@
   <depend>gazebo_msgs</depend>
   <depend>nav_msgs</depend>
   <depend>std_srvs</depend>
-  
+  <depend>cv_bridge</depend>
+  <depend>sensor_msgs</depend>
+  <depend>image_transport</depend>
+   <depend>eigen_conversions</depend>
+  <depend>tf</depend>
+  <depend>tf_conversions</depend>
+
+
 </package>
