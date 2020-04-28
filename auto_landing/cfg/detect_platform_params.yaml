@@ -1,0 +1,25 @@
+camera_matrix:
+   rows: 3
+   cols: 3
+   data: [358.4701893587005, 0, 323.8761965975529, 0, 359.5166951760163, 233.6390334982792, 0, 0, 1]
+distortion_coefficients:
+   rows: 1
+   cols: 5
+   data: [-0.3263238172477361, 0.08120101574385939, -0.0001620190119734289, -0.0009502949222392523, 0]
+publish_preprocess_ : true
+publish_detected_platform_ : true
+is_undistort_ : true
+error_limit_: 0.06
+contour_perimeter_threshold_: 0
+contour_perimeter_scale_: 15
+kernel_size: 7
+thresholding_parameters_: 
+   h:
+      min: 0
+      max: 255
+   s:
+      min: 0
+      max: 255
+   v:
+      min: 0
+      max: 20

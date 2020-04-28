@@ -14,10 +14,17 @@
         <arg name="y"        value="$(arg y)" />
     </include>
 
-    <node pkg="auto_landing" type="auto_landing_husky_node" name="auto_landing_husky_node" output="screen">
-        <rosparam command="load" file="$(find auto_landing)/cfg/husky_trajectory_params.yaml" />
-        <remap from="command_velocity" to="husky_velocity_controller/cmd_vel" />
-    </node>
+		<node pkg="auto_landing" type="auto_landing_tracking_node" name="auto_landing_tracking_node" output="screen">
+			<remap from="command_pose" 	     to="$(arg mav_name)/command/pose" />
+			<remap from="husky_odometry"     to="/odometry/filtered" />
+			<remap from="quad_odometry"  	 to="$(arg mav_name)/ground_truth/odometry" />
+			<remap from="husky_cmd_velocity" to="/husky_velocity_controller/cmd_vel" />
+			<remap from="model_state" 		 to="/gazebo/model_states" />
+		</node>
 
+        <node pkg="auto_landing" type="auto_landing_husky_node" name="auto_landing_husky_node" output="screen" args="-trajectory $(arg trajectory)">
+            <rosparam command="load" file="$(find auto_landing)/cfg/husky_trajectory_params.yaml" />
+            <remap from="command_velocity" to="husky_velocity_controller/cmd_vel" />
+        </node>
 </launch>
 
