@@ -11,32 +11,30 @@ void HuskyTrajectory::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, cha
     nh_private.getParam("ang_vel",angular_velocity_);
     
     trajectory_name_ = argv[2];
-    time_[0] = 0; count_= 0;
-    
+    time_[0] = 0; count_= 0; t_inverse = 0.1;
+    husky_x_ = 2; husky_y_ = 2; 
 }
 
 void HuskyTrajectory::run() {
-  
   if (trajectory_name_ == "linear") {
         linearTrajectory();
     }
     else if(trajectory_name_ == "eight") {
         eightTrajectory();
     }
-
     else {
         circularTrajectory();
-    }
+    }    
     trajectory_pub_.publish(husky_velocity_);
 }
 void HuskyTrajectory::modelStateCallback(const gazebo_msgs::ModelStates& msg) {
     
-    int index;
-    if( msg.name[1] == "firefly" ) { index = 2; }
-    else if( msg.name[2] == "firefly" ) { index = 1; }
+    int index = 0;
 
-    husky_odom_.pose.pose.position.x = msg.pose[index].position.x;
-    husky_odom_.pose.pose.position.y = msg.pose[index].position.y;
+    while(msg.name[index++] != "/") {}
+
+    husky_odom_.pose.pose.position.x = msg.pose[index-1].position.x;
+    husky_odom_.pose.pose.position.y = msg.pose[index-1].position.y;
 }
 void HuskyTrajectory::linearTrajectory() {
 
@@ -48,33 +46,26 @@ void HuskyTrajectory::circularTrajectory() {
     husky_velocity_.angular.z = angular_velocity_;
 }
 void HuskyTrajectory::eightTrajectory() {
-    
-    if( time_[0]==0 ) {
-        time_[0] = ros::Time::now().toSec();
-    }
+ 
+double norm = sqrt(pow(husky_odom_.pose.pose.position.x - husky_x_ , 2) + pow( husky_odom_.pose.pose.position.y - husky_y_ , 2));
 
-    time_[1] = ros::Time::now().toSec();
+time_[1] = ros::Time::now().toSec();
 
-    if( ((time_[1]-time_[0]) > 43) && (count_%2 ==0)) {
-        time_[0] = ros::Time::now().toSec();
-        count_++;
-    }
-    else if( ((time_[1]-time_[0]) > 55) && (count_%2 ==1)) {
-        time_[0] = ros::Time::now().toSec();
-        count_++;
-    }
+if( (norm <= (linear_velocity_*t_inverse) ) && (time_[1]-time_[0]) > 2){
+    time_[0] = ros::Time::now().toSec();
+    count_++;
+}
 
-    if( count_ % 2 == 0 ) {
-        husky_velocity_.linear.x = linear_velocity_;
-        husky_velocity_.angular.z = angular_velocity_;
-    }
-
-    else {
-        husky_velocity_.linear.x = linear_velocity_;
-        husky_velocity_.angular.z = -1*angular_velocity_;
-    }
-    std::cout<<std::endl<<"count _" <<count_;
-
+if( count_%2 ==0 ) {
+    husky_velocity_.linear.x = linear_velocity_;
+    husky_velocity_.angular.z = angular_velocity_;
+}
+else {
+    husky_velocity_.linear.x = linear_velocity_;
+    husky_velocity_.angular.z = -1 * angular_velocity_;
+}
+std::cout<<"count"<<count_<<std::endl;
+std::cout<<"odom"<<norm<<std::endl;
 }
 
 } //namespace ariitk::auto_landing

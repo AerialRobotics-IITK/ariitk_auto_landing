@@ -2,6 +2,8 @@
 
 #include <ros/ros.h>
 
+// #include <ncurses.h>
+
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <nav_msgs/Odometry.h>
@@ -28,8 +30,9 @@ class HuskyTrajectory {
 
       double angular_velocity_,linear_velocity_;
       double time_[2];
+      double husky_x_ ,husky_y_;
       int count_ ;
-
+      double t_inverse;
       std::string trajectory_name_;
 };
 
