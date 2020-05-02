@@ -15,7 +15,6 @@ class PlatformDetect {
 		image_transport::Publisher image_pub;
 		image_transport::Publisher image_pub_preprocess;
 		ros::Subscriber image_sub;
-		ros::Subscriber quad_height_sub;
 		ros::Publisher platform_centre_pub;
 
 		std::vector<double> camera_matrix_;
@@ -32,7 +31,6 @@ class PlatformDetect {
 
 	public:
 		void imageCallback(const sensor_msgs::ImageConstPtr& msg);
-		void heightCallback(const nav_msgs::Odometry& height_msg);
 		void init(ros::NodeHandle& nh, ros::NodeHandle& nh_private);
 		void run();
 		cv::Mat preprocessImage(cv::Mat& img, std::vector<double>& camera_matrix_, std::vector<double>& distortion_coefficients_, bool is_undistort_);

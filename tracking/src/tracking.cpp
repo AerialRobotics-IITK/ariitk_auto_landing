@@ -1,4 +1,4 @@
-#include<auto_landing/tracking.hpp>
+#include<tracking/tracking.hpp>
 
 namespace ariitk::auto_landing {
 
@@ -11,7 +11,6 @@ void Tracking::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, char** arg
     set_firefly_pose_pub_  = nh.advertise<geometry_msgs::PoseStamped>("command_pose", 1);
     quad_pose_sub_  = nh.subscribe("quad_odometry", 1, &Tracking::quadPoseCallback, this);
     gazebo_model_state_sub_ = nh.subscribe("model_state",1,&Tracking::modelStateCallback,this);
-    landing_client_  = nh_private.serviceClient<std_srvs::Trigger>("to_land");
 
     setpt_.pose.position.z = height_;
     time_[0]=ros::Time::now().toSec();
@@ -22,7 +21,6 @@ void Tracking::run() {
     if((fabs(husky_odom_.pose.pose.position.x-quad_odom_.pose.pose.position.x) < 0.1) 
         && (fabs(husky_odom_.pose.pose.position.y-quad_odom_.pose.pose.position.y) < 0.1)) {
         ROS_INFO("Over Husky.");
-        landing_client_.call(landing_service_);
     }
     
     if((fabs(husky_cmd_vel_[0].linear.x) > 0.0001 || fabs(husky_cmd_vel_[0].linear.y) > 0.0001)) {

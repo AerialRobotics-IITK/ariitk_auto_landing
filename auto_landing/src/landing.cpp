@@ -2,9 +2,7 @@
 
 namespace ariitk::auto_landing {
 
-void Landing::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, char** argv) {
-    // ROS_ERROR ("%s\n\n\n\n\n\n",argv[2]);
-    
+void Landing::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, char** argv) {    
     if (std::string(argv[2]) == "true") {
         using_trajectory_generation_ = true;
         ROS_WARN ("Using trajectory_generation.");
@@ -12,7 +10,7 @@ void Landing::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, char** argv
         using_trajectory_generation_ = false;
         ROS_WARN ("Not using trajectory_generation.");
     }
-    // ROS_ERROR("Argv is %s\n", argv[2]);
+
     mav_odometry_sub_ = nh.subscribe("mav_odometry", 1, &Landing::mavOdometryCallback, this);
     husky_odometry_sub_ = nh.subscribe("model_state", 1, &Landing::modelStateCallback, this);
 
@@ -79,4 +77,4 @@ void Landing::trajectoryCallback (const trajectory_msgs::MultiDOFJointTrajectory
     mav_command_trajectory_ = msg;
 }
 
-} //namespace ariitk::auto_landing
+} // namespace ariitk::auto_landing

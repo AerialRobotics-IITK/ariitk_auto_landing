@@ -1,4 +1,4 @@
-#include <auto_landing/detect_platform.hpp>
+#include <detection/detect_platform.hpp>
 
 namespace ariitk::auto_landing {
 cv::Mat PlatformDetect::preprocessImage(cv::Mat& img, std::vector<double>& camera_matrix_, std::vector<double>& distortion_coefficients_, bool is_undistort_) {
@@ -45,14 +45,12 @@ void PlatformDetect::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private) {
 	nh_private.getParam("kernel_size", kernel_size_);
 
 	image_sub = nh.subscribe("image_raw", 1, &PlatformDetect::imageCallback, this);
-	quad_height_sub = nh.subscribe("height_quad", 1, &PlatformDetect::heightCallback, this);
 	image_transport::ImageTransport it(nh);
 	image_pub = it.advertise("detected_platform", 1);
 	image_pub_preprocess = it.advertise("preprocessed_image", 1);
 	platform_centre_pub = nh.advertise<geometry_msgs::Point>("platform_centre", 1);
 }
 
-void PlatformDetect::heightCallback(const nav_msgs::Odometry& height_msg) { quad_height_ = height_msg.pose.pose.position.z; }
 
 void PlatformDetect::imageCallback(const sensor_msgs::ImageConstPtr& msg) {
 	cv_bridge::CvImagePtr cv_ptr;
