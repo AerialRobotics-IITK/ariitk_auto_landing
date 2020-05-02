@@ -33,10 +33,7 @@ void Landing::modelStateCallback(const gazebo_msgs::ModelStates& msg) {
     
     int index = 0;
     std::string name = msg.name[index];
-    while (name != "/") {
-        index++;
-        name = msg.name[index];
-    }
+    while(name != "/") { name = msg.name[++index]; }
     
     husky_odometry_.pose.pose.position.x = msg.pose[index].position.x;
     husky_odometry_.pose.pose.position.y = msg.pose[index].position.y;
