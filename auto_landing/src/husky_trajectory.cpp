@@ -18,13 +18,10 @@ void HuskyTrajectory::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, cha
 }
 
 void HuskyTrajectory::run() {
-	if (trajectory_name_ == "linear") {
-		linearTrajectory();
-	} else if (trajectory_name_ == "eight") {
-		eightTrajectory();
-	} else {
-		circularTrajectory();
-	}
+	if (trajectory_name_ == "linear") {	linearTrajectory();	}
+	else if (trajectory_name_ == "eight") { eightTrajectory(); }
+	else { circularTrajectory(); }
+	
 	trajectory_pub_.publish(husky_velocity_);
 }
 
@@ -60,7 +57,6 @@ void HuskyTrajectory::eightTrajectory() {
 		husky_velocity_.linear.x = linear_velocity_;
 		husky_velocity_.angular.z = -1 * angular_velocity_;
 	}
-
 }
 
 } // namespace ariitk::auto_landing
