@@ -5,7 +5,6 @@
 #include <geometry_msgs/Twist.h>
 #include <nav_msgs/Odometry.h>
 #include <ros/ros.h>
-#include <std_srvs/Trigger.h>
 
 namespace ariitk::auto_landing {
 
@@ -26,7 +25,6 @@ class Tracking {
 
         geometry_msgs::PoseStamped setpt_;
         nav_msgs::Odometry husky_odom_, quad_odom_;
-        std_srvs::Trigger landing_service_;
         geometry_msgs::Twist husky_cmd_vel_[2];
 
         ros::Publisher set_firefly_pose_pub_;

@@ -3,7 +3,6 @@
 #include <cv_bridge/cv_bridge.h>
 #include <geometry_msgs/Point.h>
 #include <image_transport/image_transport.h>
-#include <nav_msgs/Odometry.h>
 #include <opencv2/opencv.hpp>
 #include <ros/ros.h>
 #include <sensor_msgs/Image.h>
