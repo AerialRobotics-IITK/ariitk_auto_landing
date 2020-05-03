@@ -6,22 +6,18 @@
     <arg name="y"                            default="5.0" />
 	<arg name="publish_visualization_marker" default="false" />
     <arg name="use_trajectory_generation"    default="false" />
-	
-	<remap from="command_pose" 	         to="$(arg mav_name)/command/track/pose" />
-	<remap from="quad_odometry"  	     to="$(arg mav_name)/ground_truth/odometry" />
-	<remap from="model_state" 		     to="gazebo/model_states" />
 
 	<node pkg="rqt_gui" type="rqt_gui" name="rqt_gui" args="--perspective-file $(find auto_landing)/rqt/node_monitor.perspective" />
 	
  	<include file="$(find mav_linear_mpc)/launch/mav_linear_mpc_sim.launch" />
 	
-	<include file="$(find auto_landing)/launch/mov.launch" >
+	<include file="$(find auto_landing)/launch/world_setup.launch" >
 	    <arg name="mav_name"                     value="$(arg mav_name)" />
 		<arg name="x"                            value="$(arg x)" />
 		<arg name="y"                            value="$(arg y)" />
 	</include>
 
-	<include file="$(find tracking)/launch/tracker.launch">
+	<include file="$(find tracking)/launch/tracker_sim.launch">
 		<arg name="publish_visualization_marker" value="$(arg publish_visualization_marker)" />
     	<arg name="use_trajectory_generation"    value="$(arg use_trajectory_generation)" />		
 	</include>
@@ -31,7 +27,6 @@
 		<remap from="mav_odometry"       to="$(arg mav_name)/ground_truth/odometry" />
 		<remap from="model_state"        to="gazebo/model_states" />
 		<remap from="mav_final_command"  to="$(arg mav_name)/command/pose" />
-
 	</node>
 
 </launch>
