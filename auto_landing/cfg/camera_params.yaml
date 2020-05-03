@@ -1,17 +1,17 @@
 ##Camera Parameters
-distortion_matrix:                                                                      #1x5 matrix of double values used for undistorting distorted images
+distortion_matrix:                                                                      #1x5 matrix used for undistorting distorted images
   rows: 1
   cols: 5
   data: [0.0, 0.0, 0.0, 0.0, 0.0]
-camera_matrix:                                                                          #1x5 matrix of double values used for image preprocessing 
-  rows: 1
-  cols: 5
+camera_matrix:                                                                          #3x3 matrix  used for image preprocessing 
+  rows: 3
+  cols: 3
   data: [320.25492609007654, 0.0, 320.5, 0.0, 320.25492609007654, 240.5, 0.0, 0.0, 1.0]
-camera_to_quad_matrix:                                                                  #3x3 matrix of int values used for estimating the postion of the platform
+camera_to_quad_matrix:                                                                  #3x3 rotation matrix  used to rotate a vector from the camera to the quad frame.
   rows: 3
   cols: 3
   data: [-1, 0, 0, 0, -1, 0, 0, 0, -1]
-camera_translation:                                                                     #1x3 matrix of double values used for estimating the postion of the platform
+camera_translation:                                                                     #1x3 vector  from quad centre to the camera.
   rows: 1
   cols: 3
   [0.20, 0.0, -0.02]
