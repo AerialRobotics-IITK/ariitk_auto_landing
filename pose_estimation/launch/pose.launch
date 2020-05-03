@@ -1,12 +1,10 @@
 <?xml version="1.0"?>
 <launch>
 
-    <arg name="mav_name" default="firefly" />
+    <arg name="camera_parameters" default="$(optenv HOME)/.ros/camera_info/camera.yaml" />
 
     <node pkg="auto_landing" type="auto_landing_pose_node" name="auto_landing_pose_node" output="screen">
-        <rosparam file="$(find auto_landing)/cfg/camera_params.yaml" />
-        <remap from="quad_odometry"     to="$(arg mav_name)/ground_truth/pose" />
-        <remap from="pixel_coordinates" to="platform_centre" />
+        <rosparam file="$(arg camera_parameters)" />
     </node>
 
 </launch>  
