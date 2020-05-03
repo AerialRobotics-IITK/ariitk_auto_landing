@@ -9,7 +9,10 @@ void HuskyTrajectory::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, cha
 	nh_private.getParam("linear_vel", linear_velocity_);
 	nh_private.getParam("ang_vel", angular_velocity_);
 
-	trajectory_name_ = argv[2];
+	std::string choices[3] = {"linear", "circular", "eight"};
+	if (std::string(argv[2]) == "random") { trajectory_name_ = choices[rand() % 3]; } 
+	else { trajectory_name_ = argv[2]; }
+	
 	time_[0] = 0;
 	count_ = 0;
 	t_inverse = 0.1;
