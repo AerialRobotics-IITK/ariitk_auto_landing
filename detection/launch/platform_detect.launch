@@ -10,6 +10,7 @@
 
     <node pkg="auto_landing" type="auto_landing_detect_platform_node" name="auto_landing_detect_platform_node" output="screen">
     <rosparam file="$(find auto_landing)/cfg/detect_platform_params.yaml" />
+    <rosparam file="$(find auto_landing)/cfg/camera_params.yaml" />
     <remap from="image_raw"   to="/firefly/camera_front/image_raw" />
     <remap from="height_quad" to="/firefly/ground_truth/odometry" />
     </node>

@@ -8,10 +8,10 @@ void PoseEstimation::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private) {
 	firefly_pixel_coordinates_sub_ =
 	    nh.subscribe("pixel_coordinates", 1, &PoseEstimation::pixelCoordinatesCallBack, this);
 
-	nh_private.getParam("camera_to_quad_matrix", camera_to_quad_matrix_);
-	nh_private.getParam("camera_matrix", camera_matrix_);
-	nh_private.getParam("distortion_matrix", distortion_matrix_);
-	nh_private.getParam("camera_translation", camera_translation_);
+	nh_private.getParam("camera_to_quad_matrix/data", camera_to_quad_matrix_);
+	nh_private.getParam("camera_matrix/data", camera_matrix_);
+	nh_private.getParam("distortion_matrix/data", distortion_matrix_);
+	nh_private.getParam("camera_translation/data", camera_translation_);
 
 	scaleUpMatrix = Eigen::Matrix3f::Zero();
 	arrayToMatrixConversion();
