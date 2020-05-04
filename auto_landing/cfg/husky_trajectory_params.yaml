@@ -1,3 +1,4 @@
 ## Husky trajectory parameters
 ang_vel: 0.2       #double: Angular velocity of husky for circular trajectory
-linear_vel: 8      #double: Linear velocity of husky for circular trajectory    
+linear_vel: 0.2      #double: Linear velocity of husky for circular trajectory
+loop_rate: 10      #int: Rate at which node runs    
