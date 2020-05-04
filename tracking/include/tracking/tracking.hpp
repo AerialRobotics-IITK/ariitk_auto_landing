@@ -33,9 +33,6 @@ class Tracking {
         ros::Subscriber quad_pose_sub_;
         ros::Subscriber gazebo_model_state_sub_;
         ros::Subscriber husky_odometry_sub_;
-
-        ros::ServiceServer landing_server_;
-        ros::ServiceClient landing_client_;
 };
 
 } // namespace ariitk::auto_landing

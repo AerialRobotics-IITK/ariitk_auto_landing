@@ -9,12 +9,13 @@ TrajectoryGenerationTracking::TrajectoryGenerationTracking(char** argv)
     trajectory_pub_ = nh_.advertise<trajectory_msgs::MultiDOFJointTrajectory>("command_trajectory", 1);
     marker_pub_ = nh_.advertise<visualization_msgs::MarkerArray>("visualization_marker_array", 1);
     mav_odometry_sub_ = nh_.subscribe("mav_odometry", 10, &TrajectoryGenerationTracking::mavOdometryCallback, this);
-    husky_odometry_sub_ = nh_.subscribe("husky_odometry", 10, &TrajectoryGenerationTracking::huskyOdometryCallback, this);
-    
+
     nh_private_.getParam("v_max", v_max_);
     nh_private_.getParam("a_max", a_max_);
     nh_private_.getParam("distance", distance_);
-
+    if (std::string(argv[4]) == "true") { husky_odometry_sub_ = nh_.subscribe("husky_odometry", 10, &TrajectoryGenerationTracking::huskyOdometryCallback, this); }
+    else { model_states_sub_ = nh_.subscribe("model_states", 10, &TrajectoryGenerationTracking::modelStatesCallback, this); }
+    
     if (std::string(argv[2]) == "false") { publish_visualization_ = false; }
     else { publish_visualization_ = true; }
 }
@@ -72,7 +73,7 @@ void TrajectoryGenerationTracking::mavOdometryCallback(const nav_msgs::Odometry&
     mav_odom_ = msg;
 }
 
-void TrajectoryGenerationTracking::huskyOdometryCallback(const gazebo_msgs::ModelStates& msg) {
+void TrajectoryGenerationTracking::modelStatesCallback(const gazebo_msgs::ModelStates& msg) {
     int index = 0;
     std::string name = msg.name[index];
     while (name != "/") {
@@ -86,6 +87,10 @@ void TrajectoryGenerationTracking::huskyOdometryCallback(const gazebo_msgs::Mode
 
     husky_odom_.pose.pose = msg.pose[index];
     husky_odom_.twist.twist = msg.twist[index];
-} 
+}
+
+void TrajectoryGenerationTracking::huskyOdometryCallback(const nav_msgs::Odometry& msg) {
+    husky_odom_ = msg;
+}
 
 } // namespace ariitk::auto_landing

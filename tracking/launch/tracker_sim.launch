@@ -12,7 +12,8 @@
             <rosparam command="load" file="$(arg trajectory_parameters)" />
             <remap from="command_trajectory" to="$(arg mav_name)/command/track/trajectory" />
             <remap from="mav_odometry"       to="$(arg mav_name)/ground_truth/odometry" />
-            <remap from="husky_odometry"     to="gazebo/model_states" />
+            <remap from="husky_odometry"     to="husky/odometry" />
+            <remap from="model_states"       to="gazebo/model_states" />
         </node>
     </group>
 

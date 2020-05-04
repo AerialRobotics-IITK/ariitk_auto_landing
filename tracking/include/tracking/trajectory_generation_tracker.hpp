@@ -1,27 +1,29 @@
 #pragma once
 
-#include <ros/ros.h>
-#include <mav_msgs/eigen_mav_msgs.h>
-#include <mav_msgs/conversions.h>
-#include <trajectory_msgs/MultiDOFJointTrajectory.h>
 #include <gazebo_msgs/ModelStates.h>
+#include <mav_msgs/conversions.h>
+#include <mav_msgs/eigen_mav_msgs.h>
 #include <mav_trajectory_generation/polynomial_optimization_linear.h>
 #include <mav_trajectory_generation/trajectory_sampling.h>
 #include <mav_trajectory_generation_ros/ros_visualization.h>
+#include <nav_msgs/Odometry.h>
+#include <ros/ros.h>
+#include <trajectory_msgs/MultiDOFJointTrajectory.h>
 
 namespace ariitk::auto_landing {
 
 class TrajectoryGenerationTracking {
-    public:
+	public:
         TrajectoryGenerationTracking(char** argv);
         void run();
 
-    private:
+	private:
         void mavOdometryCallback(const nav_msgs::Odometry& msg);
-        void huskyOdometryCallback(const gazebo_msgs::ModelStates& msg);
-        
+        void modelStatesCallback(const gazebo_msgs::ModelStates& msg);
+        void huskyOdometryCallback(const nav_msgs::Odometry& msg);
+
         mav_trajectory_generation::Vertex::Vector computePoints();
-        void generateTrajectory (std::vector<mav_trajectory_generation::Vertex> vertices);
+        void generateTrajectory(std::vector<mav_trajectory_generation::Vertex> vertices);
 
         bool publish_visualization_;
 
@@ -47,7 +49,7 @@ class TrajectoryGenerationTracking {
 
         ros::Publisher trajectory_pub_, marker_pub_;
 
-        ros::Subscriber mav_odometry_sub_, husky_odometry_sub_;
+        ros::Subscriber mav_odometry_sub_, model_states_sub_, husky_odometry_sub_;
 };
 
-} //namespace ariitk::auto_landing
+} // namespace ariitk::auto_landing

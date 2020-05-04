@@ -28,6 +28,8 @@
 		<remap from="mav_odometry"       to="$(arg mav_name)/ground_truth/odometry" />
 		<remap from="model_state"        to="gazebo/model_states" />
 		<remap from="mav_final_command"  to="$(arg mav_name)/command/pose" />
+		<remap from="command_trajectory" to="$(arg mav_name)/command/track/trajectory" />
+		<remap from="command_trajectory_result" to="$(arg mav_name)/command/trajectory" />
 	</node>
 
 	<group if="$(arg use_detection)">
