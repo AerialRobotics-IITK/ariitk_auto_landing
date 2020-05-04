@@ -15,10 +15,11 @@ class PoseEstimation {
     public:
         void init(ros::NodeHandle& nh, ros::NodeHandle& nh_private);
         void run();
+        int loop_rate;
 
     private:
         void pixelCoordinatesCallBack(const geometry_msgs::Point& msg);
-        void quadPoseCallBack(const geometry_msgs::Pose& msg);
+        void quadPoseCallBack(const nav_msgs::Odometry& msg);
         void huskyOdomUpdate();
         void arrayToMatrixConversion();
 
@@ -28,9 +29,9 @@ class PoseEstimation {
         Eigen::Matrix3f quadOrientationMatrix, scaleUpMatrix;
         Eigen::Vector3f translation_, camera_translation_vector_;
 
-        geometry_msgs::PoseStamped husky_odom_;
+        nav_msgs::Odometry husky_odom_[2];
+        nav_msgs::Odometry firefly_odom_;
         geometry_msgs::Point pixel_coordinates_;
-        geometry_msgs::Pose firefly_odom_;
 
         ros::Publisher detected_husky_odom_pub_;
         ros::Subscriber firefly_pose_sub_;

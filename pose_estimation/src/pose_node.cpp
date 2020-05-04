@@ -11,7 +11,7 @@ int main(int argc, char** argv) {
 
 	pose.init(nh, nh_private);
 
-	ros::Rate loop_rate(10);
+	ros::Rate loop_rate(pose.loop_rate);
 
 	while (ros::ok()) {
 		ros::spinOnce();
