@@ -7,6 +7,8 @@
     <arg name="trajectory"                  default="random" />
     <arg name="husky_trajectory_parameters" default="$(find auto_landing)/cfg/husky_trajectory_params.yaml" />
     
+ 	<include file="$(find mav_linear_mpc)/launch/mav_linear_mpc_sim.launch" />
+
     <include file="$(find rotors_gazebo)/launch/mav.launch" >
         <arg name="mav_name" value="$(arg mav_name)" />
     </include> 

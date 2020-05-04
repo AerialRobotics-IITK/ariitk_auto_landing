@@ -21,7 +21,7 @@
 
     <include file="$(find mav_linear_mpc)/launch/mav_linear_mpc_sim.launch" />
 
-    <node pkg="auto_landing" type="auto_landing_detect_platform_node" name="auto_landing_detect_platform_node" output="screen">
+    <node pkg="detection" type="detection_detect_platform_node" name="detection_detect_platform_node" output="screen">
         <rosparam file="$(find auto_landing)/cfg/detect_platform_params.yaml" />
         <rosparam file="$(find auto_landing)/cfg/camera_params.yaml" />
         <remap from="image_raw"   to="/firefly/camera_front/image_raw" />

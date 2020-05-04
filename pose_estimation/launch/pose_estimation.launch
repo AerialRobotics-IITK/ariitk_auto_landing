@@ -1,10 +1,12 @@
 <?xml version="1.0"?>
 <launch>
 
-    <arg name="camera_parameters" default="$(optenv HOME)/.ros/camera_info/camera.yaml" />
+    <arg name="camera_parameters" default="$(optenv HOME)/.ros/camera_info/camera_front.yaml" />
+    <arg name="camera_location_parameters" default="$(find pose_estimation)/cfg/pose_estimation_parameters.yaml" />
 
-    <node pkg="auto_landing" type="auto_landing_pose_node" name="auto_landing_pose_node" output="screen">
+    <node pkg="pose_estimation" type="pose_estimation_pose_node" name="pose_estimation_pose_node" output="screen">
         <rosparam file="$(arg camera_parameters)" />
+        <rosparam file="$(arg camera_location_parameters)" />
     </node>
 
 </launch>  
