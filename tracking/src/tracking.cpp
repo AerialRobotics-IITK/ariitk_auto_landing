@@ -3,14 +3,21 @@
 namespace ariitk::auto_landing {
 
 Tracking::Tracking() 
-    : height_(1)
+    : height_(6)
     , inv_state_publish_rate_(0.1) {}
 
 void Tracking::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, char** argv) {
     
     set_firefly_pose_pub_  = nh.advertise<geometry_msgs::PoseStamped>("command_pose", 1);
     quad_pose_sub_  = nh.subscribe("quad_odometry", 1, &Tracking::quadPoseCallback, this);
-    gazebo_model_state_sub_ = nh.subscribe("model_state",1,&Tracking::modelStateCallback,this);
+
+    if (std::string(argv[2]) == "true") {
+        using_detection_ = true; 
+        husky_odometry_sub_ = nh.subscribe("husky_odometry", 1, &Tracking::huskyOdometryCallback, this);
+    } else {
+        using_detection_ = false; 
+        gazebo_model_state_sub_ = nh.subscribe("model_state", 1, &Tracking::modelStateCallback, this);
+    }
 
     setpt_.pose.position.z = height_;
     time_[0]=ros::Time::now().toSec();
@@ -18,22 +25,45 @@ void Tracking::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, char** arg
 
 void Tracking::run() {
         
-    if((fabs(husky_odom_.pose.pose.position.x-quad_odom_.pose.pose.position.x) < 0.1) 
-        && (fabs(husky_odom_.pose.pose.position.y-quad_odom_.pose.pose.position.y) < 0.1)) {
-        ROS_INFO("Over Husky.");
+    if (!using_detection_) {
+        if((fabs(husky_odom_.pose.pose.position.x-quad_odom_.pose.pose.position.x) < 0.1) 
+            && (fabs(husky_odom_.pose.pose.position.y-quad_odom_.pose.pose.position.y) < 0.1)) {
+            ROS_INFO("Over Husky.");
+        }
+        
+        if((fabs(husky_cmd_vel_[0].linear.x) > 0.0001 || fabs(husky_cmd_vel_[0].linear.y) > 0.0001)) {
+            updateSetPoint();
+        }
+        
+        set_firefly_pose_pub_.publish(setpt_);
+
+    } else {
+        setpt_.pose.position.x = 0;
+        setpt_.pose.position.y = 0;
+
+        if (platform_detected_) {
+            if((fabs(husky_odom_.pose.pose.position.x-quad_odom_.pose.pose.position.x) < 0.1) 
+                && (fabs(husky_odom_.pose.pose.position.y-quad_odom_.pose.pose.position.y) < 0.1)) {
+                ROS_INFO("Over Husky.");
+        }
+        
+            if((fabs(husky_cmd_vel_[0].linear.x) > 0.0001 || fabs(husky_cmd_vel_[0].linear.y) > 0.0001)) {
+                updateSetPoint();
+            }
+        
+            set_firefly_pose_pub_.publish(setpt_);
+
+        }
     }
-    
-    if((fabs(husky_cmd_vel_[0].linear.x) > 0.0001 || fabs(husky_cmd_vel_[0].linear.y) > 0.0001)) {
-        updateSetPoint();
-    }
-    
-    set_firefly_pose_pub_.publish(setpt_);
 }
 void Tracking::modelStateCallback(const gazebo_msgs::ModelStates& msg) {
     
-    int index;
-    if( msg.name[1] == "firefly" ) { index = 2; }
-    else if( msg.name[2] == "firefly" ) { index = 1; }
+    int index = 0;
+    std::string name = msg.name[index];
+    while (name != "/") {
+        index++;
+        name = msg.name[index];
+    }
 
     husky_odom_.pose.pose.position.x = msg.pose[index].position.x;
     husky_odom_.pose.pose.position.y = msg.pose[index].position.y;
@@ -51,6 +81,19 @@ void Tracking::modelStateCallback(const gazebo_msgs::ModelStates& msg) {
             setpt_.pose.position.x = husky_odom_.pose.pose.position.x;
             setpt_.pose.position.y = husky_odom_.pose.pose.position.y;
     }
+}
+
+void Tracking::huskyOdometryCallback(const nav_msgs::Odometry& msg) {
+    husky_odom_ = msg;
+    platform_detected_ = true;
+
+    husky_cmd_vel_[0].linear.x = husky_cmd_vel_[1].linear.x;
+    husky_cmd_vel_[0].linear.x = husky_cmd_vel_[1].linear.x;
+    husky_cmd_vel_[0].linear.x = husky_cmd_vel_[1].linear.x;
+
+    husky_cmd_vel_[1].linear.x = msg.twist.twist.linear.x;
+    husky_cmd_vel_[1].linear.y = msg.twist.twist.linear.y;
+    husky_cmd_vel_[1].linear.z = msg.twist.twist.linear.z;
 }
 
 void Tracking::quadPoseCallback(const nav_msgs::Odometry& msg) {

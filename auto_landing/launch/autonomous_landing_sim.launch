@@ -6,6 +6,8 @@
     <arg name="y"                            default="5.0" />
 	<arg name="publish_visualization_marker" default="false" />
     <arg name="use_trajectory_generation"    default="false" />
+	<arg name="use_detection"	 			 default="false" />
+	<arg name="use_odometry_for_platform"	 default="$(arg use_detection)" />
 
 	<node pkg="rqt_gui" type="rqt_gui" name="rqt_gui" args="--perspective-file $(find auto_landing)/rqt/node_monitor.perspective" />
 		
@@ -17,14 +19,26 @@
 
 	<include file="$(find tracking)/launch/tracker_sim.launch">
 		<arg name="publish_visualization_marker" value="$(arg publish_visualization_marker)" />
-    	<arg name="use_trajectory_generation"    value="$(arg use_trajectory_generation)" />		
+    	<arg name="use_trajectory_generation"    value="$(arg use_trajectory_generation)" />	
+		<arg name="use_odometry_for_platform"    value="$(arg use_odometry_for_platform)" />	
 	</include>
 
-	<node pkg="auto_landing" type="auto_landing_landing_node" name="auto_landing_landing_node" output="screen" args="-trajectory $(arg use_trajectory_generation)">
+	<node pkg="auto_landing" type="auto_landing_landing_node" name="auto_landing_landing_node" output="screen" args="-trajectory $(arg use_trajectory_generation) -use_odometry_for_platform $(arg use_odometry_for_platform)">
 		<remap from="mav_command"        to="$(arg mav_name)/command/track/pose" />
 		<remap from="mav_odometry"       to="$(arg mav_name)/ground_truth/odometry" />
 		<remap from="model_state"        to="gazebo/model_states" />
 		<remap from="mav_final_command"  to="$(arg mav_name)/command/pose" />
 	</node>
+
+	<group if="$(arg use_detection)">
+		<node pkg="detection" type="detection_detect_platform_node" name="detection_detect_platform_node" output="screen">
+        	<rosparam file="$(find auto_landing)/cfg/detect_platform_params.yaml" />
+        	<rosparam file="$(find auto_landing)/cfg/camera_params.yaml" />
+        	<remap from="image_raw"   to="/firefly/camera_front/image_raw" />
+        	<remap from="height_quad" to="/firefly/ground_truth/odometry" />
+    	</node>
+
+		<include file="$(find pose_estimation)/launch/pose_estimation.launch" />
+	</group>
 
 </launch>
