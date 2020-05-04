@@ -14,4 +14,4 @@ camera_to_quad_matrix:                                                          
 camera_translation:                                                                     #1x3 vector  from quad centre to the camera.
   rows: 1
   cols: 3
-  [0.20, 0.0, -0.02]
+  data: [0.20, 0.0, -0.02]
