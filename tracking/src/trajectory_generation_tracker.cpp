@@ -15,7 +15,7 @@ TrajectoryGenerationTracking::TrajectoryGenerationTracking(char** argv)
     nh_private_.getParam("a_max", a_max_);
     nh_private_.getParam("distance", distance_);
 
-    if (std::string(argv[1]) == "false") { publish_visualization_ = false; }
+    if (std::string(argv[2]) == "false") { publish_visualization_ = false; }
     else { publish_visualization_ = true; }
 }
 

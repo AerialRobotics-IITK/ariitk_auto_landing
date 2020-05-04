@@ -43,8 +43,8 @@ void Landing::run() {
     } else {
         mav_final_command_ = mav_command_;
 
-        if((fabs(husky_odometry_.pose.pose.position.x-mav_odometry_.pose.pose.position.x) < 0.025) 
-            && (fabs(husky_odometry_.pose.pose.position.y-mav_odometry_.pose.pose.position.y) < 0.025)) {
+        if((fabs(husky_odometry_.pose.pose.position.x-mav_odometry_.pose.pose.position.x) < 0.25) 
+            && (fabs(husky_odometry_.pose.pose.position.y-mav_odometry_.pose.pose.position.y) < 0.25)) {
             ROS_INFO("Over Husky.");
             mav_final_command_.pose.position.z = 0.45;
         }

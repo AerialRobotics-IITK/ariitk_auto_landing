@@ -5,7 +5,7 @@ namespace ariitk::auto_landing {
 void PoseEstimation::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private) {
 	detected_husky_odom_pub_ = nh.advertise<nav_msgs::Odometry>("detected_pose", 1);
 	firefly_pose_sub_ = nh.subscribe("quad_odometry", 1, &PoseEstimation::quadPoseCallBack, this);
-	firefly_pixel_coordinates_sub_ = nh.subscribe("pixel_coordinates", 1, &PoseEstimation::pixelCoordinatesCallBack, this);
+	firefly_pixel_coordinates_sub_ = nh.subscribe("platform_centre", 1, &PoseEstimation::pixelCoordinatesCallBack, this);
 
 	nh_private.getParam("camera_to_quad_matrix", camera_to_quad_matrix_);
 	nh_private.getParam("camera_matrix/data", camera_matrix_);
