@@ -3,10 +3,9 @@
   <name>auto_landing</name>
   <version>0.0.0</version>
   <description>The auto_landing package</description>
-
-  <maintainer email="kabeer@iitk.ac.in">Kshitij Kabeer</maintainer>
+  
   <maintainer email="sanjayso@iitk.ac.in">Sanjay Sukumaran</maintainer>
-  <maintainer email="varunk@iitk.ac.in">Varun Khatri</maintainer>
+  <maintainer email="varunk@iitk.ac.in">varun khatri</maintainer>
 
   <license>TODO</license>
 
@@ -14,18 +13,13 @@
   <buildtool_depend>catkin_simple</buildtool_depend>
   
   <depend>roscpp</depend>
-  <depend>mav_trajectory_generation</depend>
-  <depend>mav_trajectory_generation_ros</depend>
   <depend>geometry_msgs</depend>
   <depend>gazebo_msgs</depend>
   <depend>nav_msgs</depend>
   <depend>std_srvs</depend>
-  <depend>cv_bridge</depend>
-  <depend>sensor_msgs</depend>
-  <depend>image_transport</depend>
-   <depend>eigen_conversions</depend>
+  <depend>eigen_conversions</depend>
   <depend>tf</depend>
   <depend>tf_conversions</depend>
-
-
+  
 </package>
+

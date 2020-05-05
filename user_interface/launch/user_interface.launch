@@ -1,0 +1,11 @@
+<launch>
+
+<node 
+    name="user_interface" 
+    pkg="user_interface" 
+    type="user_interface" 
+    output="screen"
+    launch-prefix="xterm -e">  <!-- open in new window -->
+  </node>
+  
+  </launch>

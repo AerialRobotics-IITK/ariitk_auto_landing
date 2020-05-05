@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>user_interface</name>
+  <version>0.0.0</version>
+  <description>The user_interface package</description>
+
+  
+  <maintainer email="varun@todo.todo">varun</maintainer>
+
+
+  <license>TODO</license>
+
+
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <exec_depend>roscpp</exec_depend>
+  <depend>libncurses-dev</depend>
+  <depend>geometry_msgs</depend>
+  <depend>gazebo_msgs</depend>
+  <depend>nav_msgs</depend>
+
+  
+</package>
