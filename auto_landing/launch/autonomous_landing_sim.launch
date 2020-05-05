@@ -6,7 +6,7 @@
     <arg name="y"                            default="5.0" />
 	<arg name="publish_visualization_marker" default="false" />
     <arg name="use_trajectory_generation"    default="false" />
-	<arg name="use_detection"	 			 default="false" />
+	<arg name="use_detection"	 			 default="true" />
 	<arg name="use_odometry_for_platform"	 default="$(arg use_detection)" />
 
 	<node pkg="rqt_gui" type="rqt_gui" name="rqt_gui" args="--perspective-file $(find auto_landing)/rqt/node_monitor.perspective" />

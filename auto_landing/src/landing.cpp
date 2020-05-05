@@ -12,7 +12,8 @@ void Landing::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, char** argv
     }
 
     mav_odometry_sub_ = nh.subscribe("mav_odometry", 1, &Landing::mavOdometryCallback, this);
-    husky_odometry_sub_ = nh.subscribe("model_state", 1, &Landing::modelStateCallback, this);
+    if (std::string(argv[4]) == "false") { model_states_sub_ = nh.subscribe("model_state", 1, &Landing::modelStateCallback, this); }
+    else {husky_odometry_sub_ = nh.subscribe("husky_odometry", 1, &Landing::huskyOdometryCallback, this); }
 
     if (!using_trajectory_generation_) {
         mav_command_sub_ = nh.subscribe("mav_command", 1, &Landing::mavCommandCallback, this);
@@ -75,6 +76,10 @@ void Landing::modelStateCallback(const gazebo_msgs::ModelStates& msg) {
 
 void Landing::trajectoryCallback (const trajectory_msgs::MultiDOFJointTrajectory& msg) {
     mav_command_trajectory_ = msg;
+}
+
+void Landing::huskyOdometryCallback(const nav_msgs::Odometry& msg) {
+    husky_odometry_ = msg;
 }
 
 } // namespace ariitk::auto_landing

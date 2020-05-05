@@ -45,11 +45,9 @@ void Tracking::run() {
             if((fabs(husky_odom_.pose.pose.position.x-quad_odom_.pose.pose.position.x) < 0.1) 
                 && (fabs(husky_odom_.pose.pose.position.y-quad_odom_.pose.pose.position.y) < 0.1)) {
                 ROS_INFO("Over Husky.");
-        }
-        
-            if((fabs(husky_cmd_vel_[0].linear.x) > 0.0001 || fabs(husky_cmd_vel_[0].linear.y) > 0.0001)) {
-                updateSetPoint();
             }
+        
+            updateSetPoint();
         
             set_firefly_pose_pub_.publish(setpt_);
 
@@ -77,10 +75,6 @@ void Tracking::modelStateCallback(const gazebo_msgs::ModelStates& msg) {
     husky_cmd_vel_[1].linear.y = msg.twist[index].linear.y;
     husky_cmd_vel_[1].linear.z = msg.twist[index].linear.z;
 
-    if(fabs(husky_cmd_vel_[0].linear.x) <= 0.0001 && fabs(husky_cmd_vel_[0].linear.y) <= 0.0001) {
-            setpt_.pose.position.x = husky_odom_.pose.pose.position.x;
-            setpt_.pose.position.y = husky_odom_.pose.pose.position.y;
-    }
 }
 
 void Tracking::huskyOdometryCallback(const nav_msgs::Odometry& msg) {
