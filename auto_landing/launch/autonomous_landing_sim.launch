@@ -24,11 +24,12 @@
 	</include>
 
 	<node pkg="auto_landing" type="auto_landing_landing_node" name="auto_landing_landing_node" output="screen" args="-trajectory $(arg use_trajectory_generation) -use_odometry_for_platform $(arg use_odometry_for_platform)">
-		<remap from="mav_command"        to="$(arg mav_name)/command/track/pose" />
-		<remap from="mav_odometry"       to="$(arg mav_name)/ground_truth/odometry" />
-		<remap from="model_state"        to="gazebo/model_states" />
-		<remap from="mav_final_command"  to="$(arg mav_name)/command/pose" />
-		<remap from="command_trajectory" to="$(arg mav_name)/command/track/trajectory" />
+		<remap from="mav_command"        		to="$(arg mav_name)/command/track/pose" />
+		<remap from="mav_odometry"       		to="$(arg mav_name)/ground_truth/odometry" />
+		<remap from="model_state"        		to="gazebo/model_states" />
+		<remap from="husky_odometry" 	 		to="husky/odometry" />
+		<remap from="mav_final_command"  		to="$(arg mav_name)/command/pose" />
+		<remap from="command_trajectory" 		to="$(arg mav_name)/command/track/trajectory" />
 		<remap from="command_trajectory_result" to="$(arg mav_name)/command/trajectory" />
 	</node>
 
@@ -36,8 +37,8 @@
 		<node pkg="detection" type="detection_detect_platform_node" name="detection_detect_platform_node" output="screen">
         	<rosparam file="$(find auto_landing)/cfg/detect_platform_params.yaml" />
         	<rosparam file="$(find auto_landing)/cfg/camera_params.yaml" />
-        	<remap from="image_raw"   to="/firefly/camera_front/image_raw" />
-        	<remap from="height_quad" to="/firefly/ground_truth/odometry" />
+        	<remap from="image_raw"   			to="/firefly/camera_front/image_raw" />
+        	<remap from="height_quad" 			to="/firefly/ground_truth/odometry" />
     	</node>
 
 		<include file="$(find pose_estimation)/launch/pose_estimation.launch" />

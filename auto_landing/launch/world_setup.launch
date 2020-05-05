@@ -40,10 +40,17 @@
         <arg name="y"        value="$(arg y)" />
     </include>
 
-    <node pkg="auto_landing" type="auto_landing_husky_node" name="auto_landing_husky_node" output="screen" args="-trajectory $(arg trajectory)">
-        <rosparam file="$(arg husky_trajectory_parameters)" />
-        <remap from="command_velocity"   to="husky_velocity_controller/cmd_vel" />
-		<remap from="model_state" 		 to="/gazebo/model_states" />
-    </node>
+    <group if="$(eval arg('trajectory') == 'user')">
+        <node name="teleop" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" output="screen" />
+    </group>
+
+    <group unless="$(eval arg('trajectory') == 'user')">
+        <node pkg="auto_landing" type="auto_landing_husky_node" name="auto_landing_husky_node" output="screen" args="-trajectory $(arg trajectory)">
+            <rosparam file="$(arg husky_trajectory_parameters)" />
+            <remap from="command_velocity"   to="husky_velocity_controller/cmd_vel" />
+		    <remap from="model_state" 		 to="/gazebo/model_states" />
+        </node>
+    </group>
+
 </launch>
 

@@ -27,8 +27,6 @@
         <remap from="image_raw"   to="/firefly/camera_front/image_raw" />
         <remap from="height_quad" to="/firefly/ground_truth/odometry" />
     </node>
-
-    <node name="teleop" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" output="screen" />
     
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
         <arg name="world_name"          value="$(find rotors_gazebo)/worlds/$(arg world_name).world"/>
