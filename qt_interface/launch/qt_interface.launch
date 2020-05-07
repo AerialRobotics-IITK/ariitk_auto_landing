@@ -1,0 +1,11 @@
+<launch>
+
+<node 
+    name="qt_interface" 
+    pkg="qt_interface" 
+    type="qt_ros_ctrl" 
+    output="screen">
+
+  </node>
+  
+  </launch>
