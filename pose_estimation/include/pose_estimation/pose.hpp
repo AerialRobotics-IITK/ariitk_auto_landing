@@ -6,6 +6,7 @@
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <nav_msgs/Odometry.h>
+#include <std_msgs/Bool.h>
 #include <ros/ros.h>
 #include <tf/tf.h>
 
@@ -20,6 +21,7 @@ class PoseEstimation {
     private:
         void pixelCoordinatesCallBack(const geometry_msgs::Point& msg);
         void quadPoseCallBack(const nav_msgs::Odometry& msg);
+        void platformStatusCallback(const std_msgs::Bool& msg);
         void huskyOdomUpdate();
         void arrayToMatrixConversion();
 
@@ -32,10 +34,12 @@ class PoseEstimation {
         nav_msgs::Odometry husky_odom_[2];
         nav_msgs::Odometry firefly_odom_;
         geometry_msgs::Point pixel_coordinates_;
+        std_msgs::Bool is_platform_detected_;
 
         ros::Publisher detected_husky_odom_pub_;
         ros::Subscriber firefly_pose_sub_;
         ros::Subscriber firefly_pixel_coordinates_sub_;
+        ros::Subscriber is_platform_detected_sub_;
 };
 
 } // namespace ariitk::auto_landing

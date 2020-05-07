@@ -49,6 +49,7 @@ void PlatformDetect::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private) {
 	image_pub = it.advertise("detected_platform", 1);
 	image_pub_preprocess = it.advertise("preprocessed_image", 1);
 	platform_centre_pub = nh.advertise<geometry_msgs::Point>("platform_centre", 1);
+	if_detected_pub_ = nh.advertise<std_msgs::Bool>("platform_status", 1);
 }
 
 
@@ -84,6 +85,8 @@ void PlatformDetect::imageCallback(const sensor_msgs::ImageConstPtr& msg) {
 		std::vector<cv::Point> corners;
 		std::vector<std::vector<cv::Point>> list_corners;
 
+		is_platform_detected.data = false;
+
 		for (int i = 0; i < list_contours.size(); i++) {
 			list_corners.clear();
 			corners.clear();
@@ -103,8 +106,11 @@ void PlatformDetect::imageCallback(const sensor_msgs::ImageConstPtr& msg) {
 				center_.y = (list_corners.at(0).at(0).y + list_corners.at(0).at(1).y + list_corners.at(0).at(2).y + list_corners.at(0).at(3).y) / 4;
 				center_.z = 0.0;
 				ROS_INFO("Platform Detected");
+				is_platform_detected.data = true;
 			}
 		}
+
+		if_detected_pub_.publish(is_platform_detected);
 
 		if (publish_detected_platform_) {
 			cv_bridge::CvImage Detected_H;

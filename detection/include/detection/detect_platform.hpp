@@ -8,6 +8,7 @@
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/image_encodings.h>
 #include <xmlrpcpp/XmlRpc.h>
+#include <std_msgs/Bool.h>
 
 namespace ariitk::auto_landing {
 class PlatformDetect {
@@ -16,6 +17,7 @@ class PlatformDetect {
 		image_transport::Publisher image_pub_preprocess;
 		ros::Subscriber image_sub;
 		ros::Publisher platform_centre_pub;
+		ros::Publisher if_detected_pub_;
 
 		std::vector<double> camera_matrix_;
 		std::vector<double> distortion_coefficients_;
@@ -27,6 +29,7 @@ class PlatformDetect {
 		int contour_perimeter_threshold_, contour_perimeter_scale_;
 		int kernel_size_;
 		geometry_msgs::Point center_;
+		std_msgs::Bool is_platform_detected;
 		XmlRpc::XmlRpcValue thresholding_parameters_;
 
 	public:
