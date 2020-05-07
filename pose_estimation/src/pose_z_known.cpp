@@ -2,7 +2,7 @@
 
 namespace ariitk::pose_estimation {
 
-void PoseEstimation::scaleupKnownCalculation() {
+void PoseEstimation::zKnownCalculation() {
 	object_position_(0) = -(camera_matrix_(1, 1) * ground_to_vehicle_rotation_(0, 1) * vehicle_to_camera_rotation_(1, 0) * camera_centre_displacement_(2) *
 	                              pixel_coordinates_(0) -
 	                          camera_matrix_(1, 1) * ground_to_vehicle_rotation_(0, 1) * vehicle_to_camera_rotation_(2, 0) *
