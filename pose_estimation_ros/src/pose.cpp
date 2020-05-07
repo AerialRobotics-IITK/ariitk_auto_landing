@@ -1,4 +1,4 @@
-#include <pose_estimation/pose.hpp>
+#include <pose_estimation_ros/pose.hpp>
 
 namespace ariitk::auto_landing {
 
@@ -82,9 +82,12 @@ void PoseEstimation::huskyOdomUpdate() {
 
 		husky_odom_[0] = husky_odom_[1];
 
-		husky_odom_[1].pose.pose.position.x = temp.pose.pose.position.x;// + (temp.twist.twist.linear.x / loop_rate);
-		husky_odom_[1].pose.pose.position.y = temp.pose.pose.position.y;// + (temp.twist.twist.linear.y / loop_rate);
-		husky_odom_[1].pose.pose.position.z = temp.pose.pose.position.z;// + (temp.twist.twist.linear.z / loop_rate);
+		husky_odom_[1].pose.pose.position.x = temp.pose.pose.position.x + (temp.twist.twist.linear.x / loop_rate);
+		husky_odom_[1].pose.pose.position.y = temp.pose.pose.position.y + (temp.twist.twist.linear.y / loop_rate);
+		husky_odom_[1].pose.pose.position.z = temp.pose.pose.position.z + (temp.twist.twist.linear.z / loop_rate);
+			// husky_odom_[1].twist.twist.linear.x = 0;
+			// husky_odom_[1].twist.twist.linear.y = 0;
+			// husky_odom_[1].twist.twist.linear.z = 0;
 	}
 }
 

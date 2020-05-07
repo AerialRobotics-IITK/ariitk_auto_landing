@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>pose_estimation</name>
+  <name>pose_estimation_ros</name>
   <version>0.0.0</version>
   <description>The pose_estimation package</description>
 
