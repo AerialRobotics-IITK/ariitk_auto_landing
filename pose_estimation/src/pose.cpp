@@ -5,7 +5,8 @@ namespace ariitk::pose_estimation {
 PoseEstimation::PoseEstimation(Eigen::MatrixXd projection_matrix, Eigen::Matrix3d camera_to_vehicle_rotation, Eigen::Vector3d vehicle_to_camera_translation) {
     for (int i=0; i<3; i++) {
         for (int j=0; j<3; j++) { camera_matrix_(i,j) = projection_matrix(i,j); }
-        camera_centre_displacement_(i) = projection_matrix(i,3);
+        if (projection_matrix.cols() == 4) { camera_centre_displacement_(i) = projection_matrix(i,3); }
+        else { camera_centre_displacement_(i) = 0; }
     }
     inverse_camera_matrix_ = camera_matrix_.inverse();
 
@@ -19,7 +20,8 @@ PoseEstimation::PoseEstimation(Eigen::MatrixXd projection_matrix, Eigen::Matrix3
 void PoseEstimation::setCameraParams(Eigen::MatrixXd projection_matrix, Eigen::Matrix3d camera_to_vehicle_rotation, Eigen::Vector3d vehicle_to_camera_translation) {
     for (int i=0; i<3; i++) {
         for (int j=0; j<3; j++) { camera_matrix_(i,j) = projection_matrix(i,j); }
-        camera_centre_displacement_(i) = projection_matrix(i,3);
+        if (projection_matrix.cols() == 4) { camera_centre_displacement_(i) = projection_matrix(i,3); }
+        else { camera_centre_displacement_(i) = 0; }
     }
     inverse_camera_matrix_ = camera_matrix_.inverse();
 

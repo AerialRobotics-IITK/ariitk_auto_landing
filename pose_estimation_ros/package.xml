@@ -21,6 +21,7 @@
   <depend>eigen_conversions</depend>
   <depend>tf</depend>
   <depend>tf_conversions</depend>
+  <depend>pose_estimation</depend>
 
 
 </package>

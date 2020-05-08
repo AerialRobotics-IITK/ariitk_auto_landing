@@ -7,7 +7,7 @@ int main(int argc, char** argv) {
 	ros::NodeHandle nh;
 	ros::NodeHandle nh_private("~");
 
-	PoseEstimation pose;
+	PoseEstimationROS pose;
 
 	pose.init(nh, nh_private);
 
