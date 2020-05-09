@@ -3,7 +3,7 @@
 namespace ariitk::auto_landing {
 
 void PoseEstimation::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private) {
-	detected_husky_odom_pub_ = nh.advertise<nav_msgs::Odometry>("detected_pose", 1);
+	detected_platform_odom_pub_ = nh.advertise<nav_msgs::Odometry>("detected_pose", 1);
 	firefly_pose_sub_ = nh.subscribe("quad_odometry", 1, &PoseEstimation::quadPoseCallBack, this);
 	firefly_pixel_coordinates_sub_ = nh.subscribe("platform_centre", 1, &PoseEstimation::pixelCoordinatesCallBack, this);
 
@@ -18,8 +18,8 @@ void PoseEstimation::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private) {
 }
 
 void PoseEstimation::run() {
-	huskyOdomUpdate();
-	detected_husky_odom_pub_.publish(husky_odom_[1]);
+	platformOdomUpdate();
+	detected_platform_odom_pub_.publish(platform_odom_[1]);
 }
 
 void PoseEstimation::arrayToMatrixConversion() {
@@ -44,20 +44,20 @@ void PoseEstimation::quadPoseCallBack(const nav_msgs::Odometry& msg) {
 
 void PoseEstimation::pixelCoordinatesCallBack(const geometry_msgs::Point& msg) { pixel_coordinates_ = msg; }
 
-void PoseEstimation::huskyOdomUpdate() {
+void PoseEstimation::platformOdomUpdate() {
 	Eigen::Vector3f pixel_coordinates(pixel_coordinates_.x, pixel_coordinates_.y, 1);
 	Eigen::Vector3f coordinates_quad_frame = cameraToQuadMatrix * scaleUpMatrix * invCameraMatrix * pixel_coordinates + camera_translation_vector_;
 	Eigen::Vector3f global_coordinates = quadOrientationMatrix * coordinates_quad_frame + translation_;
 
-	husky_odom_[0] = husky_odom_[1];
+	platform_odom_[0] = platform_odom_[1];
 
-	husky_odom_[1].pose.pose.position.x = global_coordinates(0);
-	husky_odom_[1].pose.pose.position.y = global_coordinates(1);
-	husky_odom_[1].pose.pose.position.z = global_coordinates(2);
+	platform_odom_[1].pose.pose.position.x = global_coordinates(0);
+	platform_odom_[1].pose.pose.position.y = global_coordinates(1);
+	platform_odom_[1].pose.pose.position.z = global_coordinates(2);
 
-	husky_odom_[1].twist.twist.linear.x = (husky_odom_[1].pose.pose.position.x - husky_odom_[2].pose.pose.position.x) * loop_rate;
-	husky_odom_[1].twist.twist.linear.y = (husky_odom_[1].pose.pose.position.y - husky_odom_[2].pose.pose.position.y) * loop_rate;
-	husky_odom_[1].twist.twist.linear.z = (husky_odom_[1].pose.pose.position.z - husky_odom_[2].pose.pose.position.z) * loop_rate;
+	platform_odom_[1].twist.twist.linear.x = (platform_odom_[1].pose.pose.position.x - platform_odom_[0].pose.pose.position.x) * loop_rate;
+	platform_odom_[1].twist.twist.linear.y = (platform_odom_[1].pose.pose.position.y - platform_odom_[0].pose.pose.position.y) * loop_rate;
+	platform_odom_[1].twist.twist.linear.z = (platform_odom_[1].pose.pose.position.z - platform_odom_[0].pose.pose.position.z) * loop_rate;
 }
 
 } // namespace ariitk::auto_landing

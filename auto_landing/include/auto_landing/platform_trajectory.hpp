@@ -8,10 +8,11 @@
 
 namespace ariitk::auto_landing {
 
-class HuskyTrajectory {
+class PlatformTrajectory {
 	public:
       void init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, char** argv);
       void run();
+      int loop_rate_;
 
 	private:
       void modelStateCallback(const gazebo_msgs::ModelStates& msg);
@@ -22,14 +23,14 @@ class HuskyTrajectory {
       ros::Publisher trajectory_pub_;
       ros::Subscriber gazebo_model_state_sub_;
 
-      geometry_msgs::Twist husky_velocity_;
-      nav_msgs::Odometry husky_odom_;
+      geometry_msgs::Twist platform_velocity_;
+      nav_msgs::Odometry platform_odom_;
 
       double angular_velocity_, linear_velocity_;
       double time_[2];
-      double husky_x_, husky_y_;
+      double platform_x_, platform_y_;
       int count_;
-      double t_inverse;
+      double t_inverse, min_time_;
       std::string trajectory_name_;
 };
 

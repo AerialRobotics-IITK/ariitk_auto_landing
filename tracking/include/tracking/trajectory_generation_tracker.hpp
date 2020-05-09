@@ -20,7 +20,7 @@ class TrajectoryGenerationTracking {
 	private:
         void mavOdometryCallback(const nav_msgs::Odometry& msg);
         void modelStatesCallback(const gazebo_msgs::ModelStates& msg);
-        void huskyOdometryCallback(const nav_msgs::Odometry& msg);
+        void platformOdometryCallback(const nav_msgs::Odometry& msg);
 
         mav_trajectory_generation::Vertex::Vector computePoints();
         void generateTrajectory(std::vector<mav_trajectory_generation::Vertex> vertices);
@@ -34,7 +34,7 @@ class TrajectoryGenerationTracking {
         int dimension_;
         int derivative_to_optimize_;
 
-        Eigen::Vector3d husky_acceleration_;
+        Eigen::Vector3d platform_acceleration_;
 
         mav_trajectory_generation::Trajectory result_;
 
@@ -42,14 +42,14 @@ class TrajectoryGenerationTracking {
 
         visualization_msgs::MarkerArray markers_;
 
-        nav_msgs::Odometry mav_odom_, husky_odom_;
+        nav_msgs::Odometry mav_odom_, platform_odom_;
 
         ros::NodeHandle nh_;
         ros::NodeHandle nh_private_;
 
         ros::Publisher trajectory_pub_, marker_pub_;
 
-        ros::Subscriber mav_odometry_sub_, model_states_sub_, husky_odometry_sub_;
+        ros::Subscriber mav_odometry_sub_, model_states_sub_, platform_odometry_sub_;
 };
 
 } // namespace ariitk::auto_landing

@@ -2,6 +2,7 @@
 <launch>
 
     <arg name="trajectory_parameters"        default="$(find tracking)/cfg/trajectory_parameters.yaml" />
+    <arg name="tracking_parameters"        default="$(find tracking)/cfg/tracking_parameters.yaml" />
     <arg name="publish_visualization_marker" default="false" />
     <arg name="use_trajectory_generation"    default="true" />
     <arg name="mav_name"                     default="firefly" />
@@ -19,6 +20,7 @@
 
     <group unless="$(arg use_trajectory_generation)" >
     	<node pkg="tracking" type="tracking_tracking_node" name="tracking_tracking_node" output="screen" args="-use_odometry_for_platform $(arg use_odometry_for_platform)">
+            <rosparam command="load" file="$(arg tracking_parameters)" />
             <remap from="command_pose" 	         to="$(arg mav_name)/command/track/pose" />
 	        <remap from="quad_odometry"  	     to="$(arg mav_name)/ground_truth/odometry" />
 	        <remap from="model_state" 		     to="gazebo/model_states" />

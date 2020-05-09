@@ -16,7 +16,7 @@ class Landing {
     private:
         void mavCommandCallback (const geometry_msgs::PoseStamped& msg);
         void mavOdometryCallback (const nav_msgs::Odometry& msg);
-        void huskyOdometryCallback (const nav_msgs::Odometry& msg);
+        void platformOdometryCallback (const nav_msgs::Odometry& msg);
         void modelStateCallback (const gazebo_msgs::ModelStates& msg);  
         void trajectoryCallback (const trajectory_msgs::MultiDOFJointTrajectory& msg);
 
@@ -25,9 +25,9 @@ class Landing {
         geometry_msgs::PoseStamped mav_command_, mav_final_command_;
         trajectory_msgs::MultiDOFJointTrajectory mav_command_trajectory_, mav_final_command_trajectory_;
 
-        nav_msgs::Odometry mav_odometry_, husky_odometry_;
+        nav_msgs::Odometry mav_odometry_, platform_odometry_;
 
-        ros::Subscriber mav_command_sub_, mav_odometry_sub_, model_states_sub_, husky_odometry_sub_, mav_command_trajectory_sub_;
+        ros::Subscriber mav_command_sub_, mav_odometry_sub_, model_states_sub_, platform_odometry_sub_, mav_command_trajectory_sub_;
         ros::Publisher mav_final_command_pub_, mav_final_command_trajectory_pub_;
     };
 } // namespace ariitk::auto_landing
