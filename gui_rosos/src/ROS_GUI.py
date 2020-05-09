@@ -16,6 +16,7 @@ from geometry_msgs.msg import Twist
 from gazebo_msgs.msg import ModelStates
 import numpy as np
 from nav_msgs.msg import Odometry
+import math
 
 
 # roslib.load_manifest("ros_gui")
@@ -41,61 +42,102 @@ husky_x = 2
 husky_y = 2
 STOP = True
 
-def ros_interface():
+# def ros_interface():
 
-    rate = rospy.Rate(100)
-    while not rospy.is_shutdown():
-        if STOP == False :
-            cmd_vel_pub.publish(msg)
+#     rate = rospy.Rate(100)
+#     while not rospy.is_shutdown():
+#         if STOP == False :
+#             cmd_vel_pub.publish(msg)
         
-        # rate.sleep()
-    rate = rospy.Rate(100)
-    while not rospy.is_shutdown():
-        if STOP == False :
-            cmd_vel_pub.publish(msg)
-        spinOnce()
+#         # rate.sleep()
+#     rate = rospy.Rate(100)
+#     while not rospy.is_shutdown():
+#         if STOP == False :
+#             cmd_vel_pub.publish(msg)
+#         rospy.spinOnce()
         
-        rate.sleep()
+#         rate.sleep()
 
+
+def spinOnce():
+    r = rospy.Rate(10)
+    r.sleep()
 def forward():
     # msg = Twist()
-    msg.linear.x = 1
+    msg.linear.x = 2
     msg.angular.z = 0
     cmd_vel_pub.publish(msg)
     print("moving forward")
 
 def right():
     # msg = Twist()
-    msg.linear.x = 0.5
+    msg.linear.x = 2
     msg.angular.z = -1 * 0.4
     cmd_vel_pub.publish(msg)
     print("turned right")
 def left():
     # msg = Twist()
-    msg.linear.x = 0.5
+    msg.linear.x = 2
     msg.angular.z = 1* 0.4
     cmd_vel_pub.publish(msg)
     print("turned left")
     
 def eight():
-    None
+    spinOnce()
+    husky_x = husky_odom.pose.pose.position.x
+    husky_y = husky_odom.pose.pose.position.y
+    norm = math.sqrt(pow(husky_odom.pose.pose.position.x - husky_x, 2) + pow(husky_odom.pose.pose.position.y - husky_y, 2))
+    i_time = rospy.get_time()
+    f_time = i_time
+    lin =8
+    ang = 0.2
+    count = 0
+    msg = Twist()
+    rate = rospy.Rate(10)
+    print("HUSKY STARTS MOVING IN EIGHT TRAJECTORY ..!!!")
+    while not rospy.is_shutdown():
+
+        if (norm <= lin*0.1) and ((f_time-i_time) >2):
+            i_time = rospy.get_time()
+            count +=1
+
+        if count % 2 ==0:
+            msg.linear.x = lin
+            msg.angular.z = ang
+        
+        else:
+            msg.linear.x = lin
+            msg.angular.z = -1* ang
+
+        f_time = rospy.get_time()
+        cmd_vel_pub.publish(msg)
+        # rospy.spinOnce()
+        rate.sleep()
+
+            
+    
 def circle():
     STOP = False
     # msg = Twist()
     msg.linear.x = 8
     msg.angular.z = 0.2
-    # rate = rospy.Rate(10)
-    # while STOP == False:
-        # cmd_vel_pub.publish(msg)
-        # rate.sleep()
-    print("HUSKY STARTS MOVING IN CIRCULAR TRAJECTORY. PRESS STOP BUTTON TO STOP IT ..!!")
-    ros_interface()
+    Form = QtGui.QWidget()
+    ui = Ui_Form()
+    ui.setupUi(Form)
+    rate = rospy.Rate(10)
+    print("HUSKY STARTS MOVING IN CIRCULAR TRAJECTORY ..!!!")
+    while STOP == False:
+        ui.Stop.setEnabled(True)
+
+
+        cmd_vel_pub.publish(msg)
+        rate.sleep()
 def stop():
     # msg = Twist()
     msg.linear.x = 0
     msg.angular.z = 0
-    STOP = True
-    # cmd_vel_pub.publish(msg)
+    # STOP = True
+    cmd_vel_pub.publish(msg)
 
 
 def linear():
@@ -103,11 +145,12 @@ def linear():
     msg.linear.x = 4
     msg.angular.z = 0
     STOP = False
-    # rate = rospy.Rate(10)
-    # while STOP == False:
-        # cmd_vel_pub.publish(msg)
-        # rate.sleep()
-    print("HUSKY STARTS MOVING IN LINEAR TRAJECTORY. PRESS STOP BUTTON TO STOP IT ..!!")
+    print("HUSKY STARTS MOVING IN LINEAR TRAJECTORY..!!!")
+    rate = rospy.Rate(10)
+    while not rospy.is_shutdown():
+        cmd_vel_pub.publish(msg)
+        rate.sleep()
+    
 def keybr():
     None
 
@@ -128,15 +171,15 @@ class Ui_Form(object):
         self.Forward = QtGui.QPushButton(Form)
         self.Forward.setGeometry(QtCore.QRect(140, 100, 221, 61))
         self.Forward.setObjectName(_fromUtf8("pushButton"))
-        self.Forward.setAutoRepeat(False)
+        self.Forward.setAutoRepeat(True)
         self.Right = QtGui.QPushButton(Form)
         self.Right.setGeometry(QtCore.QRect(320, 200, 151, 51))
         self.Right.setObjectName(_fromUtf8("pushButton_3"))
-        self.Right.setAutoRepeat(False)
+        self.Right.setAutoRepeat(True)
         self.Left = QtGui.QPushButton(Form)
         self.Left.setGeometry(QtCore.QRect(10, 200, 151, 51))
         self.Left.setObjectName(_fromUtf8("pushButton_4"))
-        self.Left.setAutoRepeat(False)
+        self.Left.setAutoRepeat(True)
         self.Eight = QtGui.QPushButton(Form)
         self.Eight.setGeometry(QtCore.QRect(530, 130, 181, 51))
         self.Eight.setObjectName(_fromUtf8("pushButton_5"))
@@ -144,7 +187,7 @@ class Ui_Form(object):
         self.Stop = QtGui.QPushButton(Form)
         self.Stop.setGeometry(QtCore.QRect(140, 290, 221, 61))
         self.Stop.setObjectName(_fromUtf8("pushButton_6"))
-        self.Stop.setAutoRepeat(False)
+        self.Stop.setAutoRepeat(True)
         self.Circle = QtGui.QPushButton(Form)
         self.Circle.setGeometry(QtCore.QRect(530, 190, 181, 51))
         self.Circle.setObjectName(_fromUtf8("pushButton_7"))
