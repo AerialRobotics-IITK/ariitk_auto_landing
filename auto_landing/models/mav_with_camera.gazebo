@@ -25,7 +25,7 @@
 
   <!-- Mount a generic odometry sensor without odometry map (working everywhere). -->
   <xacro:odometry_plugin_macro
-    namespace="${n  }amespace}"
+    namespace="${namespace}"
     odometry_sensor_suffix="1"
     parent_link="${namespace}/base_link"
     pose_topic="odometry_sensor1/pose"
@@ -87,4 +87,3 @@
   </xacro:wind_plugin_macro>
 
 </robot>
-
