@@ -2,10 +2,10 @@
 <launch>
 
     <arg name="camera_parameters"          default="$(optenv HOME)/.ros/camera_info/camera_front.yaml" />
-    <arg name="camera_location_parameters" default="$(find pose_estimation)/cfg/pose_estimation_parameters.yaml" />
+    <arg name="camera_location_parameters" default="$(find pose_estimation_ros)/cfg/pose_estimation_parameters.yaml" />
     <arg name="mav_name"                   default="firefly" />
 
-    <node pkg="pose_estimation" type="pose_estimation_pose_node" name="pose_estimation_pose_node" output="screen">
+    <node pkg="pose_estimation_ros" type="pose_estimation_ros_pose_node" name="pose_estimation_ros_pose_node" output="screen">
         <rosparam file="$(arg camera_parameters)" />
         <rosparam file="$(arg camera_location_parameters)" />
         <remap from="detected_pose" to="husky/odometry" />

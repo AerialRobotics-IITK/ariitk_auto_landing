@@ -1,4 +1,4 @@
-#include <pose_estimation/pose.hpp>
+#include <pose_estimation_ros/pose_estimation_ros.hpp>
 
 using namespace ariitk::auto_landing;
 
@@ -7,7 +7,7 @@ int main(int argc, char** argv) {
 	ros::NodeHandle nh;
 	ros::NodeHandle nh_private("~");
 
-	PoseEstimation pose;
+	PoseEstimationROS pose;
 
 	pose.init(nh, nh_private);
 
