@@ -10,7 +10,7 @@ camera_matrix:                                                                  
 camera_to_quad_matrix:                                                                  #3x3 rotation matrix  used to rotate a vector from the camera to the quad frame.
   rows: 3
   cols: 3
-  data: [-1, 0, 0, 0, -1, 0, 0, 0, -1]
+  data: [0, -1, 0, -1, 0, 0, 0, 0, -1]
 camera_translation:                                                                     #1x3 vector  from quad centre to the camera.
   rows: 1
   cols: 3

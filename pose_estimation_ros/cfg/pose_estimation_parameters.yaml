@@ -1,4 +1,4 @@
 camera_to_quad_matrix: [-1, 0, 0, 0, -1, 0, 0, 0, -1]
 camera_translation: [0.20, 0.0, -0.02]
-platform_height: 0.45                                 #double: Height platform used
+platform_height: 0.45
 loop_rate: 10

@@ -49,6 +49,7 @@ void PlatformDetect::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private) {
 	image_pub = it.advertise("detected_platform", 1);
 	image_pub_preprocess = it.advertise("preprocessed_image", 1);
 	platform_centre_pub = nh.advertise<geometry_msgs::Point>("platform_centre", 1);
+	if_detected_pub_ = nh.advertise<std_msgs::Bool>("platform_status", 1);
 }
 
 
@@ -84,6 +85,8 @@ void PlatformDetect::imageCallback(const sensor_msgs::ImageConstPtr& msg) {
 		std::vector<cv::Point> corners;
 		std::vector<std::vector<cv::Point>> list_corners;
 
+		is_platform_detected.data = false;
+
 		for (int i = 0; i < list_contours.size(); i++) {
 			list_corners.clear();
 			corners.clear();
@@ -98,19 +101,23 @@ void PlatformDetect::imageCallback(const sensor_msgs::ImageConstPtr& msg) {
 			cv::approxPolyDP(cv::Mat(hull1[i]), corners, cv::arcLength(cv::Mat(hull1[i]), true) * error_limit_, true);
 			list_corners.push_back(corners);
 			if (corners.size() == 4) {
-				cv::drawContours(drawing, list_corners, 0, cv::Scalar(255, 0, 0), 1, 8);
+				cv::drawContours(frame, list_corners, 0, cv::Scalar(255, 0, 0), 1, 8);
 				center_.x = (list_corners.at(0).at(0).x + list_corners.at(0).at(1).x + list_corners.at(0).at(2).x + list_corners.at(0).at(3).x) / 4;
 				center_.y = (list_corners.at(0).at(0).y + list_corners.at(0).at(1).y + list_corners.at(0).at(2).y + list_corners.at(0).at(3).y) / 4;
 				center_.z = 0.0;
+				cv::circle(frame, cv::Point(center_.x, center_.y), 2, cv::Scalar(0,255,0), -1);
 				ROS_INFO("Platform Detected");
+				is_platform_detected.data = true;
 			}
 		}
+
+		if_detected_pub_.publish(is_platform_detected);
 
 		if (publish_detected_platform_) {
 			cv_bridge::CvImage Detected_H;
 			Detected_H.encoding = sensor_msgs::image_encodings::BGR8;
 			Detected_H.header.stamp = ros::Time::now();
-			Detected_H.image = drawing;
+			Detected_H.image = frame;
 			image_pub.publish(Detected_H.toImageMsg());
 		}
 }
