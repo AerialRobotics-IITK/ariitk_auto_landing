@@ -12,14 +12,13 @@ void Landing::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, char** argv
     }
 
     mav_odometry_sub_ = nh.subscribe("mav_odometry", 1, &Landing::mavOdometryCallback, this);
-  
     if (std::string(argv[4]) == "false") { 
         using_detection_ = false;
         model_states_sub_ = nh.subscribe("model_state", 1, &Landing::modelStateCallback, this);
     }
     else {
         using_detection_ = true;
-        husky_odometry_sub_ = nh.subscribe("husky_odometry", 1, &Landing::huskyOdometryCallback, this);
+        platform_odometry_sub_ = nh.subscribe("platform_odometry", 1, &Landing::platformOdometryCallback, this);
         platform_status_sub_ = nh.subscribe("platform_status", 1, &Landing::platformStatusCallback, this);
     }
 
@@ -42,13 +41,14 @@ void Landing::run() {
     if (using_trajectory_generation_) {
         mav_final_command_trajectory_ = mav_command_trajectory_;
         
-        if((fabs(platform_odometry_.pose.pose.position.x-mav_odometry_.pose.pose.position.x) < distance_threshold_) 
-            && (fabs(platform_odometry_.pose.pose.position.y-mav_odometry_.pose.pose.position.y) < distance_threshold_)) {
-            ROS_INFO("Over platform.");
+        if ((!using_detection_ || (using_detection_ && is_platform_detected_.data)) && initial_takeoff_) {
+            if((fabs(platform_odometry_.pose.pose.position.x-mav_odometry_.pose.pose.position.x) < 0.25) 
+                && (fabs(platform_odometry_.pose.pose.position.y-mav_odometry_.pose.pose.position.y) < 0.25)) {
+                ROS_INFO("Over platform.");
 
-            for (int i=0; i<mav_final_command_trajectory_.points.size(); i++) {
-                mav_final_command_trajectory_.points[i].transforms[0].translation.z = platform_height_;
-            }
+                for (int i=0; i<mav_final_command_trajectory_.points.size(); i++) {
+                    mav_final_command_trajectory_.points[i].transforms[0].translation.z = 0.45;
+                }
 
             }
         }
@@ -59,10 +59,10 @@ void Landing::run() {
         mav_final_command_ = mav_command_;
 
         if ((!using_detection_ || (using_detection_ && is_platform_detected_.data)) && initial_takeoff_) {
-            if((fabs(husky_odometry_.pose.pose.position.x-mav_odometry_.pose.pose.position.x) < distance_threshold_) 
-                && (fabs(husky_odometry_.pose.pose.position.y-mav_odometry_.pose.pose.position.y) < distance_threshold_)) {
+            if((fabs(platform_odometry_.pose.pose.position.x-mav_odometry_.pose.pose.position.x) < 0.25) 
+                && (fabs(platform_odometry_.pose.pose.position.y-mav_odometry_.pose.pose.position.y) < 0.25)) {
                 ROS_INFO("Over platform.");
-                mav_final_command_.pose.position.z = platform_height_;
+                mav_final_command_.pose.position.z = 0.45;
             }
         }
 
@@ -92,7 +92,7 @@ void Landing::modelStateCallback(const gazebo_msgs::ModelStates& msg) {
 
 void Landing::trajectoryCallback (const trajectory_msgs::MultiDOFJointTrajectory& msg) { mav_command_trajectory_ = msg; }
 
-void Landing::huskyOdometryCallback(const nav_msgs::Odometry& msg) { husky_odometry_ = msg; }
+void Landing::platformOdometryCallback(const nav_msgs::Odometry& msg) { platform_odometry_ = msg; }
 
 void Landing::platformStatusCallback(const std_msgs::Bool& msg) { is_platform_detected_ = msg; }
 

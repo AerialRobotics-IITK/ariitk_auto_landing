@@ -67,7 +67,7 @@ void PoseEstimationROS::pixelCoordinatesCallBack(const geometry_msgs::Point& msg
 
 void PoseEstimationROS::platformStatusCallback(const std_msgs::Bool& msg) { is_platform_detected_ = msg; }
 
-void PoseEstimationROS::huskyOdomUpdate() {
+void PoseEstimationROS::platformOdomUpdate() {
 	// if(is_platform_detected_.data) {
 		Eigen::Vector3d pixel_coordinates(pixel_coordinates_.x, pixel_coordinates_.y, 1);
 
