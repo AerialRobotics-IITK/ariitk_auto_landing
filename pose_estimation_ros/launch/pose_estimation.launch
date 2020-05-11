@@ -8,7 +8,7 @@
     <node pkg="pose_estimation_ros" type="pose_estimation_ros_pose_node" name="pose_estimation_ros_pose_node" output="screen">
         <rosparam file="$(arg camera_parameters)" />
         <rosparam file="$(arg camera_location_parameters)" />
-        <remap from="detected_pose" to="husky/odometry" />
+        <remap from="detected_pose" to="platform/odometry" />
         <remap from="quad_odometry" to="$(arg mav_name)/ground_truth/odometry" />
     </node>
 

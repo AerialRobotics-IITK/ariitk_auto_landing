@@ -1,19 +1,27 @@
 <?xml version="1.0"?>
 <launch>
     
-    <arg name="mav_name"                    default="firefly" />
-    <arg name="x"                           default="2" />
-    <arg name="y"                           default="2" />
-    <arg name="trajectory"                  default="random" />
-    <arg name="husky_trajectory_parameters" default="$(find auto_landing)/cfg/husky_trajectory_params.yaml" />
-    <arg name="world_name"                  default="basic"/>
-    <arg name="enable_logging"              default="false"/>
-    <arg name="enable_ground_truth"         default="true"/>
-    <arg name="log_file"                    default="$(arg mav_name)"/>
-    <arg name="debug"                       default="false"/>
-    <arg name="gui"                         default="true"/>
-    <arg name="paused"                      default="true"/>
-    <arg name="verbose"                     default="false"/>
+    <arg name="mav_name"                        default="firefly" />
+    <arg name="x"                               default="2" />
+    <arg name="y"                               default="2" />
+    <arg name="trajectory"                      default="random" />
+    <arg name="platform_trajectory_parameters"  default="$(find auto_landing)/cfg/platform_trajectory_params.yaml" />
+    <arg name="world_name"                      default="basic" />
+    <arg name="enable_logging"                  default="false" />
+    <arg name="enable_ground_truth"             default="true" />
+    <arg name="log_file"                        default="$(arg mav_name)" />
+    <arg name="debug"                           default="false" />
+    <arg name="gui"                             default="true" />
+    <arg name="paused"                          default="true" />
+	<arg name="use_wind"					    default="false" />
+    <arg name="verbose"                         default="false" />
+    
+    <!-- <group if="$(arg use_wind)">
+        <arg name="model"               value="$(find auto_landing)/models/mav_with_camera_and_wind.gazebo" />
+    </group>
+    <group unless="$(arg use_wind)">
+        <arg name="model"               value="$(find auto_landing)/models/mav_with_camera.gazebo" />
+    </group> -->
     
  	<include file="$(find mav_linear_mpc)/launch/mav_linear_mpc_sim.launch" />
 
@@ -26,13 +34,24 @@
     </include>
 
     <group ns="$(arg mav_name)">
-        <include file="$(find rotors_gazebo)/launch/spawn_mav.launch">
-            <arg name="mav_name"            value="$(arg mav_name)" />
-            <arg name="model"               value="$(find auto_landing)/models/mav_with_camera.gazebo" />
-            <arg name="enable_logging"      value="$(arg enable_logging)" />
-            <arg name="enable_ground_truth" value="$(arg enable_ground_truth)" />
-            <arg name="log_file"            value="$(arg log_file)"/>
-        </include>
+        <group if="$(arg use_wind)">
+            <include file="$(find rotors_gazebo)/launch/spawn_mav.launch">
+                <arg name="mav_name"            value="$(arg mav_name)" />
+                <arg name="model"               value="$(find auto_landing)/models/mav_with_camera_and_wind.gazebo" />
+                <arg name="enable_logging"      value="$(arg enable_logging)" />
+                <arg name="enable_ground_truth" value="$(arg enable_ground_truth)" />
+                <arg name="log_file"            value="$(arg log_file)"/>
+            </include>
+        </group>
+        <group unless="$(arg use_wind)">
+            <include file="$(find rotors_gazebo)/launch/spawn_mav.launch">
+                <arg name="mav_name"            value="$(arg mav_name)" />
+                <arg name="model"               value="$(find auto_landing)/models/mav_with_camera.gazebo" />
+                <arg name="enable_logging"      value="$(arg enable_logging)" />
+                <arg name="enable_ground_truth" value="$(arg enable_ground_truth)" />
+                <arg name="log_file"            value="$(arg log_file)"/>
+            </include>
+        </group>
     </group>
 
     <include file="$(find husky_gazebo)/launch/spawn_husky.launch">
@@ -45,8 +64,8 @@
     </group>
 
     <group unless="$(eval arg('trajectory') == 'user')">
-        <node pkg="auto_landing" type="auto_landing_husky_node" name="auto_landing_husky_node" output="screen" args="-trajectory $(arg trajectory)">
-            <rosparam file="$(arg husky_trajectory_parameters)" />
+        <node pkg="auto_landing" type="auto_landing_platform_node" name="auto_landing_platform_node" output="screen" args="-trajectory $(arg trajectory)">
+            <rosparam file="$(arg platform_trajectory_parameters)" />
             <remap from="command_velocity"   to="husky_velocity_controller/cmd_vel" />
 		    <remap from="model_state" 		 to="/gazebo/model_states" />
         </node>

@@ -24,7 +24,7 @@ class PoseEstimationROS {
         void pixelCoordinatesCallBack(const geometry_msgs::Point& msg);
         void quadPoseCallBack(const nav_msgs::Odometry& msg);
         void platformStatusCallback(const std_msgs::Bool& msg);
-        void huskyOdomUpdate();
+        void platformOdomUpdate();
         void arrayToMatrixConversion();
 
         std::vector<float> distortion_matrix_, camera_to_quad_matrix_, camera_matrix_, camera_translation_;
@@ -33,17 +33,19 @@ class PoseEstimationROS {
         Eigen::Matrix3d cameraToQuadMatrix;
         Eigen::Matrix3d quadOrientationMatrix, scaleUpMatrix;
         Eigen::Vector3d translation_, camera_translation_vector_;
+        
+        double platform_height_;
 
         pose_estimation::PoseEstimation pose_object_;
 
-        nav_msgs::Odometry husky_odom_[2];
-        nav_msgs::Odometry firefly_odom_;
+        nav_msgs::Odometry platform_odom_[2];
+        nav_msgs::Odometry quad_odom_;
         geometry_msgs::Point pixel_coordinates_;
         std_msgs::Bool is_platform_detected_;
 
-        ros::Publisher detected_husky_odom_pub_;
-        ros::Subscriber firefly_pose_sub_;
-        ros::Subscriber firefly_pixel_coordinates_sub_;
+        ros::Publisher detected_platform_odom_pub_;
+        ros::Subscriber quad_pose_sub_;
+        ros::Subscriber quad_pixel_coordinates_sub_;
         ros::Subscriber is_platform_detected_sub_;
 };
 

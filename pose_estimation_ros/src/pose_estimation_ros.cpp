@@ -3,9 +3,9 @@
 namespace ariitk::auto_landing {
 
 void PoseEstimationROS::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private) {
-	detected_husky_odom_pub_ = nh.advertise<nav_msgs::Odometry>("detected_pose", 1);
-	firefly_pose_sub_ = nh.subscribe("quad_odometry", 1, &PoseEstimationROS::quadPoseCallBack, this);
-	firefly_pixel_coordinates_sub_ = nh.subscribe("platform_centre", 1, &PoseEstimationROS::pixelCoordinatesCallBack, this);
+	detected_platform_odom_pub_ = nh.advertise<nav_msgs::Odometry>("detected_pose", 1);
+	quad_pose_sub_ = nh.subscribe("quad_odometry", 1, &PoseEstimationROS::quadPoseCallBack, this);
+	quad_pixel_coordinates_sub_ = nh.subscribe("platform_centre", 1, &PoseEstimationROS::pixelCoordinatesCallBack, this);
 	is_platform_detected_sub_ = nh.subscribe("platform_status", 1, &PoseEstimationROS::platformStatusCallback, this);
 
 	nh_private.getParam("camera_to_quad_matrix", camera_to_quad_matrix_);
@@ -13,6 +13,7 @@ void PoseEstimationROS::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private) {
 	nh_private.getParam("distortion_coefficients/data", distortion_matrix_);
 	nh_private.getParam("camera_translation", camera_translation_);
 	nh_private.getParam("loop_rate", loop_rate);
+	nh_private.getParam("platform_height", platform_height_);
 
 	ROS_ERROR("THIS IS THE LOOP RATE = %ld", loop_rate);
 
@@ -34,8 +35,8 @@ void PoseEstimationROS::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private) {
 }
 
 void PoseEstimationROS::run() {
-	huskyOdomUpdate();
-	detected_husky_odom_pub_.publish(husky_odom_[1]);
+	platformOdomUpdate();
+	detected_platform_odom_pub_.publish(platform_odom_[1]);
 }
 
 void PoseEstimationROS::arrayToMatrixConversion() {
@@ -47,13 +48,13 @@ void PoseEstimationROS::arrayToMatrixConversion() {
 		}
 	}
 	invCameraMatrix = cameraMatrix.inverse();
-
+  
 	pose_object_.setCameraParams(cameraMatrix, cameraToQuadMatrix, camera_translation_vector_);
-	
+
 }
 
 void PoseEstimationROS::quadPoseCallBack(const nav_msgs::Odometry& msg) {
-	firefly_odom_ = msg;
+	quad_odom_ = msg;
 	tf::Quaternion q(msg.pose.pose.orientation.x, msg.pose.pose.orientation.y, msg.pose.pose.orientation.z, msg.pose.pose.orientation.w);
 	Eigen::Quaterniond quat = Eigen::Quaterniond(q.w(), q.x(), q.y(), q.z());
 	quadOrientationMatrix = quat.normalized().toRotationMatrix();

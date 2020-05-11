@@ -4,7 +4,7 @@
 namespace ariitk::auto_landing {
 
 TrajectoryGenerationTracking::TrajectoryGenerationTracking(char** argv)
-    : dimension_(3), nh_(), nh_private_("~"), husky_acceleration_(0,0,0) {
+    : dimension_(3), nh_(), nh_private_("~"), platform_acceleration_(0,0,0) {
 
     trajectory_pub_ = nh_.advertise<trajectory_msgs::MultiDOFJointTrajectory>("command_trajectory", 1);
     marker_pub_ = nh_.advertise<visualization_msgs::MarkerArray>("visualization_marker_array", 1);
@@ -13,7 +13,7 @@ TrajectoryGenerationTracking::TrajectoryGenerationTracking(char** argv)
     nh_private_.getParam("v_max", v_max_);
     nh_private_.getParam("a_max", a_max_);
     nh_private_.getParam("distance", distance_);
-    if (std::string(argv[4]) == "true") { husky_odometry_sub_ = nh_.subscribe("husky_odometry", 10, &TrajectoryGenerationTracking::huskyOdometryCallback, this); }
+    if (std::string(argv[4]) == "true") { platform_odometry_sub_ = nh_.subscribe("platform_odometry", 10, &TrajectoryGenerationTracking::platformOdometryCallback, this); }
     else { model_states_sub_ = nh_.subscribe("model_states", 10, &TrajectoryGenerationTracking::modelStatesCallback, this); }
     
     if (std::string(argv[2]) == "false") { publish_visualization_ = false; }
@@ -30,16 +30,16 @@ mav_trajectory_generation::Vertex::Vector TrajectoryGenerationTracking::computeP
     mav_trajectory_generation::Vertex start(dimension_), end(dimension_);
     mav_trajectory_generation::Vertex::Vector vertices;
     
-    Eigen::Vector3d start_point(husky_odom_.pose.pose.position.x, husky_odom_.pose.pose.position.y, 4.0);
-    Eigen::Vector3d start_point_velocity(husky_odom_.twist.twist.linear.x, husky_odom_.twist.twist.linear.y, 0);    
-    Eigen::Vector3d husky_direction = start_point_velocity;
-    husky_direction.normalize();
+    Eigen::Vector3d start_point(platform_odom_.pose.pose.position.x, platform_odom_.pose.pose.position.y, 4.0);
+    Eigen::Vector3d start_point_velocity(platform_odom_.twist.twist.linear.x, platform_odom_.twist.twist.linear.y, 0);    
+    Eigen::Vector3d platform_direction = start_point_velocity;
+    platform_direction.normalize();
     
     start.makeStartOrEnd(start_point, 3);
-    end.makeStartOrEnd(start_point + (husky_direction * 2), 3);
+    end.makeStartOrEnd(start_point + (platform_direction * 2), 3);
     
     start.addConstraint(mav_trajectory_generation::derivative_order::VELOCITY, start_point_velocity);
-    start.addConstraint(mav_trajectory_generation::derivative_order::ACCELERATION, husky_acceleration_);
+    start.addConstraint(mav_trajectory_generation::derivative_order::ACCELERATION, platform_acceleration_);
 
     vertices.push_back(start);
     vertices.push_back(end);
@@ -81,16 +81,16 @@ void TrajectoryGenerationTracking::modelStatesCallback(const gazebo_msgs::ModelS
         name = msg.name[index];
     }
 
-    husky_acceleration_(0) = (msg.twist[index].linear.x-husky_odom_.twist.twist.linear.x) / 0.1;
-    husky_acceleration_(1) = (msg.twist[index].linear.y-husky_odom_.twist.twist.linear.y) / 0.1;
-    husky_acceleration_(2) = (msg.twist[index].linear.z-husky_odom_.twist.twist.linear.z) / 0.1;
+    platform_acceleration_(0) = (msg.twist[index].linear.x-platform_odom_.twist.twist.linear.x) / 0.1;
+    platform_acceleration_(1) = (msg.twist[index].linear.y-platform_odom_.twist.twist.linear.y) / 0.1;
+    platform_acceleration_(2) = (msg.twist[index].linear.z-platform_odom_.twist.twist.linear.z) / 0.1;
 
-    husky_odom_.pose.pose = msg.pose[index];
-    husky_odom_.twist.twist = msg.twist[index];
+    platform_odom_.pose.pose = msg.pose[index];
+    platform_odom_.twist.twist = msg.twist[index];
 }
 
-void TrajectoryGenerationTracking::huskyOdometryCallback(const nav_msgs::Odometry& msg) {
-    husky_odom_ = msg;
+void TrajectoryGenerationTracking::platformOdometryCallback(const nav_msgs::Odometry& msg) {
+    platform_odom_ = msg;
 }
 
 } // namespace ariitk::auto_landing

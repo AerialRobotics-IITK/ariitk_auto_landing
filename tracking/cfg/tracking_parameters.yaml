@@ -1,0 +1,7 @@
+## Tracking Parameters
+setpt_approximation_value: 5        #int: Multiplication factor for next setpoint of platform
+distance_approximation_value: 3     #int: Mutliplication factor for distance betweem platfrom and quad
+max_norm: 0.071                     #double: Maximum value of norm for approximation
+max_x: 2                            #int: Maximum value of x-component of vector from quad to platform for approximation
+max_y: 2                            #int: Maximum value of y-component of vector from quad to platform for approximation
+min_time: 4                         #double: Minimum time upto which quad should have distance less than max_norm for approximation

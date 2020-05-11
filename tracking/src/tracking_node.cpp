@@ -7,15 +7,15 @@ int main(int argc, char** argv) {
     ros::NodeHandle nh;
     ros::NodeHandle nh_private("~");
 
-    Tracking mav_husky;
+    Tracking mav_platform;
 
-    mav_husky.init(nh, nh_private, argv);
+    mav_platform.init(nh, nh_private, argv);
 
     ros::Rate loop_rate(10);
 
     while(ros::ok()) {
         ros::spinOnce();
-        mav_husky.run();
+        mav_platform.run();
         loop_rate.sleep();
     }
 

@@ -8,13 +8,15 @@
     <arg name="use_trajectory_generation"    default="false" />
 	<arg name="use_detection"	 			 default="true" />
 	<arg name="use_odometry_for_platform"	 default="$(arg use_detection)" />
-
+	<arg name="use_wind"					 default="false" />
+	
 	<node pkg="rqt_gui" type="rqt_gui" name="rqt_gui" args="--perspective-file $(find auto_landing)/rqt/node_monitor.perspective" />
 		
 	<include file="$(find auto_landing)/launch/world_setup.launch" >
 	    <arg name="mav_name"                     value="$(arg mav_name)" />
 		<arg name="x"                            value="$(arg x)" />
 		<arg name="y"                            value="$(arg y)" />
+		<arg name="use_wind"					 value="$(arg use_wind)" />
 	</include>
 
 	<include file="$(find tracking)/launch/tracker_sim.launch">
@@ -24,10 +26,11 @@
 	</include>
 
 	<node pkg="auto_landing" type="auto_landing_landing_node" name="auto_landing_landing_node" output="screen" args="-trajectory $(arg use_trajectory_generation) -use_odometry_for_platform $(arg use_odometry_for_platform)">
+		<rosparam file="$(find auto_landing)/cfg/landing_params.yaml" />
 		<remap from="mav_command"        		to="$(arg mav_name)/command/track/pose" />
 		<remap from="mav_odometry"       		to="$(arg mav_name)/ground_truth/odometry" />
 		<remap from="model_state"        		to="gazebo/model_states" />
-		<remap from="husky_odometry" 	 		to="husky/odometry" />
+		<remap from="platform_odometry" 	 	to="platform/odometry" />
 		<remap from="mav_final_command"  		to="$(arg mav_name)/command/pose" />
 		<remap from="command_trajectory" 		to="$(arg mav_name)/command/track/trajectory" />
 		<remap from="command_trajectory_result" to="$(arg mav_name)/command/trajectory" />
@@ -37,11 +40,11 @@
 		<node pkg="detection" type="detection_detect_platform_node" name="detection_detect_platform_node" output="screen">
         	<rosparam file="$(find auto_landing)/cfg/detect_platform_params.yaml" />
         	<rosparam file="$(find auto_landing)/cfg/camera_params.yaml" />
-        	<remap from="image_raw"   			to="/firefly/camera_front/image_raw" />
-        	<remap from="height_quad" 			to="/firefly/ground_truth/odometry" />
+        	<remap from="image_raw"   			to="$(arg mav_name)/camera_front/image_raw" />
+        	<remap from="height_quad" 			to="$(arg mav_name)/ground_truth/odometry" />
     	</node>
 
-		<include file="$(find pose_estimation)/launch/pose_estimation.launch" />
+		<include file="$(find pose_estimation_ros)/launch/pose_estimation.launch" />
 	</group>
 
 </launch>
