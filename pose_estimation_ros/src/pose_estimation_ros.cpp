@@ -67,7 +67,7 @@ void PoseEstimationROS::pixelCoordinatesCallBack(const geometry_msgs::Point& msg
 void PoseEstimationROS::platformStatusCallback(const std_msgs::Bool& msg) { is_platform_detected_ = msg; }
 
 void PoseEstimationROS::platformOdomUpdate() {
-	// if(is_platform_detected_.data) {
+	if(is_platform_detected_.data) {
 		Eigen::Vector3d pixel_coordinates(pixel_coordinates_.x, pixel_coordinates_.y, 1);
 		pose_object_.setVehicleParams(quadOrientationMatrix, translation_);
 		pose_object_.setObjectParams(platform_height_, pixel_coordinates);
@@ -83,7 +83,7 @@ void PoseEstimationROS::platformOdomUpdate() {
 		platform_odom_[1].twist.twist.linear.x = (platform_odom_[1].pose.pose.position.x - platform_odom_[0].pose.pose.position.x) * loop_rate;
 		platform_odom_[1].twist.twist.linear.y = (platform_odom_[1].pose.pose.position.y - platform_odom_[0].pose.pose.position.y) * loop_rate;
 		platform_odom_[1].twist.twist.linear.z = (platform_odom_[1].pose.pose.position.z - platform_odom_[0].pose.pose.position.z) * loop_rate;
-	// } else {
+	} //else {
 	// 	nav_msgs::Odometry temp = platform_odom_[0];
 
 	// 	platform_odom_[0] = platform_odom_[1];
