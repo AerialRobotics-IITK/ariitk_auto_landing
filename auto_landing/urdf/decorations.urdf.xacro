@@ -170,13 +170,13 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
           <visual>
             <origin xyz="0 0 0" rpy="0 0 0" />
             <geometry>
-              <mesh filename="package://husky_description/meshes/top_plate.dae" />
+              <mesh filename="package://auto_landing/meshes/custom_top_plate.dae" />
             </geometry>
           </visual>
           <collision>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
-              <mesh filename="package://husky_description/meshes/top_plate.stl" />
+              <mesh filename="package://auto_landing/meshes/custom_top_plate.stl" />
             </geometry>
           </collision>
         </link>
