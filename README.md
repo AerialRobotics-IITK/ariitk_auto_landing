@@ -14,6 +14,7 @@ Tasks to be done
 - [x] Add functionality for moving husky via keyboard, and maybe also a function that gives the husky a random trajectory
 - [ ] Add wind support to launch files
 - [ ] When platform is not detected, what to do
+- [ ] Add Rosmon
 
 Optional (If time permits)
 - [ ] Implement the sim in HEADLESS gazebo mode, using only rviz.

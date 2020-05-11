@@ -12,6 +12,7 @@ void PoseEstimationROS::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private) {
 	nh_private.getParam("distortion_coefficients/data", distortion_matrix_);
 	nh_private.getParam("camera_translation", camera_translation_);
 	nh_private.getParam("loop_rate", loop_rate);
+	nh_private.getParam("platform_height", platform_height_);
 
 	scaleUpMatrix = Eigen::Matrix3f::Zero();
 	arrayToMatrixConversion();
@@ -38,7 +39,7 @@ void PoseEstimationROS::quadPoseCallBack(const nav_msgs::Odometry& msg) {
 	tf::Quaternion q(msg.pose.pose.orientation.x, msg.pose.pose.orientation.y, msg.pose.pose.orientation.z, msg.pose.pose.orientation.w);
 	Eigen::Quaternionf quat = Eigen::Quaternionf(q.w(), q.x(), q.y(), q.z());
 	quadOrientationMatrix = quat.normalized().toRotationMatrix();
-	scaleUpMatrix(0, 0) = scaleUpMatrix(1, 1) = scaleUpMatrix(2, 2) = msg.pose.pose.position.z - 0.45;
+	scaleUpMatrix(0, 0) = scaleUpMatrix(1, 1) = scaleUpMatrix(2, 2) = msg.pose.pose.position.z - platform_height_;
 	translation_ = Eigen::Vector3f(msg.pose.pose.position.x, msg.pose.pose.position.y, msg.pose.pose.position.z);
 }
 

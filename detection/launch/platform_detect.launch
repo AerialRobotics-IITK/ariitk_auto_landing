@@ -15,8 +15,8 @@
     <env name="GAZEBO_RESOURCE_PATH"    value="${GAZEBO_RESOURCE_PATH}:$(find rotors_gazebo)/models"/>
     
     <include file="$(find husky_gazebo)/launch/spawn_husky.launch">
-        <arg name="x"                   value="2" />
-        <arg name="y"                   value="2" />
+        <arg name="x"                       value="2" />
+        <arg name="y"                       value="2" />
     </include>
 
     <include file="$(find mav_linear_mpc)/launch/mav_linear_mpc_sim.launch" />
@@ -24,16 +24,16 @@
     <node pkg="detection" type="detection_detect_platform_node" name="detection_detect_platform_node" output="screen">
         <rosparam file="$(find auto_landing)/cfg/detect_platform_params.yaml" />
         <rosparam file="$(find auto_landing)/cfg/camera_params.yaml" />
-        <remap from="image_raw"   to="/firefly/camera_front/image_raw" />
-        <remap from="height_quad" to="/firefly/ground_truth/odometry" />
+        <remap from="image_raw"   to="$(arg mav_name)/camera_front/image_raw" />
+        <remap from="height_quad" to="$(arg mav_name)/ground_truth/odometry" />
     </node>
     
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
-        <arg name="world_name"          value="$(find rotors_gazebo)/worlds/$(arg world_name).world"/>
-        <arg name="debug"               value="$(arg debug)" />
-        <arg name="paused"              value="$(arg paused)" />
-        <arg name="gui"                 value="$(arg gui)" />
-        <arg name="verbose"             value="$(arg verbose)"/>
+        <arg name="world_name"              value="$(find rotors_gazebo)/worlds/$(arg world_name).world"/>
+        <arg name="debug"                   value="$(arg debug)" />
+        <arg name="paused"                  value="$(arg paused)" />
+        <arg name="gui"                     value="$(arg gui)" />
+        <arg name="verbose"                 value="$(arg verbose)"/>
     </include>
 
     <group ns="$(arg mav_name)">

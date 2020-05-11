@@ -29,6 +29,8 @@ class PoseEstimationROS {
         Eigen::Matrix3f quadOrientationMatrix, scaleUpMatrix;
         Eigen::Vector3f translation_, camera_translation_vector_;
 
+        double platform_height_;
+
         nav_msgs::Odometry platform_odom_[2];
         nav_msgs::Odometry quad_odom_;
         geometry_msgs::Point pixel_coordinates_;
