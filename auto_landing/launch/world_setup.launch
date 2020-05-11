@@ -54,7 +54,7 @@
         </group>
     </group>
 
-    <include file="$(find husky_gazebo)/launch/spawn_husky.launch">
+    <include file="$(find auto_landing)/launch/spawn_custom_husky.launch">
         <arg name="x"        value="$(arg x)" />
         <arg name="y"        value="$(arg y)" />
     </include>

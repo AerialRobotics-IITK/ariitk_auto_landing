@@ -14,7 +14,7 @@
     <env name="GAZEBO_MODEL_PATH"       value="${GAZEBO_MODEL_PATH}:$(find rotors_gazebo)/models"/>
     <env name="GAZEBO_RESOURCE_PATH"    value="${GAZEBO_RESOURCE_PATH}:$(find rotors_gazebo)/models"/>
     
-    <include file="$(find husky_gazebo)/launch/spawn_husky.launch">
+    <include file="$(find auto_landing)/launch/spawn_custom_husky.launch">
         <arg name="x"                       value="2" />
         <arg name="y"                       value="2" />
     </include>
