@@ -57,10 +57,9 @@ void PoseEstimationROS::quadPoseCallBack(const nav_msgs::Odometry& msg) {
 	quad_odom_ = msg;
 	tf::Quaternion q(msg.pose.pose.orientation.x, msg.pose.pose.orientation.y, msg.pose.pose.orientation.z, msg.pose.pose.orientation.w);
 	Eigen::Quaterniond quat = Eigen::Quaterniond(q.w(), q.x(), q.y(), q.z());
-	quadOrientationMatrix = quat.normalized().toRotationMatrix();
+	quadOrientationMatrix = quat.normalized().toRotationMatrix().inverse();
 	scaleUpMatrix(0, 0) = scaleUpMatrix(1, 1) = scaleUpMatrix(2, 2) = msg.pose.pose.position.z - 0.45;
 	translation_ = Eigen::Vector3d(msg.pose.pose.position.x, msg.pose.pose.position.y, msg.pose.pose.position.z);
-	pose_object_.setVehicleParams(quadOrientationMatrix, translation_);
 }
 
 void PoseEstimationROS::pixelCoordinatesCallBack(const geometry_msgs::Point& msg) { pixel_coordinates_ = msg; }
@@ -70,8 +69,8 @@ void PoseEstimationROS::platformStatusCallback(const std_msgs::Bool& msg) { is_p
 void PoseEstimationROS::platformOdomUpdate() {
 	// if(is_platform_detected_.data) {
 		Eigen::Vector3d pixel_coordinates(pixel_coordinates_.x, pixel_coordinates_.y, 1);
-
-		pose_object_.setObjectParams(0.45, pixel_coordinates);
+		pose_object_.setVehicleParams(quadOrientationMatrix, translation_);
+		pose_object_.setObjectParams(platform_height_, pixel_coordinates);
 		Eigen::Vector3d global_coordinates = pose_object_.getObjectPosition();
 
 		platform_odom_[0] = platform_odom_[1];
@@ -79,6 +78,7 @@ void PoseEstimationROS::platformOdomUpdate() {
 		platform_odom_[1].pose.pose.position.x = global_coordinates(0);
 		platform_odom_[1].pose.pose.position.y = global_coordinates(1);
 		platform_odom_[1].pose.pose.position.z = global_coordinates(2);
+		platform_odom_[1].header.stamp = ros::Time::now();
 
 		platform_odom_[1].twist.twist.linear.x = (platform_odom_[1].pose.pose.position.x - platform_odom_[0].pose.pose.position.x) * loop_rate;
 		platform_odom_[1].twist.twist.linear.y = (platform_odom_[1].pose.pose.position.y - platform_odom_[0].pose.pose.position.y) * loop_rate;

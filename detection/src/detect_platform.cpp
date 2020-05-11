@@ -94,7 +94,7 @@ void PlatformDetect::imageCallback(const sensor_msgs::ImageConstPtr& msg) {
 			cv::convexHull(cv::Mat(list_contours[i]), hull1[i]);
 
 			if (std::fabs(cv::arcLength(cv::Mat(hull1[i]), true)) < contour_perimeter_threshold_ - quad_height_ * contour_perimeter_scale_) {
-				cv::drawContours(drawing, hull1, i, cv::Scalar(0, 255, 255), 1, 8);
+				cv::drawContours(frame, hull1, i, cv::Scalar(0, 255, 255), 1, 8);
 				continue;
 			}
 

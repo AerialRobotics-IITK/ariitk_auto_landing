@@ -3,16 +3,16 @@ publish_preprocess_ : true                         #bool:   to check the publish
 publish_detected_platform_ : true                  #bool:   to check the publishing of detected platform to the specific topic
 is_undistort_ : true                               #bool:   to undistort the image obtained as camera feed if unclear
 error_limit_: 0.06                                 #double: the error limit that is allowed in approxPolyD function when approximating a specific hull of points
-contour_perimeter_threshold_: 150                  #int :   the threshold value for the perimeter of the contour 
+contour_perimeter_threshold_: 100                  #int :   the threshold value for the perimeter of the contour 
 contour_perimeter_scale_: 15                       #int :   the scale factor used for height of the quad for calculating the threshold value for contour perimeter
-kernel_size: 7                                     #int :   the kernel size for the kernel uesd in morphologyEx function for image preprocessing
+kernel_size: 7                                     #int :   the kernel size for the kernel used in morphologyEx function for image preprocessing
 thresholding_parameters_:                          #int :   the values used in the inRange function for image preprocessing
    h:
       min: 0
-      max: 255
+      max: 50
    s:
       min: 0
-      max: 255
-   v:
-      min: 0
       max: 20
+   v:
+      min: 50
+      max: 255
