@@ -11,10 +11,10 @@
     <group if="$(arg use_trajectory_generation)" >
         <node pkg="tracking" type="tracking_trajectory_generation_tracker" name="tracking_trajectory_generation_tracker" output="screen" args="-publish_visualization_marker $(arg publish_visualization_marker) -use_odometry_for_platform $(arg use_odometry_for_platform)">
             <rosparam command="load" file="$(arg trajectory_parameters)" />
-            <remap from="command_trajectory" to="$(arg mav_name)/command/track/trajectory" />
-            <remap from="mav_odometry"       to="$(arg mav_name)/ground_truth/odometry" />
-            <remap from="platform_odometry"     to="platform/odometry" />
-            <remap from="model_states"       to="gazebo/model_states" />
+            <remap from="command_trajectory"     to="$(arg mav_name)/command/track/trajectory" />
+            <remap from="mav_odometry"           to="$(arg mav_name)/ground_truth/odometry" />
+            <remap from="platform_odometry"      to="platform/odometry" />
+            <remap from="model_states"           to="gazebo/model_states" />
         </node>
     </group>
 
@@ -24,7 +24,7 @@
             <remap from="command_pose" 	         to="$(arg mav_name)/command/track/pose" />
 	        <remap from="quad_odometry"  	     to="$(arg mav_name)/ground_truth/odometry" />
 	        <remap from="model_state" 		     to="gazebo/model_states" />
-            <remap from="platform_odometry"         to="platform/odometry" />
+            <remap from="platform_odometry"      to="platform/odometry" />
         </node>
     </group>
 

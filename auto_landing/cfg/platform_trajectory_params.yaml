@@ -4,4 +4,4 @@ linear_vel: 0.2       #double: Linear velocity of platform for circular trajecto
 min_time: 2           #double: Minimum time condition for eight trajectory
 platform_x: 2         #double: Platform spawn position along x-axis
 Platform_y: 2         #double: Platform spawn position along y-axis 
-loop_rate: 10         #int: Ros node loop rate
+loop_rate: 10         #int: ROS node loop rate

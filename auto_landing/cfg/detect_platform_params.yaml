@@ -1,12 +1,12 @@
 ## Parameters used in the detection of the platform
-publish_preprocess_ : true                         #bool:   to check the publishing of preprocessed image to the specific topic
-publish_detected_platform_ : true                  #bool:   to check the publishing of detected platform to the specific topic
-is_undistort_ : true                               #bool:   to undistort the image obtained as camera feed if unclear
-error_limit_: 0.06                                 #double: the error limit that is allowed in approxPolyD function when approximating a specific hull of points
-contour_perimeter_threshold_: 100                  #int :   the threshold value for the perimeter of the contour 
-contour_perimeter_scale_: 15                       #int :   the scale factor used for height of the quad for calculating the threshold value for contour perimeter
-kernel_size: 7                                     #int :   the kernel size for the kernel used in morphologyEx function for image preprocessing
-thresholding_parameters_:                          #int :   the values used in the inRange function for image preprocessing
+publish_preprocess_ : true                         #bool:   To check the publishing of preprocessed image to the specific topic
+publish_detected_platform_ : true                  #bool:   To check the publishing of detected platform to the specific topic
+is_undistort_ : true                               #bool:   To undistort the image obtained as camera feed if unclear
+error_limit_: 0.06                                 #double: The error limit that is allowed in approxPolyD function when approximating a specific hull of points
+contour_perimeter_threshold_: 100                  #int :   The threshold value for the perimeter of the contour 
+contour_perimeter_scale_: 15                       #int :   The scale factor used for height of the quad for calculating the threshold value for contour perimeter
+kernel_size: 7                                     #int :   The kernel size for the kernel used in morphologyEx function for image preprocessing
+thresholding_parameters_:                          #int :   The values used in the inRange function for image preprocessing
    h:
       min: 0
       max: 50

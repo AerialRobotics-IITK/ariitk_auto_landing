@@ -1,6 +1,6 @@
 #include <pose_estimation_ros/pose_estimation_ros.hpp>
 
-namespace ariitk::auto_landing {
+namespace ariitk::pose_estimation_ros {
 
 void PoseEstimationROS::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private) {
 	detected_platform_odom_pub_ = nh.advertise<nav_msgs::Odometry>("detected_pose", 1);
@@ -14,8 +14,6 @@ void PoseEstimationROS::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private) {
 	nh_private.getParam("camera_translation", camera_translation_);
 	nh_private.getParam("loop_rate", loop_rate);
 	nh_private.getParam("platform_height", platform_height_);
-
-	ROS_ERROR("THIS IS THE LOOP RATE = %ld", loop_rate);
 
 	scaleUpMatrix = Eigen::Matrix3d::Zero();
 
@@ -48,9 +46,8 @@ void PoseEstimationROS::arrayToMatrixConversion() {
 		}
 	}
 	invCameraMatrix = cameraMatrix.inverse();
-  
-	pose_object_.setCameraParams(cameraMatrix, cameraToQuadMatrix, camera_translation_vector_);
 
+	pose_object_.setCameraParams(cameraMatrix, cameraToQuadMatrix, camera_translation_vector_);
 }
 
 void PoseEstimationROS::quadPoseCallBack(const nav_msgs::Odometry& msg) {
@@ -67,7 +64,7 @@ void PoseEstimationROS::pixelCoordinatesCallBack(const geometry_msgs::Point& msg
 void PoseEstimationROS::platformStatusCallback(const std_msgs::Bool& msg) { is_platform_detected_ = msg; }
 
 void PoseEstimationROS::platformOdomUpdate() {
-	if(is_platform_detected_.data) {
+	if (is_platform_detected_.data) {
 		Eigen::Vector3d pixel_coordinates(pixel_coordinates_.x, pixel_coordinates_.y, 1);
 		pose_object_.setVehicleParams(quadOrientationMatrix, translation_);
 		pose_object_.setObjectParams(platform_height_, pixel_coordinates);
@@ -83,18 +80,7 @@ void PoseEstimationROS::platformOdomUpdate() {
 		platform_odom_[1].twist.twist.linear.x = (platform_odom_[1].pose.pose.position.x - platform_odom_[0].pose.pose.position.x) * loop_rate;
 		platform_odom_[1].twist.twist.linear.y = (platform_odom_[1].pose.pose.position.y - platform_odom_[0].pose.pose.position.y) * loop_rate;
 		platform_odom_[1].twist.twist.linear.z = (platform_odom_[1].pose.pose.position.z - platform_odom_[0].pose.pose.position.z) * loop_rate;
-	} //else {
-	// 	nav_msgs::Odometry temp = platform_odom_[0];
-
-	// 	platform_odom_[0] = platform_odom_[1];
-
-	// 	platform_odom_[1].pose.pose.position.x = temp.pose.pose.position.x + (temp.twist.twist.linear.x / loop_rate);
-	// 	platform_odom_[1].pose.pose.position.y = temp.pose.pose.position.y + (temp.twist.twist.linear.y / loop_rate);
-	// 	platform_odom_[1].pose.pose.position.z = temp.pose.pose.position.z + (temp.twist.twist.linear.z / loop_rate);
-			// platform_odom_[1].twist.twist.linear.x = 0;
-			// platform_odom_[1].twist.twist.linear.y = 0;
-			// platform_odom_[1].twist.twist.linear.z = 0;
-	// }
+	}
 }
 
-} // namespace ariitk::auto_landing
+} // namespace ariitk::pose_estimation_ros

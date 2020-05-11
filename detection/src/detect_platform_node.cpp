@@ -1,6 +1,6 @@
 #include <detection/detect_platform.hpp>
 
-using namespace ariitk::auto_landing;
+using namespace ariitk::detection;
 
 int main(int argc, char** argv) {
 	ros::init(argc, argv, "detect_platform_node");

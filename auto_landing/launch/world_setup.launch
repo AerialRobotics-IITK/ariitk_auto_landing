@@ -16,21 +16,14 @@
 	<arg name="use_wind"					    default="false" />
     <arg name="verbose"                         default="false" />
     
-    <!-- <group if="$(arg use_wind)">
-        <arg name="model"               value="$(find auto_landing)/models/mav_with_camera_and_wind.gazebo" />
-    </group>
-    <group unless="$(arg use_wind)">
-        <arg name="model"               value="$(find auto_landing)/models/mav_with_camera.gazebo" />
-    </group> -->
-    
  	<include file="$(find mav_linear_mpc)/launch/mav_linear_mpc_sim.launch" />
 
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
-        <arg name="world_name"          value="$(find rotors_gazebo)/worlds/$(arg world_name).world"/>
-        <arg name="debug"               value="$(arg debug)" />
-        <arg name="paused"              value="$(arg paused)" />
-        <arg name="gui"                 value="$(arg gui)" />
-        <arg name="verbose"             value="$(arg verbose)"/>
+        <arg name="world_name"                  value="$(find rotors_gazebo)/worlds/$(arg world_name).world"/>
+        <arg name="debug"                       value="$(arg debug)" />
+        <arg name="paused"                      value="$(arg paused)" />
+        <arg name="gui"                         value="$(arg gui)" />
+        <arg name="verbose"                     value="$(arg verbose)"/>
     </include>
 
     <group ns="$(arg mav_name)">
@@ -55,8 +48,8 @@
     </group>
 
     <include file="$(find auto_landing)/launch/spawn_custom_husky.launch">
-        <arg name="x"        value="$(arg x)" />
-        <arg name="y"        value="$(arg y)" />
+        <arg name="x"                           value="$(arg x)" />
+        <arg name="y"                           value="$(arg y)" />
     </include>
 
     <group if="$(eval arg('trajectory') == 'user')">

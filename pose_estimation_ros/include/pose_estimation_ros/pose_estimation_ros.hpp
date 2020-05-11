@@ -8,19 +8,19 @@
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <nav_msgs/Odometry.h>
-#include <std_msgs/Bool.h>
 #include <ros/ros.h>
+#include <std_msgs/Bool.h>
 #include <tf/tf.h>
 
-namespace ariitk::auto_landing {
+namespace ariitk::pose_estimation_ros {
 
 class PoseEstimationROS {
-    public:
+	public:
         void init(ros::NodeHandle& nh, ros::NodeHandle& nh_private);
         void run();
         int loop_rate;
 
-    private:
+	private:
         void pixelCoordinatesCallBack(const geometry_msgs::Point& msg);
         void quadPoseCallBack(const nav_msgs::Odometry& msg);
         void platformStatusCallback(const std_msgs::Bool& msg);
@@ -33,7 +33,7 @@ class PoseEstimationROS {
         Eigen::Matrix3d cameraToQuadMatrix;
         Eigen::Matrix3d quadOrientationMatrix, scaleUpMatrix;
         Eigen::Vector3d translation_, camera_translation_vector_;
-        
+
         double platform_height_;
 
         pose_estimation::PoseEstimation pose_object_;
@@ -49,4 +49,4 @@ class PoseEstimationROS {
         ros::Subscriber is_platform_detected_sub_;
 };
 
-} // namespace ariitk::auto_landing
+} // namespace ariitk::pose_estimation_ros

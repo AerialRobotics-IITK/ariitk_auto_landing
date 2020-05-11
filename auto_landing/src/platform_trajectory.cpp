@@ -14,9 +14,9 @@ void PlatformTrajectory::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, 
 	nh_private.getParam("loop_rate", loop_rate_);
 
 	std::string choices[3] = {"linear", "circular", "eight"};
-	if (std::string(argv[2]) == "random") { trajectory_name_ = choices[rand() % 3]; } 
+	if (std::string(argv[2]) == "random") { trajectory_name_ = choices[rand() % 3]; }
 	else { trajectory_name_ = argv[2]; }
-	
+
 	time_[0] = 0;
 	count_ = 0;
 	t_inverse = 1 / loop_rate_;

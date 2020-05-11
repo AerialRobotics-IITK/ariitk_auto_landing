@@ -1,6 +1,6 @@
 #include <pose_estimation_ros/pose_estimation_ros.hpp>
 
-using namespace ariitk::auto_landing;
+using namespace ariitk::pose_estimation_ros;
 
 int main(int argc, char** argv) {
 	ros::init(argc, argv, "pose_node");

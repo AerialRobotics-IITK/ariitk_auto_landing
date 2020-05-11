@@ -6,11 +6,11 @@ Tasks to be done
 - [ ] Finish the rqt_gui interface
 - [x] Rename and make proper launch files
 - [x] Clean up parameter files
-- [ ] Strictly check the files to adhere to conventions
+- [x] Strictly check the files to adhere to conventions
 - [x] Use different modes for tracking, either ground truth or Detection+Pose estimation, also whether to use trajectory generation or not
 - [ ] Finish README and Wiki
-- [ ] Check all files and parameterize any functional hard-coded values
-- [ ] Rigorous testing
+- [x] Check all files and parameterize any functional hard-coded values
+- [x] Rigorous testing
 - [x] Add functionality for moving husky via keyboard, and maybe also a function that gives the husky a random trajectory
 - [x] Add wind support to launch files
 - [ ] When platform is not detected, what to do

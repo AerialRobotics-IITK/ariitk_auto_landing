@@ -7,10 +7,10 @@
 #include <ros/ros.h>
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/image_encodings.h>
-#include <xmlrpcpp/XmlRpc.h>
 #include <std_msgs/Bool.h>
+#include <xmlrpcpp/XmlRpc.h>
 
-namespace ariitk::auto_landing {
+namespace ariitk::detection {
 class PlatformDetect {
 	private:
 		image_transport::Publisher image_pub;
@@ -38,4 +38,5 @@ class PlatformDetect {
 		void run();
 		cv::Mat preprocessImage(cv::Mat& img, std::vector<double>& camera_matrix_, std::vector<double>& distortion_coefficients_, bool is_undistort_);
 };
-} // namespace ariitk::auto_landing
+
+} // namespace ariitk::detection

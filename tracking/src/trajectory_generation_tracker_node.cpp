@@ -1,12 +1,12 @@
 #include <tracking/trajectory_generation_tracker.hpp>
 
-using namespace ariitk::auto_landing;
+using namespace ariitk::tracking;
 
 int main(int argc, char** argv) {
 	ros::init(argc, argv, "trajectory_pub");
 	TrajectoryGenerationTracking tracking(argv);
 
-	ros::Rate loop_rate(10);
+	ros::Rate loop_rate(tracking.publish_rate_);
 
 	int count = 0;
 	while (count < 10) {

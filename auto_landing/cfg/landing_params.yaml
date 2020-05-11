@@ -1,3 +1,3 @@
 ## Landing Parameters
-platform_height: 0.45       #double: Height platform used
+platform_height: 0.45       #double: Height of platform used
 distance_threshold: 0.25    #double: Distance threshold to initiate landing
