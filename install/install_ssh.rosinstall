@@ -9,3 +9,4 @@
 - git: {local-name: mav_trajectory_generation, uri: 'git@github.com:ethz-asl/mav_trajectory_generation.git'}
 - git: {local-name: yaml_cpp_catkin, uri: 'git@github.com:ethz-asl/yaml_cpp_catkin.git'}
 - git: {local-name: unique_identifier, uri: 'git@github.com:ros-geographic-info/unique_identifier'}
+- git: {local-name: rosmon, uri: 'git@github.com:xqms/rosmon'}

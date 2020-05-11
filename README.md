@@ -3,7 +3,7 @@ ROS packages for autonomous landing of an MAV on a moving platform.
 
 Tasks to be done  
 - [x] Re-arrange nodes in different packages
-- [ ] Finish the rqt_gui interface
+- [x] Finish the rqt_gui interface
 - [x] Rename and make proper launch files
 - [x] Clean up parameter files
 - [x] Strictly check the files to adhere to conventions
@@ -14,7 +14,7 @@ Tasks to be done
 - [x] Add functionality for moving husky via keyboard, and maybe also a function that gives the husky a random trajectory
 - [x] Add wind support to launch files
 - [ ] When platform is not detected, what to do
-- [ ] Add Rosmon
+- [x] Add Rosmon
 - [x] Replace husky everywhere with platform, also firefly with mav/quad
 
 Optional (If time permits)

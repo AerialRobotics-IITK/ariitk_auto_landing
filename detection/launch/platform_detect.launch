@@ -45,4 +45,7 @@
             <arg name="log_file"            value="$(arg log_file)"/>
         </include>
     </group>
+
+	<node pkg="rqt_gui" type="rqt_gui" name="rqt_gui" args="--perspective-file $(find detection)/rqt/detection.perspective" />
+
 </launch>  
