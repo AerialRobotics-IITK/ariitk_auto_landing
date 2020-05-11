@@ -19,17 +19,17 @@ void PoseEstimationROS::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private) {
 
 	scaleUpMatrix = Eigen::Matrix3d::Zero();
 
-	husky_odom_[0].pose.pose.position.x = 0;
-	husky_odom_[0].pose.pose.position.y = 0;
-	husky_odom_[0].pose.pose.position.z = 0;
+	platform_odom_[0].pose.pose.position.x = 0;
+	platform_odom_[0].pose.pose.position.y = 0;
+	platform_odom_[0].pose.pose.position.z = 0;
 
-	husky_odom_[1].pose.pose.position.x = 0;
-	husky_odom_[1].pose.pose.position.y = 0;
-	husky_odom_[1].pose.pose.position.z = 0;
+	platform_odom_[1].pose.pose.position.x = 0;
+	platform_odom_[1].pose.pose.position.y = 0;
+	platform_odom_[1].pose.pose.position.z = 0;
 
-	husky_odom_[1].twist.twist.linear.x = 0;
-	husky_odom_[1].twist.twist.linear.y = 0;
-	husky_odom_[1].twist.twist.linear.z = 0;
+	platform_odom_[1].twist.twist.linear.x = 0;
+	platform_odom_[1].twist.twist.linear.y = 0;
+	platform_odom_[1].twist.twist.linear.z = 0;
 
 	arrayToMatrixConversion();
 }
@@ -74,26 +74,26 @@ void PoseEstimationROS::huskyOdomUpdate() {
 		pose_object_.setObjectParams(0.45, pixel_coordinates);
 		Eigen::Vector3d global_coordinates = pose_object_.getObjectPosition();
 
-		husky_odom_[0] = husky_odom_[1];
+		platform_odom_[0] = platform_odom_[1];
 
-		husky_odom_[1].pose.pose.position.x = global_coordinates(0);
-		husky_odom_[1].pose.pose.position.y = global_coordinates(1);
-		husky_odom_[1].pose.pose.position.z = global_coordinates(2);
+		platform_odom_[1].pose.pose.position.x = global_coordinates(0);
+		platform_odom_[1].pose.pose.position.y = global_coordinates(1);
+		platform_odom_[1].pose.pose.position.z = global_coordinates(2);
 
-		husky_odom_[1].twist.twist.linear.x = (husky_odom_[1].pose.pose.position.x - husky_odom_[0].pose.pose.position.x) * loop_rate;
-		husky_odom_[1].twist.twist.linear.y = (husky_odom_[1].pose.pose.position.y - husky_odom_[0].pose.pose.position.y) * loop_rate;
-		husky_odom_[1].twist.twist.linear.z = (husky_odom_[1].pose.pose.position.z - husky_odom_[0].pose.pose.position.z) * loop_rate;
+		platform_odom_[1].twist.twist.linear.x = (platform_odom_[1].pose.pose.position.x - platform_odom_[0].pose.pose.position.x) * loop_rate;
+		platform_odom_[1].twist.twist.linear.y = (platform_odom_[1].pose.pose.position.y - platform_odom_[0].pose.pose.position.y) * loop_rate;
+		platform_odom_[1].twist.twist.linear.z = (platform_odom_[1].pose.pose.position.z - platform_odom_[0].pose.pose.position.z) * loop_rate;
 	// } else {
-	// 	nav_msgs::Odometry temp = husky_odom_[0];
+	// 	nav_msgs::Odometry temp = platform_odom_[0];
 
-	// 	husky_odom_[0] = husky_odom_[1];
+	// 	platform_odom_[0] = platform_odom_[1];
 
-	// 	husky_odom_[1].pose.pose.position.x = temp.pose.pose.position.x + (temp.twist.twist.linear.x / loop_rate);
-	// 	husky_odom_[1].pose.pose.position.y = temp.pose.pose.position.y + (temp.twist.twist.linear.y / loop_rate);
-	// 	husky_odom_[1].pose.pose.position.z = temp.pose.pose.position.z + (temp.twist.twist.linear.z / loop_rate);
-			// husky_odom_[1].twist.twist.linear.x = 0;
-			// husky_odom_[1].twist.twist.linear.y = 0;
-			// husky_odom_[1].twist.twist.linear.z = 0;
+	// 	platform_odom_[1].pose.pose.position.x = temp.pose.pose.position.x + (temp.twist.twist.linear.x / loop_rate);
+	// 	platform_odom_[1].pose.pose.position.y = temp.pose.pose.position.y + (temp.twist.twist.linear.y / loop_rate);
+	// 	platform_odom_[1].pose.pose.position.z = temp.pose.pose.position.z + (temp.twist.twist.linear.z / loop_rate);
+			// platform_odom_[1].twist.twist.linear.x = 0;
+			// platform_odom_[1].twist.twist.linear.y = 0;
+			// platform_odom_[1].twist.twist.linear.z = 0;
 	// }
 }
 
