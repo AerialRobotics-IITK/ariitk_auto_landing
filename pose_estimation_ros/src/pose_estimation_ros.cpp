@@ -2,10 +2,10 @@
 
 namespace ariitk::auto_landing {
 
-void PoseEstimation::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private) {
+void PoseEstimationROS::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private) {
 	detected_platform_odom_pub_ = nh.advertise<nav_msgs::Odometry>("detected_pose", 1);
-	quad_pose_sub_ = nh.subscribe("quad_odometry", 1, &PoseEstimation::quadPoseCallBack, this);
-	quad_pixel_coordinates_sub_ = nh.subscribe("platform_centre", 1, &PoseEstimation::pixelCoordinatesCallBack, this);
+	quad_pose_sub_ = nh.subscribe("quad_odometry", 1, &PoseEstimationROS::quadPoseCallBack, this);
+	quad_pixel_coordinates_sub_ = nh.subscribe("platform_centre", 1, &PoseEstimationROS::pixelCoordinatesCallBack, this);
 
 	nh_private.getParam("camera_to_quad_matrix", camera_to_quad_matrix_);
 	nh_private.getParam("camera_matrix/data", camera_matrix_);
@@ -17,12 +17,12 @@ void PoseEstimation::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private) {
 	arrayToMatrixConversion();
 }
 
-void PoseEstimation::run() {
+void PoseEstimationROS::run() {
 	platformOdomUpdate();
 	detected_platform_odom_pub_.publish(platform_odom_[1]);
 }
 
-void PoseEstimation::arrayToMatrixConversion() {
+void PoseEstimationROS::arrayToMatrixConversion() {
 	for (int i = 0; i < 3; i++) {
 		camera_translation_vector_(i) = camera_translation_[i];
 		for (int j = 0; j < 3; j++) {
@@ -33,7 +33,7 @@ void PoseEstimation::arrayToMatrixConversion() {
 	invCameraMatrix = cameraMatrix.inverse();
 }
 
-void PoseEstimation::quadPoseCallBack(const nav_msgs::Odometry& msg) {
+void PoseEstimationROS::quadPoseCallBack(const nav_msgs::Odometry& msg) {
 	quad_odom_ = msg;
 	tf::Quaternion q(msg.pose.pose.orientation.x, msg.pose.pose.orientation.y, msg.pose.pose.orientation.z, msg.pose.pose.orientation.w);
 	Eigen::Quaternionf quat = Eigen::Quaternionf(q.w(), q.x(), q.y(), q.z());
@@ -42,9 +42,9 @@ void PoseEstimation::quadPoseCallBack(const nav_msgs::Odometry& msg) {
 	translation_ = Eigen::Vector3f(msg.pose.pose.position.x, msg.pose.pose.position.y, msg.pose.pose.position.z);
 }
 
-void PoseEstimation::pixelCoordinatesCallBack(const geometry_msgs::Point& msg) { pixel_coordinates_ = msg; }
+void PoseEstimationROS::pixelCoordinatesCallBack(const geometry_msgs::Point& msg) { pixel_coordinates_ = msg; }
 
-void PoseEstimation::platformOdomUpdate() {
+void PoseEstimationROS::platformOdomUpdate() {
 	Eigen::Vector3f pixel_coordinates(pixel_coordinates_.x, pixel_coordinates_.y, 1);
 	Eigen::Vector3f coordinates_quad_frame = cameraToQuadMatrix * scaleUpMatrix * invCameraMatrix * pixel_coordinates + camera_translation_vector_;
 	Eigen::Vector3f global_coordinates = quadOrientationMatrix * coordinates_quad_frame + translation_;

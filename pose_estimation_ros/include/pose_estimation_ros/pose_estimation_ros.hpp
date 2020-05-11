@@ -11,7 +11,7 @@
 
 namespace ariitk::auto_landing {
 
-class PoseEstimation {
+class PoseEstimationROSROS {
     public:
         void init(ros::NodeHandle& nh, ros::NodeHandle& nh_private);
         void run();
