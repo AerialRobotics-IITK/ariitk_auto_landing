@@ -12,8 +12,11 @@ void Landing::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, char** argv
     }
 
     mav_odometry_sub_ = nh.subscribe("mav_odometry", 1, &Landing::mavOdometryCallback, this);
+
+    nh_private.getParam("platform_height", platform_height_);
+
     if (std::string(argv[4]) == "false") { model_states_sub_ = nh.subscribe("model_state", 1, &Landing::modelStateCallback, this); }
-    else {platform_odometry_sub_ = nh.subscribe("platform_odometry", 1, &Landing::platformOdometryCallback, this); }
+    else { platform_odometry_sub_ = nh.subscribe("platform_odometry", 1, &Landing::platformOdometryCallback, this); }
 
     if (!using_trajectory_generation_) {
         mav_command_sub_ = nh.subscribe("mav_command", 1, &Landing::mavCommandCallback, this);
@@ -29,7 +32,7 @@ void Landing::run() {
     if (using_trajectory_generation_) {
         mav_final_command_trajectory_ = mav_command_trajectory_;
         
-        if((fabs(platform_odometry_.pose.pose.position.x-mav_odometry_.pose.pose.position.x) < 0.25) 
+        if(( fabs(platform_odometry_.pose.pose.position.x-mav_odometry_.pose.pose.position.x) < 0.25) 
             && (fabs(platform_odometry_.pose.pose.position.y-mav_odometry_.pose.pose.position.y) < 0.25)) {
             ROS_INFO("Over platform.");
 
@@ -47,7 +50,7 @@ void Landing::run() {
         if((fabs(platform_odometry_.pose.pose.position.x-mav_odometry_.pose.pose.position.x) < 0.25) 
             && (fabs(platform_odometry_.pose.pose.position.y-mav_odometry_.pose.pose.position.y) < 0.25)) {
             ROS_INFO("Over platform.");
-            mav_final_command_.pose.position.z = 0.45;
+            mav_final_command_.pose.position.z = platform_height_;
         }
 
         mav_final_command_pub_.publish(mav_final_command_);

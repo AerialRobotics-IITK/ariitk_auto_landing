@@ -32,7 +32,7 @@ class Tracking {
         nav_msgs::Odometry platform_odom_, quad_odom_;
         geometry_msgs::Twist platform_cmd_vel_[2];
 
-        ros::Publisher set_firefly_pose_pub_;
+        ros::Publisher set_quad_pose_pub_;
         ros::Subscriber quad_pose_sub_;
         ros::Subscriber gazebo_model_state_sub_;
         ros::Subscriber platform_odometry_sub_;

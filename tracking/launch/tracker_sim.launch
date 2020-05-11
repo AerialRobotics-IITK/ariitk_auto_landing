@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <launch>
 
-    <arg name="trajectory_parameters"        default="$(find tracking)/cfg/trajectory_parameters.yaml" />
-    <arg name="tracking_parameters"        default="$(find tracking)/cfg/tracking_parameters.yaml" />
-    <arg name="publish_visualization_marker" default="false" />
-    <arg name="use_trajectory_generation"    default="true" />
-    <arg name="mav_name"                     default="firefly" />
-    <arg name="use_odometry_for_platform"    default="false" />
+    <arg name="trajectory_parameters"           default="$(find tracking)/cfg/trajectory_parameters.yaml" />
+    <arg name="tracking_parameters"             default="$(find tracking)/cfg/tracking_parameters.yaml" />
+    <arg name="publish_visualization_marker"    default="false" />
+    <arg name="use_trajectory_generation"       default="true" />
+    <arg name="mav_name"                        default="firefly" />
+    <arg name="use_odometry_for_platform"       default="false" />
     
     <group if="$(arg use_trajectory_generation)" >
         <node pkg="tracking" type="tracking_trajectory_generation_tracker" name="tracking_trajectory_generation_tracker" output="screen" args="-publish_visualization_marker $(arg publish_visualization_marker) -use_odometry_for_platform $(arg use_odometry_for_platform)">

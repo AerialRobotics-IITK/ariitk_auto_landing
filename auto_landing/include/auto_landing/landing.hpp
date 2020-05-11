@@ -21,6 +21,7 @@ class Landing {
         void trajectoryCallback (const trajectory_msgs::MultiDOFJointTrajectory& msg);
 
         bool using_trajectory_generation_;
+        double platform_height_;
         
         geometry_msgs::PoseStamped mav_command_, mav_final_command_;
         trajectory_msgs::MultiDOFJointTrajectory mav_command_trajectory_, mav_final_command_trajectory_;

@@ -8,7 +8,7 @@ Tracking::Tracking()
 
 void Tracking::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, char** argv) {
     
-    set_firefly_pose_pub_  = nh.advertise<geometry_msgs::PoseStamped>("command_pose", 1);
+    set_quad_pose_pub_  = nh.advertise<geometry_msgs::PoseStamped>("command_pose", 1);
     quad_pose_sub_  = nh.subscribe("quad_odometry", 1, &Tracking::quadPoseCallback, this);
 
     nh_private.getParam("setpt_approximation_value", setpt_approximation_value_);
@@ -42,7 +42,7 @@ void Tracking::run() {
             updateSetPoint();
         }
         
-        set_firefly_pose_pub_.publish(setpt_);
+        set_quad_pose_pub_.publish(setpt_);
 
     } else {
         setpt_.pose.position.x = 0;
@@ -56,7 +56,7 @@ void Tracking::run() {
         
             updateSetPoint();
         
-            set_firefly_pose_pub_.publish(setpt_);
+            set_quad_pose_pub_.publish(setpt_);
 
         }
     }

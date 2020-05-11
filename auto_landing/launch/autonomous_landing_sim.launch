@@ -24,6 +24,7 @@
 	</include>
 
 	<node pkg="auto_landing" type="auto_landing_landing_node" name="auto_landing_landing_node" output="screen" args="-trajectory $(arg use_trajectory_generation) -use_odometry_for_platform $(arg use_odometry_for_platform)">
+		<rosparam file="$(find auto_landing)/cfg/landing_params.yaml" />
 		<remap from="mav_command"        		to="$(arg mav_name)/command/track/pose" />
 		<remap from="mav_odometry"       		to="$(arg mav_name)/ground_truth/odometry" />
 		<remap from="model_state"        		to="gazebo/model_states" />

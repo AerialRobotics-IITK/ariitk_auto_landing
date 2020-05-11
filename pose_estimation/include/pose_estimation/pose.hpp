@@ -2,40 +2,40 @@
 
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
-#include <geometry_msgs/Point.h>
-#include <geometry_msgs/Pose.h>
-#include <geometry_msgs/PoseStamped.h>
-#include <nav_msgs/Odometry.h>
-#include <ros/ros.h>
 #include <tf/tf.h>
 
-namespace ariitk::auto_landing {
+namespace ariitk::pose_estimation {
 
 class PoseEstimation {
-    public:
-        void init(ros::NodeHandle& nh, ros::NodeHandle& nh_private);
-        void run();
-        int loop_rate;
+	public:
+        PoseEstimation(){};
+        PoseEstimation(Eigen::MatrixXd projection_matrix, Eigen::Matrix3d camera_to_vehicle_rotation, Eigen::Vector3d vehicle_to_camera_translation);
+        void setCameraParams(Eigen::MatrixXd projection_matrix, Eigen::Matrix3d camera_to_vehicle_rotation, Eigen::Vector3d vehicle_to_camera_translation);
+        void setVehicleParams(Eigen::Matrix3d ground_to_vehicle_rotation, Eigen::Vector3d vehicle_position);
+        void setObjectParams(Eigen::Matrix3d scale_up_matrix, Eigen::Vector3d pixel_coordinates);
+        void setObjectParams(double z_coordinate, Eigen::Vector3d pixel_coordinates);
+        Eigen::Vector3d getObjectPosition();
 
-    private:
-        void pixelCoordinatesCallBack(const geometry_msgs::Point& msg);
-        void quadPoseCallBack(const nav_msgs::Odometry& msg);
-        void platformOdomUpdate();
-        void arrayToMatrixConversion();
+	private:
+        void scaleupKnownCalculation();
+        void zKnownCalculation();
+        
+        Eigen::Matrix3d scale_up_matrix_;
+        Eigen::Matrix3d camera_matrix_;
+        Eigen::Matrix3d inverse_camera_matrix_;
+        Eigen::Matrix3d camera_to_vehicle_rotation_;
+        Eigen::Matrix3d ground_to_vehicle_rotation_;
+        Eigen::Matrix3d vehicle_to_camera_rotation_;
+        Eigen::Matrix3d vehicle_to_ground_rotation_;
 
-        std::vector<float> distortion_matrix_, camera_to_quad_matrix_, camera_matrix_, camera_translation_;
-        Eigen::Matrix3f cameraMatrix, invCameraMatrix;
-        Eigen::Matrix3f cameraToQuadMatrix;
-        Eigen::Matrix3f quadOrientationMatrix, scaleUpMatrix;
-        Eigen::Vector3f translation_, camera_translation_vector_;
+        Eigen::Vector3d object_position_;
+        Eigen::Vector3d vehicle_position_;
+        Eigen::Vector3d vehicle_to_camera_translation_;
+        Eigen::Vector3d camera_centre_displacement_;
+        Eigen::Vector3d pixel_coordinates_;
 
-        nav_msgs::Odometry platform_odom_[2];
-        nav_msgs::Odometry firefly_odom_;
-        geometry_msgs::Point pixel_coordinates_;
-
-        ros::Publisher detected_platform_odom_pub_;
-        ros::Subscriber firefly_pose_sub_;
-        ros::Subscriber firefly_pixel_coordinates_sub_;
+        bool is_data_changed_;
+        enum use_case { scaleup_known, z_known } estimation_type;
 };
 
-} // namespace ariitk::auto_landing
+} // namespace ariitk::pose_estimation

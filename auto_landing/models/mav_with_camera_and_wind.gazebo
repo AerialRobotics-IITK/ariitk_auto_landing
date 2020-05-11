@@ -72,4 +72,18 @@
   <origin xyz="0.20 0.0 -0.02" rpy="0.0 1.57 0.0" />
   </xacro:camera_macro>
 
+  <xacro:wind_plugin_macro
+    namespace="${namespace}"
+    xyz_offset="0 0 0"
+    wind_direction="1 0 0"
+    wind_force_mean="0.0"
+    wind_gust_direction="0 1 0"
+    wind_gust_duration="0.0"
+    wind_gust_start="0.0"
+    wind_gust_force_mean="0.0"
+    wind_speed_mean="5.0"
+    use_custom_static_wind_field="true"
+    custom_wind_field_path="$(find auto_landing)/models/wind_field_hemicyl.txt">
+  </xacro:wind_plugin_macro>
+
 </robot>
