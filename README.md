@@ -12,6 +12,8 @@ wstool update
 catkin build
 echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
 source ~/.bashrc
+sudo apt-get install ros-melodic-husky-simulator
+export HUSKY_GAZEBO_DESCRIPTION=$(rospack find husky_gazebo)/urdf/description.gazebo.xacro
 ```
 
 If you want to use the keyboard to control the husky, you need to execute this command to install it
