@@ -17,10 +17,17 @@ void PoseEstimationROS::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private) {
 
 	scaleUpMatrix = Eigen::Matrix3d::Zero();
 
-	platform_odom_[0].pose.pose.position = {0.0, 0.0, 0.0};
-	platform_odom_[1].pose.pose.position = {0.0, 0.0, 0.0};
+	platform_odom_[0].pose.pose.position.x = 0;
+	platform_odom_[0].pose.pose.position.y = 0;
+	platform_odom_[0].pose.pose.position.z = 0;
 
-	platform_odom_[1].twist.twist.linear = {0.0, 0.0, 0.0};
+	platform_odom_[1].pose.pose.position.x = 0;
+	platform_odom_[1].pose.pose.position.y = 0;
+	platform_odom_[1].pose.pose.position.z = 0;
+
+	platform_odom_[1].twist.twist.linear.x = 0;
+	platform_odom_[1].twist.twist.linear.y = 0;
+	platform_odom_[1].twist.twist.linear.z = 0;
 
 	arrayToMatrixConversion();
 }

@@ -21,8 +21,8 @@ class Tracking {
 		void platformOdometryCallback(const nav_msgs::Odometry& msg);
 		void updateSetPoint();
 		bool isPlatformMoving();
-		bool isPlatformNear();
-		void calculateSetPoint();
+		bool isPlatformFar(double distance_x, double distance_y);
+		void calculateSetPoint(double norm);
 
 		int height_;
 		double inv_state_publish_rate_;

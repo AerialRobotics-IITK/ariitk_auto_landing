@@ -72,16 +72,14 @@ void Tracking::updateSetPoint() {
 	double distance_y = platform_odom_.pose.pose.position.y - quad_odom_.pose.pose.position.y;
 	double norm = sqrt(pow(distance_x, 2) + pow(distance_y, 2));
 
-	if (isPlatformNear()) {
+	if (isPlatformFar(distance_x, distance_y)) {
 		setpt_.pose.position.x = platform_odom_.pose.pose.position.x;
 		setpt_.pose.position.y = platform_odom_.pose.pose.position.y;
 		time_[0] = ros::Time::now().toSec();
 	} else {
 		time_[1] = ros::Time::now().toSec();
 		if ((time_[1] - time_[0]) > min_time_) {
-			int approximation_value[2] = {setpt_approximation_value_, distance_approximation_value_};
-			if (norm > max_norm_) { approximation_value[1] = distance_approximation_value_ - norm; }
-			calculateSetPoint();
+			calculateSetPoint(norm);
 
 		} else {
 			setpt_.pose.position.x = platform_odom_.pose.pose.position.x;
@@ -92,9 +90,13 @@ void Tracking::updateSetPoint() {
 
 bool Tracking::isPlatformMoving() { return fabs(platform_cmd_vel_[0].linear.x) > 0.0001 || fabs(platform_cmd_vel_[0].linear.y) > 0.0001; }
 
-bool Tracking::isPlatformNear() { return fabs(distance_x) > max_x_ || fabs(distance_y) > max_y_; }
+bool Tracking::isPlatformFar(double distance_x, double distance_y) { return fabs(distance_x) > max_x_ || fabs(distance_y) > max_y_; }
 
-void Tracking::calculateSetPoint() {
+void Tracking::calculateSetPoint(double norm) {
+	int approximation_value[2] = { setpt_approximation_value_, distance_approximation_value_ };
+	if (norm > max_norm_) { approximation_value[1] = distance_approximation_value_ - norm; }
+	
+	
 	double x_approx = platform_cmd_vel_[1].linear.x * inv_state_publish_rate_ +
 	                  0.5 * (platform_cmd_vel_[1].linear.x - platform_cmd_vel_[0].linear.x) * pow(inv_state_publish_rate_, 2);
 	double y_approx = platform_cmd_vel_[1].linear.y * inv_state_publish_rate_ +
