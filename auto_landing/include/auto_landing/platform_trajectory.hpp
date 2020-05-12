@@ -10,28 +10,32 @@ namespace ariitk::auto_landing {
 
 class PlatformTrajectory {
 	public:
-            void init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, char** argv);
-            void run();
-            int loop_rate_;
+        void init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, char** argv);
+        void run();
+        int loop_rate;
 
 	private:
-            void modelStateCallback(const gazebo_msgs::ModelStates& msg);
-            void linearTrajectory();
-            void circularTrajectory();
-            void eightTrajectory();
+        void modelStateCallback(const gazebo_msgs::ModelStates& msg);
+        void linearTrajectory();
+        void circularTrajectory();
+        void eightTrajectory();
 
-            ros::Publisher trajectory_pub_;
-            ros::Subscriber gazebo_model_state_sub_;
+        ros::Publisher trajectory_pub_;
+        ros::Subscriber gazebo_model_state_sub_;
 
-            geometry_msgs::Twist platform_velocity_;
-            nav_msgs::Odometry platform_odom_;
+        geometry_msgs::Twist platform_velocity_;
+        nav_msgs::Odometry platform_odom_;
 
-            double angular_velocity_, linear_velocity_;
-            double time_[2];
-            double platform_x_, platform_y_;
-            int count_;
-            double t_inverse, min_time_;
-            std::string trajectory_name_;
+        double angular_velocity_;
+        double linear_velocity_;
+        double time_[2];
+        double platform_x_;
+        double platform_y_;
+        double t_inverse, min_time_;
+        
+        int count_;
+        
+        std::string trajectory_name_;
 };
 
 } // namespace ariitk::auto_landing

@@ -16,8 +16,9 @@ class TrajectoryGenerationTracking {
 	public:
 		TrajectoryGenerationTracking(char** argv);
 		void run();
+		void waitForOdometry();
 
-		int publish_rate_;
+		int publish_rate;
 
 	private:
 		void mavOdometryCallback(const nav_msgs::Odometry& msg);

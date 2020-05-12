@@ -12,12 +12,7 @@ int main(int argc, char** argv) {
 
 	ros::Rate loop_rate(10);
 
-	int count = 0;
-	while (count < 5) {
-		ros::spinOnce();
-		count++;
-		ros::Duration(1).sleep();
-	}
+	mav.waitForOdometry();
 
 	while (ros::ok()) {
 		mav.run();

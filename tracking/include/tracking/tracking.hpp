@@ -13,13 +13,16 @@ class Tracking {
 		void init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, char** argv);
 		void run();
 
-		double publish_rate_;
+		double publish_rate;
 
 	private:
 		void modelStateCallback(const gazebo_msgs::ModelStates& msg);
 		void quadPoseCallback(const nav_msgs::Odometry& msg);
 		void platformOdometryCallback(const nav_msgs::Odometry& msg);
 		void updateSetPoint();
+		bool isPlatformMoving();
+		bool isPlatformNear();
+		void calculateSetPoint();
 
 		int height_;
 		double inv_state_publish_rate_;

@@ -11,7 +11,7 @@ void PlatformTrajectory::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, 
 	nh_private.getParam("min_time", min_time_);
 	nh_private.getParam("platform_y", platform_y_);
 	nh_private.getParam("platform_x", platform_x_);
-	nh_private.getParam("loop_rate", loop_rate_);
+	nh_private.getParam("loop_rate", loop_rate);
 
 	std::string choices[3] = {"linear", "circular", "eight"};
 	if (std::string(argv[2]) == "random") { trajectory_name_ = choices[rand() % 3]; }
@@ -19,7 +19,7 @@ void PlatformTrajectory::init(ros::NodeHandle& nh, ros::NodeHandle& nh_private, 
 
 	time_[0] = 0;
 	count_ = 0;
-	t_inverse = 1 / loop_rate_;
+	t_inverse = 1 / loop_rate;
 }
 
 void PlatformTrajectory::run() {

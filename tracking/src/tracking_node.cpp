@@ -11,7 +11,7 @@ int main(int argc, char** argv) {
 
 	mav_platform.init(nh, nh_private, argv);
 
-	ros::Rate loop_rate(mav_platform.publish_rate_);
+	ros::Rate loop_rate(mav_platform.publish_rate);
 
 	while (ros::ok()) {
 		ros::spinOnce();

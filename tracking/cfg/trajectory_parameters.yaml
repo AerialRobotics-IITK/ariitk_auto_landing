@@ -1,5 +1,5 @@
 ## Trajectory Generation Parameters
-v_max: 2              #double: Maximum allowable velocity (in m/s)
-a_max: 2              #double: Maximum allowable acceleration (in m/s)
-distance: 1.0         #double: Distance (in meters) by which to separate markers for visualization in rviz
-publish_rate: 10      #int: Rate at which trajectory commands are published
+v_max: 2              #double: Maximum allowable velocity, in metres/second
+a_max: 2              #double: Maximum allowable acceleration, in metres/second^2
+distance: 1.0         #double: Distance by which to separate markers for visualization in rviz, in metres
+publish_rate: 10      #int: Rate at which trajectory commands are published, in Hz

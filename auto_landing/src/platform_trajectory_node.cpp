@@ -11,7 +11,7 @@ int main(int argc, char** argv) {
 
 	platform.init(nh, nh_private, argv);
 
-	ros::Rate loop_rate(platform.loop_rate_);
+	ros::Rate loop_rate(platform.loop_rate);
 
 	while (ros::ok()) {
 		ros::spinOnce();

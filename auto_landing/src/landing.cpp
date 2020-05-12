@@ -86,4 +86,12 @@ void Landing::platformOdometryCallback(const nav_msgs::Odometry& msg) { platform
 
 void Landing::platformStatusCallback(const std_msgs::Bool& msg) { is_platform_detected_ = msg; }
 
+void TrajectoryGenerationTracking::waitForOdometry() {
+	int count = 0;
+	while (count++ < 10) {
+		ros::spinOnce();
+		ros::Duration(0.5).sleep();
+	}
+}
+
 } // namespace ariitk::auto_landing

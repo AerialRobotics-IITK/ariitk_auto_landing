@@ -6,14 +6,9 @@ int main(int argc, char** argv) {
 	ros::init(argc, argv, "trajectory_pub");
 	TrajectoryGenerationTracking tracking(argv);
 
-	ros::Rate loop_rate(tracking.publish_rate_);
+	ros::Rate loop_rate(tracking.publish_rate);
 
-	int count = 0;
-	while (count < 10) {
-		ros::spinOnce();
-		ros::Duration(0.5).sleep();
-		count++;
-	}
+	tracking.waitForOdometry();
 
 	while (ros::ok()) {
 		tracking.run();

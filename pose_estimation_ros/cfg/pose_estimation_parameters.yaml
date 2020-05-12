@@ -1,5 +1,5 @@
 ## Pose estimation parameters
 camera_to_quad_matrix: [0, -1, 0, -1, 0, 0, 0, 0, -1]     #double matrix(3x3): Rotation matrix to rotate vector from camera to quad frame
-camera_translation: [0.20, 0.0, -0.02]                    #double matrix(3x1): Translation vector from quad to camera centre
-platform_height: 0.45                                     #double: Height of the platform
-loop_rate: 10                                             #int: Loop rate of while loop
+camera_translation: [0.20, 0.0, -0.02]                    #double matrix(3x1): Translation vector from quad to camera centre, in metres
+platform_height: 0.45                                     #double: Height of the platform, in metres
+loop_rate: 10                                             #int: Loop rate of while loop, in Hz

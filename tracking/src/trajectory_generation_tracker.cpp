@@ -11,7 +11,7 @@ TrajectoryGenerationTracking::TrajectoryGenerationTracking(char** argv) : dimens
 	nh_private_.getParam("v_max", v_max_);
 	nh_private_.getParam("a_max", a_max_);
 	nh_private_.getParam("distance", distance_);
-	nh_private_.getParam("publish_rate", publish_rate_);
+	nh_private_.getParam("publish_rate", publish_rate);
 
     if (std::string(argv[4]) == "true") { platform_odometry_sub_ = nh_.subscribe("platform_odometry", 10, &TrajectoryGenerationTracking::platformOdometryCallback, this); }
     else { model_states_sub_ = nh_.subscribe("model_states", 10, &TrajectoryGenerationTracking::modelStatesCallback, this); }
@@ -79,19 +79,24 @@ void TrajectoryGenerationTracking::mavOdometryCallback(const nav_msgs::Odometry&
 void TrajectoryGenerationTracking::modelStatesCallback(const gazebo_msgs::ModelStates& msg) {
 	int index = 0;
 	std::string name = msg.name[index];
-	while (name != "/") {
-		index++;
-		name = msg.name[index];
-	}
+	while (name != "/") { name = msg.name[++index]; }
 
-	platform_acceleration_(0) = (msg.twist[index].linear.x - platform_odom_.twist.twist.linear.x) * publish_rate_;
-	platform_acceleration_(1) = (msg.twist[index].linear.y - platform_odom_.twist.twist.linear.y) * publish_rate_;
-	platform_acceleration_(2) = (msg.twist[index].linear.z - platform_odom_.twist.twist.linear.z) * publish_rate_;
+	platform_acceleration_(0) = (msg.twist[index].linear.x - platform_odom_.twist.twist.linear.x) * publish_rate;
+	platform_acceleration_(1) = (msg.twist[index].linear.y - platform_odom_.twist.twist.linear.y) * publish_rate;
+	platform_acceleration_(2) = (msg.twist[index].linear.z - platform_odom_.twist.twist.linear.z) * publish_rate;
 
 	platform_odom_.pose.pose = msg.pose[index];
 	platform_odom_.twist.twist = msg.twist[index];
 }
 
 void TrajectoryGenerationTracking::platformOdometryCallback(const nav_msgs::Odometry& msg) { platform_odom_ = msg; }
+
+void TrajectoryGenerationTracking::waitForOdometry() {
+	int count = 0;
+	while (count++ < 10) {
+		ros::spinOnce();
+		ros::Duration(0.5).sleep();
+	}
+}
 
 } // namespace ariitk::tracking

@@ -44,7 +44,7 @@ void PoseEstimation::setVehicleParams(Eigen::Matrix3d ground_to_vehicle_rotation
 
 void PoseEstimation::setObjectParams(Eigen::Matrix3d scale_up_matrix, Eigen::Vector3d pixel_coordinates) {
 	scale_up_matrix_ = scale_up_matrix;
-	estimation_type = scaleup_known;
+	use_case = UseCase::scaleup_known;
 	pixel_coordinates_ = pixel_coordinates;
 
 	is_data_changed_ = true;
@@ -52,7 +52,7 @@ void PoseEstimation::setObjectParams(Eigen::Matrix3d scale_up_matrix, Eigen::Vec
 
 void PoseEstimation::setObjectParams(double z_coordinate, Eigen::Vector3d pixel_coordinates) {
 	object_position_(2) = z_coordinate;
-	estimation_type = z_known;
+	use_case = UseCase::z_known;
 	pixel_coordinates_ = pixel_coordinates;
 
 	is_data_changed_ = true;
@@ -60,7 +60,7 @@ void PoseEstimation::setObjectParams(double z_coordinate, Eigen::Vector3d pixel_
 
 Eigen::Vector3d PoseEstimation::getObjectPosition() {
 	if (!is_data_changed_) return object_position_;
-	if (estimation_type == z_known) {
+	if (use_case == UseCase::z_known) {
 		zKnownCalculation();
 		is_data_changed_ = false;
 		return object_position_;
@@ -72,11 +72,10 @@ Eigen::Vector3d PoseEstimation::getObjectPosition() {
 }
 
 void PoseEstimation::scaleupKnownCalculation() {
-	object_position_ =
-	    (vehicle_to_ground_rotation_ *
-	        ((camera_to_vehicle_rotation_ * ((scale_up_matrix_ * inverse_camera_matrix_ * pixel_coordinates_) + camera_centre_displacement_)) +
-	            vehicle_to_camera_translation_)) +
-	    vehicle_position_;
+
+		Eigen::Vector3d object_position_in_camera_frame = (scale_up_matrix_ * inverse_camera_matrix_ * pixel_coordinates_) + camera_centre_displacement_;
+		Eigen::Vector3d object_position_in_vehicle_frame = (camera_to_vehicle_rotation_ * object_position_in_camera_frame) + vehicle_to_camera_translation_;
+		object_position_ = (vehicle_to_ground_rotation_ * object_position_in_vehicle_frame) + vehicle_position_;
 }
 
 } // namespace ariitk::pose_estimation
