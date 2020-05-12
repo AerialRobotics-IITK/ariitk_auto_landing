@@ -9,7 +9,12 @@
 	<arg name="use_detection"	 			 default="true" />
 	<arg name="use_odometry_for_platform"	 default="$(arg use_detection)" />
 	<arg name="use_wind"					 default="false" />
+    <arg name="trajectory"                   default="random" />
 	
+	<!-- The possible values for trajectory field are:= random, circular, eight, linear, user.
+	Using random randomly selects from circular, eight and linear trajectories.
+	Using user allows the user to control the platform with the keyboard. -->
+
 	<node pkg="rqt_gui" type="rqt_gui" name="rqt_gui" args="--perspective-file $(find auto_landing)/rqt/node_monitor.perspective" />
 		
 	<include file="$(find auto_landing)/launch/world_setup.launch" >
@@ -17,6 +22,7 @@
 		<arg name="x"                            value="$(arg x)" />
 		<arg name="y"                            value="$(arg y)" />
 		<arg name="use_wind"					 value="$(arg use_wind)" />
+		<arg name="trajectory"					 value="$(arg trajectory)" />
 	</include>
 
 	<include file="$(find tracking)/launch/tracker_sim.launch">

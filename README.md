@@ -14,18 +14,24 @@ echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 ```
 
+If you want to use the keyboard to control the husky, you need to execute this command to install it
+```
+sudo apt-get install ros-melodic-teleop-twist-keyboard
+```
+
 Run the simulation using
 ```
 mon launch auto_landing autonomous_landing_sim.launch
 ```
 
 The parameters that can be set in the autonomous_landing_sim.launch file
-- **mav_name**: Name of the MAV to be used in the RotorS simulation
+- **mav_name**: Name of the MAV to be used in the RotorS simulation.
 - **x**: x coordinate of spawn point of husky
 - **y**: y coordinate of spawn point of husky
 - **publish_visualization_marker**: When tracking using trajectory generation, whether to use rviz to visualize the generated trajectory
 - **use_detection(experimental)**: Use detection to calculate the odometry of the platform 
 - **use_odometry_for_platform**: Use odometry instead of gazebo/model_states
-- **use_wind**: Add wind to the simulation
+- **use_wind**: Add wind to the 
+- **trajectory**: Specify the trajectory of the platform. Possible values are given in launch file. 
 
 For more info, please refer the wiki.
