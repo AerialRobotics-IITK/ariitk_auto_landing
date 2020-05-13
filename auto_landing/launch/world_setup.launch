@@ -13,10 +13,10 @@
     <arg name="debug"                           default="false" />
     <arg name="gui"                             default="true" />
     <arg name="paused"                          default="true" />
-	<arg name="use_wind"					    default="false" />
+    <arg name="use_wind"                        default="false" />
     <arg name="verbose"                         default="false" />
     
- 	<include file="$(find mav_linear_mpc)/launch/mav_linear_mpc_sim.launch" />
+    <include file="$(find mav_linear_mpc)/launch/mav_linear_mpc_sim.launch" />
 
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
         <arg name="world_name"                  value="$(find rotors_gazebo)/worlds/$(arg world_name).world"/>
@@ -59,8 +59,8 @@
     <group unless="$(eval arg('trajectory') == 'user')">
         <node pkg="auto_landing" type="auto_landing_platform_node" name="auto_landing_platform_node" output="screen" args="-trajectory $(arg trajectory)">
             <rosparam file="$(arg platform_trajectory_parameters)" />
-            <remap from="command_velocity"   to="husky_velocity_controller/cmd_vel" />
-		    <remap from="model_state" 		 to="/gazebo/model_states" />
+            <remap from="command_velocity"     to="husky_velocity_controller/cmd_vel" />
+            <remap from="model_state"          to="/gazebo/model_states" />
         </node>
     </group>
 

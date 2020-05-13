@@ -1,6 +1,7 @@
 #include <detection/detect_platform.hpp>
 
 namespace ariitk::detection {
+
 cv::Mat PlatformDetect::preprocessImage(cv::Mat& img, std::vector<double>& camera_matrix_, std::vector<double>& distortion_coefficients_, bool is_undistort_) {
 	ROS_ASSERT(img.empty() != true);
 

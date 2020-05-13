@@ -10,10 +10,10 @@
     <arg name="gui"                  default="true"/>
     <arg name="paused"               default="true"/>
     <arg name="verbose"              default="false"/>
-    
+
     <env name="GAZEBO_MODEL_PATH"           value="${GAZEBO_MODEL_PATH}:$(find rotors_gazebo)/models"/>
     <env name="GAZEBO_RESOURCE_PATH"        value="${GAZEBO_RESOURCE_PATH}:$(find rotors_gazebo)/models"/>
-    
+
     <include file="$(find auto_landing)/launch/spawn_custom_husky.launch">
         <arg name="x"                       value="2" />
         <arg name="y"                       value="2" />
@@ -27,7 +27,7 @@
         <remap from="image_raw"   to="$(arg mav_name)/camera_front/image_raw" />
         <remap from="height_quad" to="$(arg mav_name)/ground_truth/odometry" />
     </node>
-    
+
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
         <arg name="world_name"              value="$(find rotors_gazebo)/worlds/$(arg world_name).world"/>
         <arg name="debug"                   value="$(arg debug)" />
@@ -46,6 +46,6 @@
         </include>
     </group>
 
-	<node pkg="rqt_gui" type="rqt_gui" name="rqt_gui" args="--perspective-file $(find detection)/rqt/detection.perspective" />
+    <node pkg="rqt_gui" type="rqt_gui" name="rqt_gui" args="--perspective-file $(find detection)/rqt/detection.perspective" />
 
 </launch>  

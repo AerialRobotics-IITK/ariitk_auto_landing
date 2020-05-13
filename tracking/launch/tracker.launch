@@ -4,7 +4,7 @@
     <arg name="trajectory_parameters"        default="$(find tracking)/cfg/trajectory_parameters.yaml" />
     <arg name="publish_visualization_marker" default="false" />
     <arg name="use_trajectory_generation"    default="true" />
-    
+
     <group if="$(arg use_trajectory_generation)" >
         <node pkg="tracking" type="tracking_trajectory_generation_tracker" name="tracking_trajectory_generation_tracker" output="screen" args="-publish_visualization_marker $(arg publish_visualization_marker) -use_odometry_for_platform true">
             <rosparam command="load" file="$(arg trajectory_parameters)" />
@@ -12,7 +12,7 @@
     </group>
 
     <group unless="$(arg use_trajectory_generation)" >
-    	<node pkg="tracking" type="tracking_tracking_node" name="tracking_tracking_node" output="screen" args="-use_odometry_for_platform true" />
+        <node pkg="tracking" type="tracking_tracking_node" name="tracking_tracking_node" output="screen" args="-use_odometry_for_platform true" />
     </group>
 
     <group if="$(arg publish_visualization_marker)">

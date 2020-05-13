@@ -11,6 +11,7 @@
 #include <xmlrpcpp/XmlRpc.h>
 
 namespace ariitk::detection {
+
 class PlatformDetect {
 	public:
 		void imageCallback(const sensor_msgs::ImageConstPtr& msg);
