@@ -8,4 +8,5 @@
 - git: {local-name: mav_control_rw, uri: 'https://github.com/ethz-asl/mav_control_rw.git'}
 - git: {local-name: mav_trajectory_generation, uri: 'https://github.com/ethz-asl/mav_trajectory_generation.git'}
 - git: {local-name: yaml_cpp_catkin, uri: 'https://github.com/ethz-asl/yaml_cpp_catkin.git'}
-- git: {local-name: unique_identifier, uri: 'https://github.com/ros-geographic-info/unique_identifier'
+- git: {local-name: unique_identifier, uri: 'https://github.com/ros-geographic-info/unique_identifier'}
+- git: {local-name: rosmon, uri: 'https://github.com/xqms/rosmon'}

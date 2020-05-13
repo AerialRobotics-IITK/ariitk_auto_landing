@@ -1,25 +1,18 @@
-camera_matrix:
-   rows: 3
-   cols: 3
-   data: [358.4701893587005, 0, 323.8761965975529, 0, 359.5166951760163, 233.6390334982792, 0, 0, 1]
-distortion_coefficients:
-   rows: 1
-   cols: 5
-   data: [-0.3263238172477361, 0.08120101574385939, -0.0001620190119734289, -0.0009502949222392523, 0]
-publish_preprocess_ : true
-publish_detected_platform_ : true
-is_undistort_ : true
-error_limit_: 0.06
-contour_perimeter_threshold_: 0
-contour_perimeter_scale_: 15
-kernel_size: 7
-thresholding_parameters_: 
+## Parameters used in the detection of the platform
+publish_preprocess_ : true                         #bool:   To check the publishing of preprocessed image to the specific topic
+publish_detected_platform_ : true                  #bool:   To check the publishing of detected platform to the specific topic
+is_undistort_ : true                               #bool:   To undistort the image obtained as camera feed if unclear
+error_limit_: 0.06                                 #double: The error limit that is allowed in approxPolyD function when approximating a specific hull of points
+contour_perimeter_threshold_: 100                  #int :   The threshold value for the perimeter of the contour 
+contour_perimeter_scale_: 15                       #int :   The scale factor used for height of the quad for calculating the threshold value for contour perimeter
+kernel_size: 7                                     #int :   The kernel size for the kernel used in morphologyEx function for image preprocessing
+thresholding_parameters_:                          #int :   The values used in the inRange function for image preprocessing
    h:
       min: 0
-      max: 255
+      max: 50
    s:
       min: 0
-      max: 255
-   v:
-      min: 0
       max: 20
+   v:
+      min: 50
+      max: 255

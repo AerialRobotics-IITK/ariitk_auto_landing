@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>auto_landing</name>
+  <name>detection</name>
   <version>0.0.0</version>
-  <description>The auto_landing package</description>
+  <description>The detection package</description>
 
   <maintainer email="kabeer@iitk.ac.in">Kshitij Kabeer</maintainer>
   <maintainer email="sanjayso@iitk.ac.in">Sanjay Sukumaran</maintainer>
@@ -15,10 +15,10 @@
   
   <depend>roscpp</depend>
   <depend>geometry_msgs</depend>
-  <depend>gazebo_msgs</depend>
-  <depend>nav_msgs</depend>
   <depend>std_msgs</depend>
-  <depend>trajectory_msgs</depend>
+  <depend>cv_bridge</depend>
+  <depend>sensor_msgs</depend>
+  <depend>image_transport</depend>
 
 
 </package>

@@ -1,0 +1,7 @@
+## Platform trajectory parameters
+ang_vel: 0.2          #double: Angular velocity of platform for circular trajectory, in rads/second
+linear_vel: 0.2       #double: Linear velocity of platform for circular trajectory, in metres/second
+min_time: 2           #double: Minimum time condition for eight trajectory, in seconds
+platform_x: 2         #double: Platform spawn position along x-axis, in metres
+Platform_y: 2         #double: Platform spawn position along y-axis, in metres
+loop_rate: 10         #int: ROS node loop rate, in Hz

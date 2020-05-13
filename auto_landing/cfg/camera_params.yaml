@@ -1,9 +1,17 @@
-height: 480
-width: 640
-distortion_model: "plumb_bob"
-distortion_matrix: [0.0, 0.0, 0.0, 0.0, 0.0]
-camera_matrix: [320.25492609007654, 0.0, 320.5, 0.0, 320.25492609007654, 240.5, 0.0, 0.0, 1.0]
-rectification_matrix: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
-projection_matrix: [320.25492609007654, 0.0, 320.5, -0.0, 0.0, 320.25492609007654, 240.5, 0.0, 0.0, 0.0, 1.0, 0.0]
-camera_to_quad_matrix: [-1, 0, 0, 0, -1, 0, 0, 0, -1]
-camera_translation: [0.20, 0.0, -0.02]
+##Camera Parameters
+distortion_matrix:        #double matrix(1x5): used for undistorting distorted images.
+  rows: 1
+  cols: 5
+  data: [0.0, 0.0, 0.0, 0.0, 0.0]
+camera_matrix:            #double matrix(3,3): used for image preprocessing.
+  rows: 3
+  cols: 3
+  data: [320.25492609007654, 0.0, 320.5, 0.0, 320.25492609007654, 240.5, 0.0, 0.0, 1.0]
+camera_to_quad_matrix:    #double matrix(3,3): used to rotate a vector from the camera to the quad frame.
+  rows: 3
+  cols: 3
+  data: [0, -1, 0, -1, 0, 0, 0, 0, -1]
+camera_translation:       #double matrix(1,3): translation vector from quad centre to the camera, in metres.
+  rows: 1
+  cols: 3
+  data: [0.20, 0.0, -0.02]
