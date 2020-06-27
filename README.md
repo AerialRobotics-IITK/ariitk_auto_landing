@@ -12,7 +12,7 @@ wstool update
 catkin build
 echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
 source ~/.bashrc
-sudo apt-get install ros-melodic-husky-simulator
+sudo apt-get install ros-melodic-husky-simulator ros-melodic-eigen-conversions
 export HUSKY_GAZEBO_DESCRIPTION=$(rospack find husky_gazebo)/urdf/description.gazebo.xacro
 ```
 
